@@ -15,6 +15,7 @@ import { site } from '../../config/site';
     variant="wave"
     tone="blue"
     horizon={0.56}
+    fps={30}
     mask="linear-gradient(105deg, rgb(0 0 0 / 0.15) 0%, rgb(0 0 0 / 0.55) 35%, #000 65%)"
   />
   <div class="hero__glow" aria-hidden="true"></div>
@@ -83,9 +84,7 @@ import { site } from '../../config/site';
     padding: 0.45em 1em;
     border: 1px solid var(--line);
     border-radius: var(--radius-pill);
-    background: rgb(20 20 22 / 0.5);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
+    background: rgb(20 20 22 / 0.75);
     color: var(--text-body);
     font-size: var(--text-sm);
     font-weight: 500;

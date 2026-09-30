@@ -17,16 +17,14 @@ interface Props {
 const { dates, showTrack = true, class: className } = Astro.props;
 ---
 
-<ol class:list={['timeline', className]} role="list" data-timeline>
+<ol class:list={['timeline', className]} role="list" data-timeline data-reveal>
   {
-    dates.map((d, i) => {
+    dates.map((d) => {
       const parts = d.date ? dateParts(d.date) : null;
       return (
         <li
           class:list={['timeline__item', { 'is-milestone': d.milestone, 'is-tbd': !d.date }]}
           data-date={d.date ?? undefined}
-          data-reveal
-          style={`--reveal-delay:${i}`}
         >
           <span class="timeline__badge" aria-hidden="true">
             {parts ? (

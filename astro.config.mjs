@@ -15,6 +15,8 @@ export default defineConfig({
   trailingSlash: 'ignore',
   integrations: [sitemap()],
   devToolbar: { enabled: false },
+  // Fetch a page as soon as its link is hovered or focused, so clicking feels instant.
+  prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
   // Redirect targets are not base-prefixed by Astro, so add it here.
   redirects: {
     '/program': `${base.replace(/\/$/, '')}/program/schedule/`,

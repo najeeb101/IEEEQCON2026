@@ -10,10 +10,12 @@ interface Props {
   /** Wave only: vertical position of the wave's horizon (0 top – 1 bottom). */
   horizon?: number;
   mask?: string;
+  /** Animation frame rate. Heroes use 30; decorative panels default to 20. */
+  fps?: number;
   class?: string;
 }
 
-const { variant = 'wave', tone = 'blue', intensity = 1, horizon = 0.5, mask, class: className } = Astro.props;
+const { variant = 'wave', tone = 'blue', intensity = 1, horizon = 0.5, mask, fps = 20, class: className } = Astro.props;
 ---
 
 <canvas
@@ -23,6 +25,7 @@ const { variant = 'wave', tone = 'blue', intensity = 1, horizon = 0.5, mask, cla
   data-tone={tone}
   data-intensity={intensity}
   data-horizon={horizon}
+  data-fps={fps}
   style={mask ? `--mask:${mask}` : undefined}
   aria-hidden="true"></canvas>
 

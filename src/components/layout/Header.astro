@@ -149,16 +149,14 @@ const sectionActive = (item: (typeof mainNav)[number]) =>
     height: var(--header-h);
     transition:
       background-color var(--dur) var(--ease-out),
-      border-color var(--dur) var(--ease-out),
-      backdrop-filter var(--dur);
+      border-color var(--dur) var(--ease-out);
     border-bottom: 1px solid transparent;
   }
 
   .site-header.is-scrolled {
-    background: rgb(20 20 22 / 0.94);
+    /* Solid rather than blurred: a blur under a fixed header is recomputed on every scroll frame. */
+    background: rgb(20 20 22 / 0.97);
     border-bottom-color: var(--line-soft);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
-    backdrop-filter: blur(14px) saturate(140%);
   }
 
   .site-header__inner {
@@ -234,9 +232,7 @@ const sectionActive = (item: (typeof mainNav)[number]) =>
     padding: var(--space-2);
     border: 1px solid var(--line);
     border-radius: var(--radius-md);
-    background: rgb(27 28 30 / 0.97);
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
+    background: rgb(27 28 30 / 0.98);
     box-shadow: var(--shadow-pop);
     opacity: 0;
     visibility: hidden;

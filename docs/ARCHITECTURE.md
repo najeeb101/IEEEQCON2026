@@ -100,12 +100,32 @@ pages  →  sections  →  ui  →  tokens.css
 | Feature | Where | Notes |
 | --- | --- | --- |
 | Header scroll state, dropdowns, mobile menu | `layout/Header.astro` | Dropdowns open on hover (mouse) or click/Enter (touch, keyboard). Escape closes. The mobile menu is `inert` when closed. |
-| Scroll reveal | `layouts/BaseLayout.astro` + `global.css` | Only active when JS runs (`html.js`), so content is never hidden without JS. |
-| Announcements carousel | `sections/Announcements.astro` | Auto-advances every 7s. Pauses on hover/focus. Supports arrow keys and swipe. No autoplay with reduced motion. |
+| Scroll reveal | `layouts/BaseLayout.astro` + `global.css` | Only elements that start *below the fold* are hidden (`.reveal-pending`), so first paint never waits for JS and nothing is hidden without JS. |
+| Announcements carousel | `sections/Announcements.astro` | The 7s timer is a CSS animation on the progress bar, and its `animationend` advances the slide, so there is no per-frame JavaScript. Pauses on hover, focus and when off screen. Supports arrow keys and swipe. No autoplay with reduced motion. |
 | Countdown | `ui/Countdown.astro` | Reads `site.event.start`/`end`. Shows "Happening now" during the event and a thank-you after. |
 | Date timeline states | `ui/DateTimeline.astro` | Past/next are computed in the visitor's browser, so they stay right without a rebuild. |
-| Particle fields | `scripts/particles.ts` | Canvas, device-pixel-ratio aware, fewer particles on phones, animates only while visible. |
+| Particle fields | `scripts/particles.ts` | See [Performance](#performance). |
+| Venue map | `ui/MapEmbed.astro` | Placeholder first. The Google Maps iframe loads only when the visitor taps "Show interactive map". |
+| Link prefetch | `astro.config.mjs` → `prefetch` | Pages are fetched on hover or focus, so navigation feels instant. |
 | Speaker bio dialog | `ui/PersonCard.astro` | Native `<dialog>`. Closes on Escape or backdrop click. |
+
+## Performance
+
+Measured with Playwright on a production build (`npm run build`, then `npm run preview`) at 1440px, and at 390px with the CPU throttled 4× to stand in for a mid-range phone:
+
+| Phone profile | Before | After |
+| --- | --- | --- |
+| Home page scroll | 12 fps, 14.4s of blocked main thread | 49 fps, 0.2s |
+| About page scroll | 19 fps | 53 fps |
+| Home largest paint | 1.7s | 1.2s |
+
+What keeps it smooth, and should be kept:
+
+- **Particle fields** (`scripts/particles.ts`) animate only while on screen, at the field's `fps` (30 for heroes, 20 for panels, max 24 on phones). They **hold still while the page scrolls**, render at no more than 1.5× pixel density, draw tiny dots as rectangles, and **step their particle count down** when frames cost more than 8ms. On very slow devices they fall back to a still frame. Off-screen canvases are hidden. Reduced motion and Data Saver get one still frame.
+- **No `backdrop-filter` blur over animated areas or on the fixed header.** A blur has to be recomputed every frame. Use a solid color with ~95% opacity instead.
+- **Reveal lists as one block.** Put `data-reveal` on the list or grid container (timeline, schedule, stats, themes, facts), not on each item. Each revealed element becomes its own GPU layer while it animates.
+- **Heavy third-party embeds load on demand** (the map). Registration is the exception, because there the form is the whole point of the page.
+- **Fonts:** the three faces used above the fold are preloaded in `BaseLayout`. Every face is self-hosted.
 
 ## SEO and sharing
 

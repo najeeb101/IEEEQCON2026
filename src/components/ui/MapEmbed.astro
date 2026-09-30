@@ -1,5 +1,9 @@
 ---
-/** Google Maps embed (no API key) tinted for the dark theme, with a venue card and directions link. */
+/**
+ * Venue map. Shows a lightweight placeholder and loads the Google Maps embed only when the
+ * visitor asks for it: the embed runs seconds of script on phones, and Google sees no visit
+ * until the map is opened. "Directions" works immediately either way.
+ */
 import Icon from './Icon.astro';
 import Button from './Button.astro';
 import { site, mapsEmbedUrl, mapsDirectionsUrl } from '../../config/site';
@@ -12,14 +16,20 @@ const { height = 'clamp(320px, 45vw, 460px)' } = Astro.props;
 ---
 
 <div class="map" style={`--map-h:${height}`}>
-  <iframe
-    src={mapsEmbedUrl}
-    title={`Map showing ${site.venue.name}`}
-    loading="lazy"
-    referrerpolicy="no-referrer-when-downgrade"
-    allowfullscreen></iframe>
+  <div class="map__frame" data-map data-src={mapsEmbedUrl} data-title={`Map showing ${site.venue.name}`}>
+    <div class="map__placeholder" aria-hidden="true">
+      <span class="map__ping"><Icon name="pin" size={30} /></span>
+    </div>
+    <div class="map__load">
+      <button type="button" data-map-load>
+        <Icon name="globe" size={18} />
+        Show interactive map
+      </button>
+      <span>Loads Google Maps</span>
+    </div>
+  </div>
   <div class="map__card">
-    <Icon name="pin" size={22} class="map__pin" />
+    <span class="map__pin"><Icon name="pin" size={22} /></span>
     <div>
       <strong>{site.venue.name}</strong>
       <span>{site.venue.area}, {site.venue.city}, {site.venue.country}</span>
@@ -37,11 +47,93 @@ const { height = 'clamp(320px, 45vw, 460px)' } = Astro.props;
     background: var(--surface);
   }
 
-  iframe {
-    width: 100%;
+  .map__frame {
+    position: relative;
     height: var(--map-h);
+  }
+
+  .map__frame :global(iframe) {
+    width: 100%;
+    height: 100%;
     border: 0;
     filter: grayscale(0.25) invert(0.9) hue-rotate(180deg) contrast(0.92) brightness(0.95);
+  }
+
+  /* A quiet street-grid look in theme colors. */
+  .map__placeholder {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(40% 55% at 50% 45%, rgb(57 148 200 / 0.16), transparent 70%),
+      repeating-linear-gradient(0deg, var(--line-soft) 0 1px, transparent 1px 56px),
+      repeating-linear-gradient(90deg, var(--line-soft) 0 1px, transparent 1px 56px),
+      linear-gradient(32deg, transparent 48.6%, rgb(255 255 255 / 0.07) 49%, rgb(255 255 255 / 0.07) 51%, transparent 51.4%),
+      var(--bg-deep);
+  }
+
+  .map__ping {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 90px;
+    border-radius: 50%;
+    background: rgb(190 74 74 / 0.18);
+    color: var(--maroon-300);
+  }
+
+  .map__ping::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgb(229 138 138 / 0.6);
+    border-radius: 50%;
+    animation: ping 2.4s var(--ease-out) infinite;
+  }
+
+  @keyframes ping {
+    to {
+      opacity: 0;
+      transform: scale(2.2);
+    }
+  }
+
+  .map__load {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: grid;
+    justify-items: center;
+    gap: var(--space-2);
+    transform: translate(-50%, 10px);
+    color: var(--text-subtle);
+    font-size: var(--text-xs);
+  }
+
+  .map__load button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55em;
+    min-height: 44px;
+    padding: 0 1.2em;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    background: rgb(27 28 30 / 0.92);
+    color: var(--text);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      border-color var(--dur-fast),
+      background-color var(--dur-fast);
+  }
+
+  .map__load button:hover {
+    border-color: var(--accent);
+    background: rgb(57 148 200 / 0.14);
   }
 
   .map__card {
@@ -56,9 +148,7 @@ const { height = 'clamp(320px, 45vw, 460px)' } = Astro.props;
     padding: var(--space-4) var(--space-5);
     border: 1px solid var(--line);
     border-radius: var(--radius-md);
-    background: rgb(20 20 22 / 0.9);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
+    background: rgb(20 20 22 / 0.94);
     box-shadow: var(--shadow-pop);
   }
 
@@ -77,7 +167,37 @@ const { height = 'clamp(320px, 45vw, 460px)' } = Astro.props;
     font-size: var(--text-sm);
   }
 
-  .map :global(.map__pin) {
+  .map__card .map__pin {
+    display: grid;
     color: var(--accent-2);
   }
+
+  .map__load button {
+    white-space: nowrap;
+  }
+
+  /* On phones the venue card sits under the map instead of covering it. */
+  @media (max-width: 560px) {
+    .map__card {
+      position: static;
+      max-width: none;
+      border-width: 1px 0 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-map]').forEach((root) => {
+    root.querySelector('[data-map-load]')?.addEventListener('click', () => {
+      const frame = document.createElement('iframe');
+      frame.src = root.dataset.src!;
+      frame.title = root.dataset.title!;
+      frame.referrerPolicy = 'no-referrer-when-downgrade';
+      frame.allowFullscreen = true;
+      root.replaceChildren(frame);
+      frame.focus();
+    });
+  });
+</script>

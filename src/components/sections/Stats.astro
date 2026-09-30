@@ -6,10 +6,10 @@ import { stats } from '../../data/program';
 <section class="stats" aria-labelledby="stats-title">
   <div class="container">
     <h2 id="stats-title" class="visually-hidden">Q-Con at a glance</h2>
-    <ul class="stats__list" role="list">
+    <ul class="stats__list" role="list" data-reveal>
       {
-        stats.map((s, i) => (
-          <li class="stat" data-reveal style={`--reveal-delay:${i}`}>
+        stats.map((s) => (
+          <li class="stat">
             <span class="stat__value">{s.value}</span>
             <span class="stat__label">{s.label}</span>
             <span class="stat__note">{s.note}</span>
