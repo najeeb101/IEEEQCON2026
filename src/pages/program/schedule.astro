@@ -1,0 +1,88 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import ScheduleList from '../../components/ui/ScheduleList.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon from '../../components/ui/Icon.astro';
+import { schedule, scheduleDate } from '../../data/program';
+import { site } from '../../config/site';
+import { dateParts } from '../../lib/format';
+
+const day = dateParts(scheduleDate);
+---
+
+<PageLayout
+  title="Conference Schedule"
+  lead={`A full day of keynotes, technical talks, posters, prototypes and networking at ${site.venue.name}.`}
+  crumbs={[{ label: 'Program' }, { label: 'Schedule' }]}
+>
+  <section class="section">
+    <div class="container container--narrow">
+      <header class="dayhead" data-reveal>
+        <p class="eyebrow">{day.weekday}</p>
+        <p class="dayhead__date smallcaps">{site.event.dateLabel}</p>
+        <p class="dayhead__meta">
+          <span><Icon name="clock" size={18} /> {site.event.timeLabel}</span>
+          <span><Icon name="pin" size={18} /> {site.venue.name}</span>
+        </p>
+      </header>
+
+      <ScheduleList items={schedule} />
+
+      <p class="note">Times are in Doha time (GMT+3). Rooms and session details are added as they are confirmed.</p>
+
+      <div class="actions" data-reveal>
+        <Button href="/registration/" icon="arrow-right">Register</Button>
+        <Button href="/program/speakers/" variant="outline">Meet the speakers</Button>
+      </div>
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .dayhead {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-7);
+    padding: var(--space-6);
+    background: var(--surface);
+    text-align: center;
+  }
+
+  .dayhead__date {
+    color: #fff;
+    font-size: var(--text-3xl);
+    line-height: 1.2;
+  }
+
+  .dayhead__meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2) var(--space-5);
+    color: var(--text-muted);
+  }
+
+  .dayhead__meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+  }
+
+  .dayhead__meta :global(svg) {
+    color: var(--accent-soft);
+  }
+
+  .note {
+    margin-top: var(--space-5);
+    color: var(--text-subtle);
+    font-size: var(--text-sm);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-7);
+  }
+</style>

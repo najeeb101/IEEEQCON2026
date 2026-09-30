@@ -1,0 +1,41 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import PersonCard from '../../components/ui/PersonCard.astro';
+import Button from '../../components/ui/Button.astro';
+import { speakers } from '../../data/program';
+---
+
+<PageLayout
+  title="Speakers"
+  heading="Keynotes & Panel"
+  lead="Experts from leading institutions such as QSTP, QCRI, QEERI, HBKU, and major technology companies share insights on AI, sustainability, innovation leadership, and applied engineering."
+  crumbs={[{ label: 'Program' }, { label: 'Speakers' }]}
+>
+  <section class="section">
+    <div class="container">
+      <div class="grid-speakers">
+        {speakers.map((s, i) => <PersonCard {...s} index={i} />)}
+      </div>
+      <div class="more" data-reveal>
+        <p class="muted">More speakers and panelists will be announced soon.</p>
+        <Button href="/program/schedule/" variant="outline" icon="arrow-right">See when they speak</Button>
+      </div>
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .grid-speakers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-8) var(--space-5);
+  }
+
+  .more {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-4);
+    margin-top: var(--space-9);
+    text-align: center;
+  }
+</style>

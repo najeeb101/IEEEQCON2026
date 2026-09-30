@@ -1,0 +1,117 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import TrackCard from '../../components/ui/TrackCard.astro';
+import DateTimeline from '../../components/ui/DateTimeline.astro';
+import Button from '../../components/ui/Button.astro';
+import Themes from '../../components/sections/Themes.astro';
+import { tracks, importantDates } from '../../data/submissions';
+import { fullName } from '../../config/site';
+
+const openTrack = tracks.find((t) => t.status === 'open' && t.formUrl);
+---
+
+<PageLayout
+  title="Call for Submissions"
+  heading={`Submit your work to ${fullName}`}
+  eyebrow="Call for Submissions"
+  lead="Students across Qatar are invited to submit research abstracts, posters, or engineering prototypes. All submissions are reviewed by faculty and industry judges, with awards presented during the conference."
+  crumbs={[{ label: 'Submissions' }]}
+>
+  <Fragment slot="actions">
+    {openTrack && <Button href={openTrack.formUrl} icon="arrow-right">Submit an abstract</Button>}
+    <Button href="/submissions/research-and-posters/" variant="outline">Read the guidelines</Button>
+  </Fragment>
+
+  <section class="section">
+    <div class="container cfp">
+      <div>
+        <SectionHeading eyebrow="Two ways to take part" title="Submission Tracks" />
+        <div class="cfp__tracks">
+          {tracks.map((t, i) => <TrackCard track={t} index={i} />)}
+        </div>
+
+        <div class="cfp__who" data-reveal>
+          <h2>Who can submit?</h2>
+          <p class="muted">
+            The conference is open to students from all universities and institutions across Qatar. Abstracts are open to
+            students and researchers, but only students compete for awards. Prototype entries are open to all university
+            students, individually or in teams of up to four.
+          </p>
+        </div>
+      </div>
+
+      <aside class="cfp__dates" aria-labelledby="cfp-dates">
+        <h2 id="cfp-dates" class="cfp__dates-title">Important Dates</h2>
+        <DateTimeline dates={importantDates} />
+        <p class="cfp__note">Dates are in Doha time (GMT+3). Check this page for updates.</p>
+      </aside>
+    </div>
+  </section>
+
+  <Themes />
+</PageLayout>
+
+<style>
+  .cfp {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  .cfp__tracks {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .cfp__who {
+    margin-top: var(--space-8);
+    padding-left: var(--space-5);
+    border-left: 3px solid var(--accent);
+  }
+
+  .cfp__who h2 {
+    margin-bottom: var(--space-3);
+    font-size: var(--text-xl);
+  }
+
+  .cfp__dates {
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-5));
+    padding-left: var(--space-6);
+    border-left: 1px solid var(--line);
+  }
+
+  .cfp__dates-title {
+    margin-bottom: var(--space-5);
+    font-size: var(--text-xl);
+  }
+
+  .cfp__dates :global(.timeline__item) {
+    padding: var(--space-3) var(--space-4);
+    gap: var(--space-4);
+  }
+
+  .cfp__dates :global(.timeline__label) {
+    font-size: var(--text-base);
+  }
+
+  .cfp__note {
+    margin-top: var(--space-4);
+    color: var(--text-subtle);
+    font-size: var(--text-sm);
+  }
+
+  @media (max-width: 960px) {
+    .cfp {
+      grid-template-columns: 1fr;
+    }
+
+    .cfp__dates {
+      position: static;
+      padding-left: 0;
+      border-left: 0;
+    }
+  }
+</style>

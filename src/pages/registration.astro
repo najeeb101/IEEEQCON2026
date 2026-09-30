@@ -1,0 +1,116 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import FactGrid from '../components/ui/FactGrid.astro';
+import StatusBadge from '../components/ui/StatusBadge.astro';
+import Button from '../components/ui/Button.astro';
+import { site, fullName, venueLine } from '../config/site';
+
+const { status, formUrl } = site.registration;
+// embedded=true strips Google's chrome; hl=en keeps the form in English regardless of the visitor's region.
+const embedUrl = formUrl ? `${formUrl}${formUrl.includes('?') ? '&' : '?'}embedded=true&hl=en` : '';
+---
+
+<PageLayout
+  title="Registration"
+  heading={`Register for ${fullName}`}
+  lead="Join students, researchers, innovators, and industry leaders from across Qatar for a full day of engineering talks, posters, prototypes, and interactive sessions."
+  crumbs={[{ label: 'Registration' }]}
+>
+  <section class="section section--tight">
+    <div class="container">
+      <FactGrid
+        facts={[
+          { icon: 'calendar', label: 'Event date', value: site.event.dateLabel },
+          { icon: 'clock', label: 'Event time', value: site.event.timeLabel },
+          { icon: 'pin', label: 'Address', value: venueLine, href: '/venue/' },
+          { icon: 'mail', label: 'Contact us', value: site.contact.email, href: `mailto:${site.contact.email}` },
+        ]}
+      />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="form-title">
+    <div class="container container--narrow">
+      <div class="form-head" data-reveal>
+        <h2 id="form-title">Registration form</h2>
+        <StatusBadge status={status} label={status === 'open' ? 'Registration open' : undefined} />
+      </div>
+
+      {
+        status === 'open' && formUrl ? (
+          <div class="form-frame" data-reveal>
+            <iframe src={embedUrl} title={`${fullName} registration form`} loading="lazy">
+              Loading…
+            </iframe>
+            <p class="form-fallback">
+              Trouble with the form?{' '}
+              <a href={formUrl} target="_blank" rel="noopener noreferrer">
+                Open it in a new tab
+              </a>
+              .
+            </p>
+          </div>
+        ) : (
+          <div class="form-state" data-reveal>
+            <p class="lead">
+              {status === 'soon'
+                ? 'Registration opens soon. Follow us on Instagram or check back here for the announcement.'
+                : 'Registration is now closed. Thank you for your interest!'}
+            </p>
+            <Button href={site.socials[0].url} variant="outline">
+              Follow {site.socials[0].handle}
+            </Button>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .form-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+
+  .form-head h2 {
+    font-size: var(--text-2xl);
+  }
+
+  .form-frame {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--paper);
+  }
+
+  .form-frame iframe {
+    width: 100%;
+    height: min(1800px, 190vh);
+    border: 0;
+  }
+
+  .form-fallback {
+    padding: var(--space-4) var(--space-5);
+    border-top: 1px solid #dfe3e8;
+    color: #4a5059;
+    font-size: var(--text-sm);
+  }
+
+  .form-fallback a {
+    color: var(--brand-blue);
+  }
+
+  .form-state {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-5);
+    padding: var(--space-7);
+    border: 1px dashed var(--line);
+    border-radius: var(--radius-lg);
+  }
+</style>

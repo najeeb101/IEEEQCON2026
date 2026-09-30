@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/sections/Hero.astro';
+import Announcements from '../components/sections/Announcements.astro';
+import Overview from '../components/sections/Overview.astro';
+import Stats from '../components/sections/Stats.astro';
+import Themes from '../components/sections/Themes.astro';
+import DayFlow from '../components/sections/DayFlow.astro';
+import KeyDates from '../components/sections/KeyDates.astro';
+import SpeakersPreview from '../components/sections/SpeakersPreview.astro';
+import WhenWhere from '../components/sections/WhenWhere.astro';
+import Partners from '../components/sections/Partners.astro';
+import GetInvolved from '../components/sections/GetInvolved.astro';
+import FinalCta from '../components/sections/FinalCta.astro';
+import { site, fullName } from '../config/site';
+
+// schema.org Event — lets search engines show the date and venue in results.
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: fullName,
+  description: site.description,
+  startDate: site.event.start,
+  endDate: site.event.end,
+  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  eventStatus: 'https://schema.org/EventScheduled',
+  location: {
+    '@type': 'Place',
+    name: site.venue.name,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: site.venue.area,
+      addressLocality: site.venue.city,
+      addressCountry: 'QA',
+    },
+  },
+  organizer: { '@type': 'Organization', name: site.organizer, email: site.contact.email },
+};
+---
+
+<BaseLayout schema={schema}>
+  <Hero />
+  <Announcements />
+  <Overview />
+  <Stats />
+  <Themes />
+  <DayFlow />
+  <KeyDates />
+  <SpeakersPreview />
+  <WhenWhere />
+  <Partners />
+  <GetInvolved />
+  <FinalCta />
+</BaseLayout>

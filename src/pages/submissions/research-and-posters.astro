@@ -1,0 +1,72 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import SubmissionBlock from '../../components/ui/SubmissionBlock.astro';
+import RequirementList from '../../components/ui/RequirementList.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import DateTimeline from '../../components/ui/DateTimeline.astro';
+import Button from '../../components/ui/Button.astro';
+import {
+  tracks,
+  abstractRequirements,
+  posterRequirements,
+  posterTemplateUrl,
+  researchDates,
+} from '../../data/submissions';
+
+const track = tracks.find((t) => t.id === 'research')!;
+---
+
+<PageLayout
+  title="Research & Poster Submissions"
+  lead="Submit a one-page abstract for the Poster Session or Oral Presentation tracks. Accepted posters are judged on conference day, with awards for undergraduate and graduate categories."
+  crumbs={[{ label: 'Submissions', href: '/submissions/' }, { label: 'Research & Posters' }]}
+>
+  <section class="section">
+    <div class="container">
+      <SubmissionBlock
+        title="Abstract Submission for Poster / Presentation"
+        status={track.status}
+        formUrl={track.formUrl}
+        deadline={track.deadline}
+        deadlineLabel="Submission deadline"
+      >
+        <p class="muted intro">Students may submit research for consideration in either the Poster Session or Oral Presentation tracks.</p>
+        <h3>Abstract requirements</h3>
+        <RequirementList items={abstractRequirements} />
+      </SubmissionBlock>
+
+      <SubmissionBlock title="Poster Submission" status={track.status === 'open' ? 'soon' : track.status}>
+        <h3>Poster requirements</h3>
+        <RequirementList items={posterRequirements} />
+        <div class="template">
+          {
+            posterTemplateUrl ? (
+              <Button href={posterTemplateUrl} variant="outline" iconStart="download">
+                Download the A1 poster template
+              </Button>
+            ) : (
+              <p class="muted">The link to the official A1 poster template will be posted here.</p>
+            )
+          }
+        </div>
+      </SubmissionBlock>
+    </div>
+  </section>
+
+  <section class="section section--deep">
+    <div class="container container--narrow">
+      <SectionHeading title="Important Dates" eyebrow="Research & Posters" align="center" />
+      <DateTimeline dates={researchDates} showTrack={false} />
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .intro {
+    margin-bottom: var(--space-5);
+  }
+
+  .template {
+    margin-top: var(--space-5);
+  }
+</style>

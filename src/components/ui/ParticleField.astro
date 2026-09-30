@@ -1,0 +1,44 @@
+---
+/**
+ * Decorative animated particle layer. Fills its positioned parent.
+ * Use `mask` to fade it out behind text, e.g. "linear-gradient(90deg, transparent 20%, #000 70%)".
+ */
+interface Props {
+  variant?: 'wave' | 'sphere' | 'rings';
+  tone?: 'blue' | 'cyan' | 'maroon';
+  intensity?: number;
+  /** Wave only: vertical position of the wave's horizon (0 top – 1 bottom). */
+  horizon?: number;
+  mask?: string;
+  class?: string;
+}
+
+const { variant = 'wave', tone = 'blue', intensity = 1, horizon = 0.5, mask, class: className } = Astro.props;
+---
+
+<canvas
+  class:list={['particles', className]}
+  data-particles
+  data-variant={variant}
+  data-tone={tone}
+  data-intensity={intensity}
+  data-horizon={horizon}
+  style={mask ? `--mask:${mask}` : undefined}
+  aria-hidden="true"></canvas>
+
+<style>
+  .particles {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    -webkit-mask-image: var(--mask, none);
+    mask-image: var(--mask, none);
+  }
+</style>
+
+<script>
+  import { initParticles } from '../../scripts/particles';
+  initParticles();
+</script>

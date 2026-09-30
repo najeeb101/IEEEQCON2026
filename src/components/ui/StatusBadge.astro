@@ -1,0 +1,73 @@
+---
+import type { Status } from '../../config/site';
+
+interface Props {
+  status: Status;
+  /** Override the default wording. */
+  label?: string;
+}
+
+const { status, label } = Astro.props;
+const text = label ?? { open: 'Open now', soon: 'Opening soon', closed: 'Closed' }[status];
+---
+
+<span class:list={['status', `status--${status}`]}>
+  <span class="status__dot" aria-hidden="true"></span>
+  {text}
+</span>
+
+<style>
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55em;
+    padding: 0.3em 0.85em;
+    border: 1px solid;
+    border-radius: var(--radius-pill);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  .status__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .status--open {
+    color: var(--blue-300);
+    border-color: rgb(154 205 234 / 0.35);
+    background: rgb(57 148 200 / 0.12);
+  }
+
+  .status--open .status__dot {
+    box-shadow: 0 0 0 0 rgb(154 205 234 / 0.6);
+    animation: pulse 2s infinite;
+  }
+
+  .status--soon {
+    color: var(--ink-100);
+    border-color: var(--line);
+    background: rgb(255 255 255 / 0.04);
+  }
+
+  .status--closed {
+    color: var(--maroon-300);
+    border-color: rgb(190 74 74 / 0.4);
+    background: rgb(190 74 74 / 0.1);
+  }
+
+  @keyframes pulse {
+    70% {
+      box-shadow: 0 0 0 7px rgb(154 205 234 / 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgb(154 205 234 / 0);
+    }
+  }
+</style>

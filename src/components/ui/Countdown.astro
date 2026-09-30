@@ -1,0 +1,130 @@
+---
+/**
+ * Live countdown to the conference. Switches to "Happening now" during the event
+ * and a thank-you line afterwards. Without JavaScript it shows the date.
+ */
+import { site } from '../../config/site';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+const units = [
+  ['days', 'Days'],
+  ['hours', 'Hours'],
+  ['minutes', 'Minutes'],
+  ['seconds', 'Seconds'],
+] as const;
+---
+
+<div class:list={['countdown', className]} data-countdown data-start={site.event.start} data-end={site.event.end}>
+  <div class="countdown__clock" role="timer" aria-live="off" aria-label={`Time until ${site.event.dateLabel}`}>
+    {
+      units.map(([key, label]) => (
+        <div class="countdown__unit">
+          <span class="countdown__value" data-unit={key}>
+            --
+          </span>
+          <span class="countdown__label">{label}</span>
+        </div>
+      ))
+    }
+  </div>
+  <p class="countdown__message" data-message hidden></p>
+</div>
+
+<style>
+  .countdown__clock {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-2);
+    max-width: 440px;
+  }
+
+  .countdown__unit {
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+    padding: var(--space-3) var(--space-2);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-sm);
+    background: rgb(20 20 22 / 0.55);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+
+  .countdown__value {
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem);
+    font-weight: 300;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .countdown__label {
+    color: var(--text-subtle);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .countdown__message {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+    padding: 0.55em 1em;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    background: rgb(20 20 22 / 0.55);
+    color: var(--text-body);
+    font-size: var(--text-sm);
+  }
+
+  .countdown__message::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .countdown.is-done .countdown__clock {
+    display: none;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-countdown]').forEach((root) => {
+    const start = new Date(root.dataset.start!).getTime();
+    const end = new Date(root.dataset.end!).getTime();
+    const out = Object.fromEntries(
+      [...root.querySelectorAll<HTMLElement>('[data-unit]')].map((el) => [el.dataset.unit!, el]),
+    );
+    const message = root.querySelector<HTMLElement>('[data-message]')!;
+
+    const finish = (text: string) => {
+      root.classList.add('is-done');
+      message.textContent = text;
+      message.hidden = false;
+    };
+
+    const tick = () => {
+      const now = Date.now();
+      if (now >= end) return finish('Thank you for joining us. See you at the next edition!'), false;
+      if (now >= start) return finish('Happening now — welcome to Q-Con!'), false;
+      let s = Math.floor((start - now) / 1000);
+      const values = { days: Math.floor(s / 86400), hours: Math.floor((s %= 86400) / 3600), minutes: Math.floor((s %= 3600) / 60), seconds: s % 60 };
+      for (const [k, v] of Object.entries(values)) out[k].textContent = String(v).padStart(2, '0');
+      return true;
+    };
+
+    if (tick()) {
+      const id = window.setInterval(() => {
+        if (!tick()) window.clearInterval(id);
+      }, 1000);
+    }
+  });
+</script>

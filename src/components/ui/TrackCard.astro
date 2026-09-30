@@ -1,0 +1,79 @@
+---
+/** Submission track summary card (Call for Submissions page). */
+import Button from './Button.astro';
+import StatusBadge from './StatusBadge.astro';
+import Icon from './Icon.astro';
+import type { Track } from '../../data/submissions';
+import { formatDate } from '../../lib/format';
+
+interface Props {
+  track: Track;
+  index?: number;
+}
+
+const { track, index = 0 } = Astro.props;
+const canSubmit = track.status === 'open' && !!track.formUrl;
+---
+
+<article class="track" data-reveal style={`--reveal-delay:${index}`}>
+  <div class="track__top">
+    <StatusBadge status={track.status} />
+    <span class="track__deadline">
+      <Icon name="calendar" size={16} />
+      Deadline: {formatDate(track.deadline)}
+    </span>
+  </div>
+  <h3>{track.title}</h3>
+  <p>{track.summary}</p>
+  <div class="track__actions">
+    <Button href={track.href} variant={canSubmit ? 'outline' : 'primary'} icon="arrow-right">Guidelines</Button>
+    {canSubmit && <Button href={track.formUrl}>Submit now</Button>}
+  </div>
+</article>
+
+<style>
+  .track {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-6);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
+  }
+
+  .track__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .track__deadline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  h3 {
+    color: var(--accent-soft);
+    font-size: var(--text-xl);
+    font-weight: 600;
+  }
+
+  p {
+    color: var(--text-muted);
+  }
+
+  .track__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: auto;
+    padding-top: var(--space-2);
+  }
+</style>

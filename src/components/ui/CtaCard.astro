@@ -1,0 +1,63 @@
+---
+/** "Get involved" card (IECON's mailing-list / volunteer panels) with a gradient hairline border. */
+import Icon from './Icon.astro';
+import Button from './Button.astro';
+import type { IconName } from './icons';
+
+interface Props {
+  title: string;
+  icon: IconName;
+  cta: { label: string; href: string };
+  index?: number;
+}
+
+const { title, icon, cta, index = 0 } = Astro.props;
+---
+
+<article class="cta-card" data-reveal style={`--reveal-delay:${index}`}>
+  <span class="cta-card__icon"><Icon name={icon} size={26} /></span>
+  <h3>{title}</h3>
+  <p><slot /></p>
+  <Button href={cta.href} variant="ghost" icon="arrow-right">{cta.label}</Button>
+</article>
+
+<style>
+  .cta-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+    height: 100%;
+    padding: var(--space-6);
+    border: 1px solid transparent;
+    border-radius: var(--radius-lg);
+    background:
+      linear-gradient(160deg, rgb(35 36 40 / 0.95), rgb(20 20 22 / 0.95)) padding-box,
+      linear-gradient(160deg, rgb(57 148 200 / 0.55), rgb(63 67 73 / 0.4) 40%, rgb(190 74 74 / 0.45)) border-box;
+    transition: translate var(--dur) var(--ease-out);
+  }
+
+  .cta-card:hover {
+    translate: 0 -4px;
+  }
+
+  .cta-card__icon {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgb(57 148 200 / 0.12);
+    color: var(--accent-soft);
+  }
+
+  h3 {
+    font-size: var(--text-xl);
+    font-weight: 500;
+  }
+
+  p {
+    flex: 1;
+    color: var(--text-muted);
+  }
+</style>

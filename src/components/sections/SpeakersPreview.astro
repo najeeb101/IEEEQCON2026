@@ -1,0 +1,39 @@
+---
+/** Keynote speakers grid (IECON) for the home page. */
+import SectionHeading from '../ui/SectionHeading.astro';
+import PersonCard from '../ui/PersonCard.astro';
+import Button from '../ui/Button.astro';
+import { speakers } from '../../data/program';
+---
+
+<section class="section" aria-labelledby="speakers-title">
+  <div class="container">
+    <SectionHeading
+      id="speakers-title"
+      eyebrow="Program"
+      title="Keynotes & Panel"
+      lead="Voices from Qatar's research institutions and industry open and close the day."
+      align="center"
+    />
+    <div class="speakers">
+      {speakers.map((s, i) => <PersonCard {...s} index={i} />)}
+    </div>
+    <div class="speakers__more" data-reveal>
+      <Button href="/program/speakers/" variant="outline" icon="arrow-right">All speakers</Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .speakers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-7) var(--space-5);
+  }
+
+  .speakers__more {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-8);
+  }
+</style>

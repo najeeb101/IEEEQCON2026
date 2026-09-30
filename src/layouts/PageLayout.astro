@@ -1,0 +1,26 @@
+---
+/** Inner page = BaseLayout + PageHero. Content goes in the default slot; hero buttons in slot="actions". */
+import BaseLayout from './BaseLayout.astro';
+import PageHero from '../components/layout/PageHero.astro';
+
+interface Props {
+  title: string;
+  /** Hero heading; defaults to `title`. */
+  heading?: string;
+  description?: string;
+  lead?: string;
+  eyebrow?: string;
+  crumbs?: { label: string; href?: string }[];
+  tone?: 'maroon' | 'blue';
+  schema?: Record<string, unknown>;
+}
+
+const { title, heading, description, lead, eyebrow, crumbs, tone, schema } = Astro.props;
+---
+
+<BaseLayout title={title} description={description ?? lead} schema={schema}>
+  <PageHero title={heading ?? title} lead={lead} eyebrow={eyebrow} crumbs={crumbs ?? [{ label: title }]} tone={tone}>
+    <slot name="actions" />
+  </PageHero>
+  <slot />
+</BaseLayout>

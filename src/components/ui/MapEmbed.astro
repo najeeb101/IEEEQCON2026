@@ -1,0 +1,83 @@
+---
+/** Google Maps embed (no API key) tinted for the dark theme, with a venue card and directions link. */
+import Icon from './Icon.astro';
+import Button from './Button.astro';
+import { site, mapsEmbedUrl, mapsDirectionsUrl } from '../../config/site';
+
+interface Props {
+  height?: string;
+}
+
+const { height = 'clamp(320px, 45vw, 460px)' } = Astro.props;
+---
+
+<div class="map" style={`--map-h:${height}`}>
+  <iframe
+    src={mapsEmbedUrl}
+    title={`Map showing ${site.venue.name}`}
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"
+    allowfullscreen></iframe>
+  <div class="map__card">
+    <Icon name="pin" size={22} class="map__pin" />
+    <div>
+      <strong>{site.venue.name}</strong>
+      <span>{site.venue.area}, {site.venue.city}, {site.venue.country}</span>
+    </div>
+    <Button href={mapsDirectionsUrl} size="sm" icon="external">Directions</Button>
+  </div>
+</div>
+
+<style>
+  .map {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+
+  iframe {
+    width: 100%;
+    height: var(--map-h);
+    border: 0;
+    filter: grayscale(0.25) invert(0.9) hue-rotate(180deg) contrast(0.92) brightness(0.95);
+  }
+
+  .map__card {
+    position: absolute;
+    left: var(--space-4);
+    bottom: var(--space-4);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3) var(--space-4);
+    max-width: calc(100% - 2rem);
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: rgb(20 20 22 / 0.9);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-pop);
+  }
+
+  .map__card > div {
+    display: grid;
+    line-height: 1.35;
+  }
+
+  .map__card strong {
+    font-family: var(--font-display);
+    font-weight: 500;
+  }
+
+  .map__card span {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .map :global(.map__pin) {
+    color: var(--accent-2);
+  }
+</style>

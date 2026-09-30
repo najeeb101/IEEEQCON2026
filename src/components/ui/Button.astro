@@ -1,0 +1,159 @@
+---
+/**
+ * Button / link-button.
+ *  primary – Q-Con blue with dark text (main action per view)
+ *  outline – white hairline (Q-Con header "Register")
+ *  ghost   – text + arrow for tertiary links
+ */
+import Icon from './Icon.astro';
+import type { IconName } from './icons';
+import { url, isExternal } from '../../lib/url';
+
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'outline' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  icon?: IconName;
+  iconStart?: IconName;
+  block?: boolean;
+  class?: string;
+  type?: 'button' | 'submit';
+  disabled?: boolean;
+  [key: `data-${string}`]: string | undefined;
+  'aria-label'?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  icon,
+  iconStart,
+  block = false,
+  class: className,
+  type = 'button',
+  disabled = false,
+  ...rest
+} = Astro.props;
+
+const external = href ? isExternal(href) : false;
+const endIcon: IconName | undefined = icon ?? (external ? 'external' : undefined);
+const classes = ['btn', `btn--${variant}`, `btn--${size}`, block && 'btn--block', className];
+const iconSize = size === 'lg' ? 20 : 18;
+---
+
+{
+  href && !disabled ? (
+    <a
+      class:list={classes}
+      href={url(href)}
+      target={external ? '_blank' : undefined}
+      rel={external ? 'noopener noreferrer' : undefined}
+      {...rest}
+    >
+      {iconStart && <Icon name={iconStart} size={iconSize} />}
+      <span><slot /></span>
+      {endIcon && <Icon name={endIcon} size={iconSize} class="btn__icon" />}
+      {external && <span class="visually-hidden">(opens in a new tab)</span>}
+    </a>
+  ) : (
+    <button class:list={classes} type={type} disabled={disabled} {...rest}>
+      {iconStart && <Icon name={iconStart} size={iconSize} />}
+      <span><slot /></span>
+      {endIcon && <Icon name={endIcon} size={iconSize} class="btn__icon" />}
+    </button>
+  )
+}
+
+<style>
+  .btn {
+    --btn-h: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6em;
+    min-height: var(--btn-h);
+    padding: 0 1.4em;
+    border: 1px solid transparent;
+    border-radius: var(--radius-xs);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color var(--dur) var(--ease-out),
+      border-color var(--dur) var(--ease-out),
+      color var(--dur) var(--ease-out),
+      transform var(--dur) var(--ease-out),
+      box-shadow var(--dur) var(--ease-out);
+  }
+
+  .btn--sm {
+    --btn-h: 40px;
+    padding-inline: 1.1em;
+    font-size: var(--text-xs);
+  }
+
+  .btn--lg {
+    --btn-h: 56px;
+    padding-inline: 1.8em;
+    font-size: var(--text-base);
+  }
+
+  .btn--block {
+    width: 100%;
+  }
+
+  .btn--primary {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .btn--primary:hover {
+    background: var(--accent-strong);
+    color: var(--on-accent);
+    transform: translateY(-2px);
+    box-shadow: var(--glow-accent);
+  }
+
+  .btn--outline {
+    border-color: rgb(255 255 255 / 0.85);
+    color: #fff;
+    background: transparent;
+  }
+
+  .btn--outline:hover {
+    background: #fff;
+    color: var(--ink-900);
+  }
+
+  .btn--ghost {
+    min-height: auto;
+    padding: 0.35em 0;
+    color: var(--accent-soft);
+    background: none;
+  }
+
+  .btn--ghost:hover {
+    color: #fff;
+  }
+
+  .btn__icon {
+    transition: transform var(--dur) var(--ease-out);
+  }
+
+  .btn:hover .btn__icon {
+    transform: translateX(3px);
+  }
+
+  .btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+    transform: none;
+    box-shadow: none;
+  }
+</style>

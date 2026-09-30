@@ -1,0 +1,109 @@
+---
+/**
+ * Q-Con's signature split panel: a hairline-bordered box with a particle visual on one side
+ * (with an overlaid statement) and text on the other. Stacks on mobile.
+ */
+import ParticleField from './ParticleField.astro';
+
+interface Props {
+  variant?: 'wave' | 'sphere' | 'rings';
+  tone?: 'blue' | 'cyan' | 'maroon';
+  /** Statement set over the visual. */
+  statement?: string;
+  /** Put the visual on the right. */
+  reverse?: boolean;
+  /** Visual column share, e.g. "2fr 3fr". */
+  columns?: string;
+  class?: string;
+}
+
+const { variant = 'wave', tone = 'blue', statement, reverse = false, columns = '2fr 3fr', class: className } = Astro.props;
+const hasVisualSlot = Astro.slots.has('visual');
+---
+
+<div class:list={['split', { 'split--reverse': reverse }, className]} style={`--cols:${columns}`} data-reveal>
+  <div class="split__visual">
+    <ParticleField variant={variant} tone={tone} horizon={0.5} />
+    <div class="split__visual-content">
+      {statement && <p class="split__statement">{statement}</p>}
+      {hasVisualSlot && <slot name="visual" />}
+    </div>
+  </div>
+  <div class="split__body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .split {
+    display: grid;
+    grid-template-columns: var(--cols);
+    border: 1px solid var(--line);
+    background: rgb(20 20 22 / 0.6);
+  }
+
+  .split--reverse {
+    direction: rtl;
+  }
+
+  .split--reverse > * {
+    direction: ltr;
+  }
+
+  .split__visual {
+    position: relative;
+    min-height: 420px;
+    overflow: hidden;
+    border-right: 1px solid var(--line);
+    background: radial-gradient(70% 70% at 50% 50%, rgb(255 255 255 / 0.025), transparent 70%), var(--bg-deep);
+  }
+
+  .split--reverse .split__visual {
+    border-right: 0;
+    border-left: 1px solid var(--line);
+  }
+
+  .split__visual-content {
+    position: relative;
+    display: grid;
+    place-items: center;
+    gap: var(--space-6);
+    height: 100%;
+    padding: var(--space-7) var(--space-6);
+    text-align: center;
+  }
+
+  .split__statement {
+    max-width: 16ch;
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    text-shadow: 0 4px 24px rgb(0 0 0 / 0.8);
+  }
+
+  .split__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(2rem, 1rem + 4vw, 5.5rem);
+  }
+
+  @media (max-width: 860px) {
+    .split {
+      grid-template-columns: 1fr;
+    }
+
+    .split__visual {
+      min-height: 300px;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .split--reverse .split__visual {
+      border-left: 0;
+    }
+  }
+</style>

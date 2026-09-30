@@ -1,0 +1,86 @@
+---
+/**
+ * "Organized by" + sponsors (IECON). While no sponsors are confirmed, the home page shows an
+ * invitation to sponsor instead of an empty grid.
+ */
+import SectionHeading from '../ui/SectionHeading.astro';
+import LogoTile from '../ui/LogoTile.astro';
+import Button from '../ui/Button.astro';
+import { organizers, sponsorTiers } from '../../data/community';
+import { fullName } from '../../config/site';
+
+const sponsors = sponsorTiers.flatMap((t) => t.sponsors);
+---
+
+<section class="section partners" aria-labelledby="partners-title">
+  <div class="container">
+    <SectionHeading id="partners-title" eyebrow="Partners" title={`${fullName} is organized by`} align="center" />
+    <div class="partners__organizers" data-reveal>
+      {organizers.map((o) => <LogoTile name={o.name} logo={o.logo} href={o.url} size="lg" />)}
+    </div>
+
+    {
+      sponsors.length > 0 ? (
+        <>
+          <h3 class="partners__subtitle">Sponsors</h3>
+          <div class="partners__grid" data-reveal>
+            {sponsors.map((s) => (
+              <LogoTile name={s.name} logo={s.logo} href={s.url} />
+            ))}
+          </div>
+        </>
+      ) : (
+        <div class="partners__invite" data-reveal>
+          <div>
+            <h3>Partner with {fullName}</h3>
+            <p>Put your organization in front of Qatar’s next generation of engineers and support student research and innovation.</p>
+          </div>
+          <Button href="/sponsors/" icon="arrow-right">Sponsorship opportunities</Button>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .partners__organizers {
+    display: grid;
+    grid-template-columns: minmax(0, 520px);
+    justify-content: center;
+  }
+
+  .partners__subtitle {
+    margin: var(--space-8) 0 var(--space-5);
+    font-size: var(--text-xl);
+    text-align: center;
+  }
+
+  .partners__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: var(--space-4);
+  }
+
+  .partners__invite {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    margin-top: var(--space-8);
+    padding: var(--space-6) clamp(1.25rem, 1rem + 2vw, 3rem);
+    border: 1px dashed var(--line);
+    border-radius: var(--radius-lg);
+    background: rgb(255 255 255 / 0.015);
+  }
+
+  .partners__invite h3 {
+    font-size: var(--text-xl);
+  }
+
+  .partners__invite p {
+    max-width: 60ch;
+    margin-top: var(--space-2);
+    color: var(--text-muted);
+  }
+</style>

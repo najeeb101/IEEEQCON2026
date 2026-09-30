@@ -1,0 +1,86 @@
+---
+/**
+ * Organization tile (IECON partner/exhibitor grid). Logos sit on a light tile so any
+ * sponsor artwork reads on the dark theme. Without a logo the name is set as a wordmark.
+ */
+import { url, isExternal } from '../../lib/url';
+
+interface Props {
+  name?: string;
+  logo?: string;
+  href?: string;
+  /** Dashed "Your logo here" slot. */
+  placeholder?: boolean;
+  size?: 'md' | 'lg';
+}
+
+const { name = '', logo, href, placeholder = false, size = 'md' } = Astro.props;
+const Tag = href ? 'a' : 'div';
+const linkProps = href
+  ? { href: url(href), ...(isExternal(href) ? { target: '_blank', rel: 'noopener noreferrer' } : {}) }
+  : {};
+---
+
+{
+  placeholder ? (
+    <div class:list={['tile', 'tile--placeholder', `tile--${size}`]}>
+      <span>Your logo here</span>
+    </div>
+  ) : (
+    <Tag class:list={['tile', `tile--${size}`]} {...linkProps} aria-label={href ? name : undefined}>
+      {logo ? <img src={url(logo)} alt={name} loading="lazy" decoding="async" /> : <span class="tile__wordmark">{name}</span>}
+    </Tag>
+  )
+}
+
+<style>
+  .tile {
+    display: grid;
+    place-items: center;
+    min-height: 120px;
+    padding: var(--space-5);
+    border-radius: var(--radius-md);
+    background: var(--paper);
+    text-decoration: none;
+    transition:
+      translate var(--dur) var(--ease-out),
+      box-shadow var(--dur) var(--ease-out);
+  }
+
+  .tile--lg {
+    min-height: 160px;
+  }
+
+  a.tile:hover {
+    translate: 0 -3px;
+    box-shadow: 0 16px 36px -16px rgb(57 148 200 / 0.5);
+  }
+
+  .tile img {
+    max-height: 72px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .tile--lg img {
+    max-height: 96px;
+  }
+
+  .tile__wordmark {
+    color: var(--brand-blue);
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  .tile--placeholder {
+    border: 1px dashed var(--line);
+    background: rgb(255 255 255 / 0.02);
+    color: var(--text-subtle);
+    font-size: var(--text-sm);
+    letter-spacing: 0.06em;
+  }
+</style>

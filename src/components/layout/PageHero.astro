@@ -1,0 +1,178 @@
+---
+/**
+ * Inner-page hero — Q-Con's About/Registration/Schedule banner: large title and lead on the left,
+ * the white "Q" mark on the right, over a maroon particle wave. Breadcrumbs follow IECON's hierarchy.
+ */
+import ParticleField from '../ui/ParticleField.astro';
+import Icon from '../ui/Icon.astro';
+import { url } from '../../lib/url';
+
+interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  title: string;
+  lead?: string;
+  eyebrow?: string;
+  crumbs?: Crumb[];
+  tone?: 'maroon' | 'blue';
+  /** Show the Q mark on the right (default true). */
+  mark?: boolean;
+}
+
+const { title, lead, eyebrow, crumbs = [], tone = 'maroon', mark = true } = Astro.props;
+---
+
+<section class="page-hero">
+  <ParticleField
+    variant="wave"
+    tone={tone}
+    intensity={0.85}
+    horizon={0.42}
+    mask="linear-gradient(180deg, #000 55%, transparent 100%)"
+  />
+  <div class="page-hero__shade" aria-hidden="true"></div>
+
+  <div class="container page-hero__inner">
+    <div class="page-hero__text">
+      {
+        crumbs.length > 0 && (
+          <nav class="crumbs" aria-label="Breadcrumb">
+            <ol role="list">
+              <li>
+                <a href={url('/')}>Home</a>
+              </li>
+              {crumbs.map((c) => (
+                <li>
+                  <Icon name="chevron-right" size={14} />
+                  {c.href ? <a href={url(c.href)}>{c.label}</a> : <span aria-current="page">{c.label}</span>}
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )
+      }
+      {eyebrow && <span class="eyebrow page-hero__eyebrow">{eyebrow}</span>}
+      <h1>{title}</h1>
+      {lead && <p class="lead page-hero__lead">{lead}</p>}
+      <div class="page-hero__actions"><slot /></div>
+    </div>
+
+    {
+      mark && (
+        <div class="page-hero__mark" aria-hidden="true">
+          <img src={url('/brand/qcon-mark-white.png')} alt="" width="200" height="245" />
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: calc(var(--header-h) + clamp(3rem, 2rem + 5vw, 6.5rem)) clamp(3rem, 2rem + 4vw, 5.5rem);
+    border-bottom: 1px solid var(--line-soft);
+    background:
+      radial-gradient(80% 90% at 85% 30%, rgb(80 0 0 / 0.35), transparent 70%),
+      var(--bg);
+  }
+
+  .page-hero__shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgb(20 20 22 / 0.92) 0%, rgb(20 20 22 / 0.55) 55%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .page-hero__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-7);
+  }
+
+  .page-hero__text {
+    max-width: 820px;
+  }
+
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4em;
+    margin: 0 0 var(--space-5);
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+  }
+
+  .crumbs li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    color: var(--text-subtle);
+  }
+
+  .crumbs a {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  .crumbs a:hover {
+    color: #fff;
+  }
+
+  .crumbs [aria-current] {
+    color: var(--accent-soft);
+  }
+
+  .page-hero__eyebrow {
+    margin-bottom: var(--space-3);
+  }
+
+  h1 {
+    font-size: var(--text-4xl);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+  }
+
+  .page-hero__lead {
+    margin-top: var(--space-5);
+    max-width: 62ch;
+  }
+
+  .page-hero__actions:not(:empty) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .page-hero__mark img {
+    width: clamp(120px, 12vw, 180px);
+    filter: drop-shadow(0 20px 40px rgb(0 0 0 / 0.6));
+    animation: float 9s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @media (max-width: 760px) {
+    .page-hero__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .page-hero__mark {
+      display: none;
+    }
+  }
+</style>

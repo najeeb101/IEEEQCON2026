@@ -1,0 +1,242 @@
+---
+/**
+ * Day schedule — Q-Con's row layout (title · clock time · location) with IECON's
+ * color-coding by session type, shown as a left accent bar and a legend.
+ */
+import Icon from './Icon.astro';
+import { sessionKindLabels, type ScheduleItem, type SessionKind } from '../../data/program';
+import { formatTime } from '../../lib/format';
+
+interface Props {
+  items: ScheduleItem[];
+  legend?: boolean;
+}
+
+const { items, legend = true } = Astro.props;
+const kinds = [...new Set(items.map((i) => i.kind))] as SessionKind[];
+---
+
+{
+  legend && (
+    <ul class="legend" role="list" aria-label="Session types">
+      {kinds.map((k) => (
+        <li class:list={['legend__item', `kind-${k}`]}>
+          <span class="legend__swatch" aria-hidden="true" />
+          {sessionKindLabels[k]}
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<ol class="schedule" role="list">
+  {
+    items.map((item, i) => (
+      <li class:list={['slot', `kind-${item.kind}`]} data-reveal style={`--reveal-delay:${Math.min(i, 6)}`}>
+        <div class="slot__time">
+          <Icon name="clock" size={20} />
+          <span>
+            <time datetime={item.start}>{formatTime(item.start)}</time> – <time datetime={item.end}>{formatTime(item.end)}</time>
+          </span>
+        </div>
+        <div class="slot__main">
+          <span class="slot__kind">{sessionKindLabels[item.kind]}</span>
+          <h3 class="slot__title">{item.title}</h3>
+          {item.speaker && (
+            <p class="slot__speaker">
+              <Icon name="mic" size={16} />
+              {item.speaker}
+            </p>
+          )}
+          {item.parts && (
+            <ul class="slot__parts" role="list">
+              {item.parts.map((p) => (
+                <li>
+                  <strong>{p.title}</strong>
+                  {p.time && <span> · {p.time}</span>}
+                  {p.note && <span class="muted"> — {p.note}</span>}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        {item.location && (
+          <div class="slot__where">
+            <Icon name="pin" size={18} />
+            {item.location}
+          </div>
+        )}
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .kind-arrival,
+  .kind-break,
+  .kind-networking {
+    --kind: var(--ink-400);
+  }
+
+  .kind-ceremony {
+    --kind: var(--blue-500);
+  }
+
+  .kind-session {
+    --kind: var(--blue-300);
+  }
+
+  .kind-keynote {
+    --kind: var(--maroon-400);
+  }
+
+  .kind-panel {
+    --kind: var(--maroon-300);
+  }
+
+  .kind-block {
+    --kind: var(--blue-400);
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    margin: 0 0 var(--space-6);
+    padding: 0;
+    list-style: none;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .legend__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+  }
+
+  .legend__swatch {
+    width: 14px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--kind);
+  }
+
+  .schedule {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .slot {
+    position: relative;
+    display: grid;
+    grid-template-columns: 220px 1fr auto;
+    gap: var(--space-3) var(--space-6);
+    align-items: start;
+    padding: var(--space-5) var(--space-5) var(--space-5) var(--space-6);
+    border-bottom: 1px solid var(--line);
+    transition: background-color var(--dur);
+  }
+
+  .slot::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: var(--space-5);
+    bottom: var(--space-5);
+    width: 3px;
+    border-radius: 2px;
+    background: var(--kind);
+  }
+
+  .slot:hover {
+    background: rgb(255 255 255 / 0.02);
+  }
+
+  .slot.kind-break,
+  .slot.kind-arrival,
+  .slot.kind-networking {
+    background: rgb(255 255 255 / 0.015);
+  }
+
+  .slot.kind-block {
+    background: linear-gradient(90deg, rgb(57 148 200 / 0.08), transparent 70%);
+  }
+
+  .slot__time {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    color: var(--accent-soft);
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .slot__kind {
+    display: block;
+    margin-bottom: 0.2em;
+    color: var(--kind);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .slot__title {
+    font-family: var(--font-body);
+    font-size: var(--text-xl);
+    font-weight: 500;
+    font-variant-caps: small-caps;
+    letter-spacing: 0.02em;
+    line-height: var(--leading-snug);
+  }
+
+  .kind-break .slot__title,
+  .kind-arrival .slot__title,
+  .kind-networking .slot__title {
+    color: var(--text-muted);
+  }
+
+  .slot__speaker {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-top: var(--space-2);
+    color: var(--text-muted);
+  }
+
+  .slot__parts {
+    display: grid;
+    gap: var(--space-2);
+    margin: var(--space-3) 0 0;
+    padding: var(--space-3) 0 0 var(--space-4);
+    border-left: 1px solid var(--line);
+    list-style: none;
+    font-size: var(--text-sm);
+  }
+
+  .slot__where {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 720px) {
+    .slot {
+      grid-template-columns: 1fr;
+      padding-left: var(--space-5);
+    }
+
+    .slot__time {
+      font-size: var(--text-sm);
+    }
+  }
+</style>

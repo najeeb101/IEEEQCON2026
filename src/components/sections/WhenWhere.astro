@@ -1,0 +1,74 @@
+---
+/** Q-Con "When and Where?" — small-caps title, date and venue in light blue, full-width map below. */
+import MapEmbed from '../ui/MapEmbed.astro';
+import { site } from '../../config/site';
+
+interface Props {
+  /** Hide the map (e.g. when the page shows it elsewhere). */
+  map?: boolean;
+}
+
+const { map = true } = Astro.props;
+---
+
+<section class="section when" aria-labelledby="when-title">
+  <div class="container">
+    <div class="when__head" data-reveal>
+      <h2 id="when-title" class="smallcaps">When and Where?</h2>
+      <span class="when__rule" aria-hidden="true"></span>
+      <p class="when__date smallcaps"><time datetime={site.event.start}>{site.event.dateLabel}</time></p>
+      <p class="when__time">{site.event.timeLabel} · {site.event.format}</p>
+      <p class="when__venue smallcaps">
+        {site.venue.name}, {site.venue.area}<br />{site.venue.city}, {site.venue.country}
+      </p>
+    </div>
+    {
+      map && (
+        <div data-reveal>
+          <MapEmbed />
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .when__head {
+    display: grid;
+    justify-items: center;
+    margin-bottom: var(--space-7);
+    text-align: center;
+  }
+
+  h2 {
+    font-size: var(--text-4xl);
+    font-weight: 400;
+  }
+
+  .when__rule {
+    width: min(480px, 70%);
+    height: 3px;
+    margin: var(--space-4) 0 var(--space-6);
+    border-radius: 2px;
+    background: var(--line);
+  }
+
+  .when__date {
+    color: var(--accent-soft);
+    font-size: var(--text-3xl);
+    line-height: 1.2;
+  }
+
+  .when__time {
+    margin-top: var(--space-2);
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+
+  .when__venue {
+    margin-top: var(--space-5);
+    color: var(--accent-soft);
+    font-size: var(--text-2xl);
+    line-height: 1.35;
+  }
+</style>

@@ -1,0 +1,32 @@
+---
+import type { Requirement } from '../../data/submissions';
+
+interface Props {
+  items: Requirement[];
+}
+
+const { items } = Astro.props;
+---
+
+<ul class="prose reqs">
+  {
+    items.map((r) => (
+      <li>
+        {r.emphasis ? <strong>{r.text}</strong> : r.text}
+        {r.items && (
+          <ul>
+            {r.items.map((sub) => (
+              <li>{sub}</li>
+            ))}
+          </ul>
+        )}
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .reqs {
+    color: var(--text-body);
+  }
+</style>

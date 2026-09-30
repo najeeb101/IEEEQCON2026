@@ -1,0 +1,158 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import LogoTile from '../components/ui/LogoTile.astro';
+import FeatureCard from '../components/ui/FeatureCard.astro';
+import Button from '../components/ui/Button.astro';
+import { organizers, sponsorTiers } from '../data/community';
+import { site, fullName } from '../config/site';
+
+const reasons = [
+  {
+    title: 'Meet emerging talent',
+    icon: 'users',
+    body: 'Connect with undergraduate and graduate engineers from universities across Qatar.',
+  },
+  {
+    title: 'Show your work',
+    icon: 'presentation',
+    body: 'Share your technology and mission with students, faculty and industry guests in one room.',
+  },
+  {
+    title: 'Back student innovation',
+    icon: 'award',
+    body: 'Support the research, posters and prototypes of the next generation of engineers.',
+  },
+] as const;
+
+const mail = `mailto:${site.contact.email}?subject=${encodeURIComponent(`Sponsoring ${fullName}`)}`;
+---
+
+<PageLayout
+  title="Sponsors & Partners"
+  lead={`${fullName} is made possible by the organizations that invest in Qatar’s student engineers.`}
+  crumbs={[{ label: 'Sponsors' }]}
+>
+  <Fragment slot="actions">
+    <Button href={mail} icon="mail">Become a sponsor</Button>
+    {
+      site.sponsorship.prospectusUrl && (
+        <Button href={site.sponsorship.prospectusUrl} variant="outline" iconStart="download">
+          Sponsorship prospectus
+        </Button>
+      )
+    }
+  </Fragment>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading title="Organized by" align="center" />
+      <div class="organizers" data-reveal>
+        {organizers.map((o) => <LogoTile name={o.name} logo={o.logo} href={o.url} size="lg" />)}
+      </div>
+
+      {
+        sponsorTiers.map((tier) => (
+          <section class="tier" aria-labelledby={`tier-${tier.tier}`}>
+            <h2 id={`tier-${tier.tier}`} class="tier__title" data-reveal>
+              <span>{tier.tier}</span>
+            </h2>
+            <div class:list={['tier__grid', `tier__grid--${tier.tier.toLowerCase()}`]} data-reveal>
+              {tier.sponsors.length > 0
+                ? tier.sponsors.map((s) => <LogoTile name={s.name} logo={s.logo} href={s.url} />)
+                : Array.from({ length: tier.placeholders }, () => <LogoTile placeholder />)}
+            </div>
+          </section>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section section--deep">
+    <div class="container">
+      <SectionHeading eyebrow="Why sponsor" title="Partner with Q-Con" align="center" />
+      <div class="reasons">
+        {
+          reasons.map((r, i) => (
+            <FeatureCard title={r.title} icon={r.icon} index={i}>
+              {r.body}
+            </FeatureCard>
+          ))
+        }
+      </div>
+      <div class="contact" data-reveal>
+        <p class="lead">Interested in sponsoring or exhibiting? We’d love to hear from you.</p>
+        <Button href={mail} size="lg" icon="arrow-right">{site.contact.email}</Button>
+      </div>
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .organizers {
+    display: grid;
+    grid-template-columns: minmax(0, 520px);
+    justify-content: center;
+  }
+
+  .tier {
+    margin-top: var(--space-8);
+  }
+
+  .tier__title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+  }
+
+  .tier__title::before,
+  .tier__title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .tier__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-4);
+  }
+
+  .tier__grid--platinum {
+    grid-template-columns: minmax(0, 420px);
+    justify-content: center;
+  }
+
+  .tier__grid--gold {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 360px));
+    justify-content: center;
+  }
+
+  .reasons {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  .contact {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-5);
+    margin-top: var(--space-8);
+    text-align: center;
+  }
+
+  @media (max-width: 900px) {
+    .reasons {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

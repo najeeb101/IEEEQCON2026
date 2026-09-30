@@ -1,0 +1,96 @@
+---
+/** Q-Con feature card: dark surface, blue line icon, light-blue title, underline that lights up on hover. */
+import Icon from './Icon.astro';
+import type { IconName } from './icons';
+
+interface Props {
+  title: string;
+  icon?: IconName;
+  as?: 'h3' | 'h4';
+  /** Stagger index for the reveal animation. */
+  index?: number;
+  class?: string;
+}
+
+const { title, icon, as: Tag = 'h3', index = 0, class: className } = Astro.props;
+---
+
+<article class:list={['feature', className]} data-reveal style={`--reveal-delay:${index}`}>
+  {icon && <span class="feature__icon"><Icon name={icon} size={30} /></span>}
+  <Tag class="feature__title">{title}</Tag>
+  <div class="feature__body"><slot /></div>
+  <span class="feature__bar" aria-hidden="true"></span>
+</article>
+
+<style>
+  .feature {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    height: 100%;
+    padding: var(--space-6) var(--space-6) calc(var(--space-6) + 6px);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
+    transition:
+      translate var(--dur) var(--ease-out),
+      border-color var(--dur) var(--ease-out),
+      background-color var(--dur) var(--ease-out);
+  }
+
+  .feature:hover {
+    translate: 0 -4px;
+    border-color: rgb(57 148 200 / 0.35);
+    background: var(--surface-hover);
+  }
+
+  .feature__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-sm);
+    background: rgb(57 148 200 / 0.1);
+    color: var(--accent);
+  }
+
+  .feature__title {
+    color: var(--accent-soft);
+    font-size: var(--text-xl);
+    font-weight: 600;
+    line-height: var(--leading-snug);
+  }
+
+  .feature__body {
+    flex: 1;
+    color: var(--text-muted);
+    font-size: var(--text-base);
+  }
+
+  .feature__bar {
+    position: absolute;
+    left: var(--space-6);
+    right: var(--space-6);
+    bottom: var(--space-5);
+    height: 3px;
+    border-radius: 2px;
+    background: var(--line);
+    overflow: hidden;
+  }
+
+  .feature__bar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-brand);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur-slow) var(--ease-out);
+  }
+
+  .feature:hover .feature__bar::after {
+    transform: scaleX(1);
+  }
+</style>

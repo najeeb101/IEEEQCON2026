@@ -1,0 +1,96 @@
+---
+/** "Q-Con at a glance" — IECON's "Qatar in Numbers" band, reworked for the conference format. */
+import { stats } from '../../data/program';
+---
+
+<section class="stats" aria-labelledby="stats-title">
+  <div class="container">
+    <h2 id="stats-title" class="visually-hidden">Q-Con at a glance</h2>
+    <ul class="stats__list" role="list">
+      {
+        stats.map((s, i) => (
+          <li class="stat" data-reveal style={`--reveal-delay:${i}`}>
+            <span class="stat__value">{s.value}</span>
+            <span class="stat__label">{s.label}</span>
+            <span class="stat__note">{s.note}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .stats {
+    position: relative;
+    padding-block: var(--space-8);
+    border-block: 1px solid var(--line-soft);
+    background:
+      radial-gradient(50% 120% at 50% 0%, rgb(57 148 200 / 0.08), transparent 70%),
+      var(--bg-deep);
+  }
+
+  .stats__list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .stat {
+    display: grid;
+    align-content: start;
+    gap: var(--space-1);
+    padding: var(--space-3) var(--space-6);
+    border-left: 1px solid var(--line);
+  }
+
+  .stat:first-child {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .stat__value {
+    width: fit-content;
+    background: linear-gradient(120deg, #fff 20%, var(--blue-300) 60%, var(--maroon-300));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 2rem + 3vw, 4.75rem);
+    font-weight: 200;
+    line-height: 1;
+  }
+
+  .stat__label {
+    margin-top: var(--space-2);
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 500;
+  }
+
+  .stat__note {
+    color: var(--text-subtle);
+    font-size: var(--text-sm);
+  }
+
+  @media (max-width: 900px) {
+    .stats__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: var(--space-6);
+    }
+
+    .stat:nth-child(odd) {
+      border-left: 0;
+      padding-left: 0;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .stat {
+      padding-inline: var(--space-4);
+    }
+  }
+</style>

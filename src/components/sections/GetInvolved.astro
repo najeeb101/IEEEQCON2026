@@ -1,0 +1,35 @@
+---
+/** IECON's "mailing list / reviewer / local team" calls, as three cards. */
+import SectionHeading from '../ui/SectionHeading.astro';
+import CtaCard from '../ui/CtaCard.astro';
+import { getInvolved } from '../../data/community';
+---
+
+<section class="section section--deep" aria-labelledby="involved-title">
+  <div class="container">
+    <SectionHeading id="involved-title" eyebrow="Get involved" title="Be part of Q-Con" align="center" />
+    <div class="involved">
+      {
+        getInvolved.map((c, i) => (
+          <CtaCard title={c.title} icon={c.icon} cta={c.cta} index={i}>
+            {c.body}
+          </CtaCard>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .involved {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  @media (max-width: 900px) {
+    .involved {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

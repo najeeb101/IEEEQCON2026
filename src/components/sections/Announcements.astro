@@ -1,0 +1,291 @@
+---
+/**
+ * Announcements carousel (IECON). Auto-advances, pauses on hover/focus, supports swipe and
+ * keyboard, and never auto-plays for visitors who prefer reduced motion.
+ */
+import Icon from '../ui/Icon.astro';
+import Button from '../ui/Button.astro';
+import { announcements } from '../../data/community';
+---
+
+<section class="announce-wrap" aria-labelledby="announce-title">
+  <div class="container">
+    <div class="announce" data-carousel data-reveal aria-roledescription="carousel">
+      <div class="announce__head">
+        <h2 id="announce-title" class="eyebrow announce__title">
+          <span class="announce__live" aria-hidden="true"></span>
+          Announcements
+        </h2>
+        <div class="announce__dots" role="tablist" aria-label="Choose announcement">
+          {
+            announcements.map((a, i) => (
+              <button
+                type="button"
+                role="tab"
+                aria-selected={i === 0 ? 'true' : 'false'}
+                aria-label={`${i + 1} of ${announcements.length}: ${a.title}`}
+                data-dot={i}
+              />
+            ))
+          }
+        </div>
+        <div class="announce__nav">
+          <button type="button" data-prev aria-label="Previous announcement"><Icon name="chevron-left" size={18} /></button>
+          <button type="button" data-next aria-label="Next announcement"><Icon name="chevron-right" size={18} /></button>
+        </div>
+      </div>
+
+      <div class="announce__track" aria-live="polite">
+        {
+          announcements.map((a, i) => (
+            <article
+              class:list={['announce__slide', { 'is-active': i === 0 }]}
+              aria-roledescription="slide"
+              aria-label={`${i + 1} of ${announcements.length}`}
+              inert={i !== 0}
+              data-slide
+            >
+              <span class="announce__tag">{a.tag}</span>
+              <h3>{a.title}</h3>
+              <p>{a.body}</p>
+              {a.cta && (
+                <Button href={a.cta.href} variant="ghost" icon="arrow-right">
+                  {a.cta.label}
+                </Button>
+              )}
+            </article>
+          ))
+        }
+      </div>
+      <div class="announce__progress" aria-hidden="true"><span data-progress></span></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .announce-wrap {
+    position: relative;
+    z-index: 2;
+    margin-top: calc(var(--space-9) * -1);
+  }
+
+  .announce {
+    position: relative;
+    overflow: hidden;
+    padding: var(--space-6) clamp(1.25rem, 1rem + 2vw, 3rem) var(--space-7);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(60% 120% at 100% 0%, rgb(57 148 200 / 0.14), transparent 60%),
+      radial-gradient(40% 90% at 0% 100%, rgb(190 74 74 / 0.12), transparent 60%),
+      rgb(27 28 30 / 0.92);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    box-shadow: var(--shadow-pop);
+  }
+
+  .announce__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+
+  .announce__title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7em;
+    margin: 0;
+    color: var(--text);
+    font-family: var(--font-body);
+  }
+
+  .announce__live {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-2);
+    box-shadow: 0 0 0 4px rgb(190 74 74 / 0.2);
+  }
+
+  .announce__dots {
+    display: flex;
+    gap: 4px;
+    margin-inline: auto;
+  }
+
+  .announce__dots button {
+    width: 28px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+
+  .announce__dots button::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--line);
+    transition: background-color var(--dur);
+  }
+
+  .announce__dots button[aria-selected='true']::after {
+    background: var(--accent);
+  }
+
+  .announce__nav {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .announce__nav button {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: none;
+    color: #fff;
+    cursor: pointer;
+    transition: border-color var(--dur-fast), background-color var(--dur-fast);
+  }
+
+  .announce__nav button:hover {
+    border-color: var(--accent);
+    background: rgb(57 148 200 / 0.12);
+  }
+
+  .announce__track {
+    display: grid;
+  }
+
+  .announce__slide {
+    grid-area: 1 / 1;
+    max-width: 820px;
+    opacity: 0;
+    transform: translateX(24px);
+    transition:
+      opacity var(--dur-slow) var(--ease-out),
+      transform var(--dur-slow) var(--ease-out);
+  }
+
+  .announce__slide.is-active {
+    opacity: 1;
+    transform: none;
+  }
+
+  .announce__tag {
+    display: inline-block;
+    margin-bottom: var(--space-3);
+    color: var(--accent-soft);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .announce__slide h3 {
+    font-size: var(--text-2xl);
+    font-weight: 500;
+  }
+
+  .announce__slide p {
+    margin: var(--space-3) 0 var(--space-4);
+    color: var(--text-muted);
+    font-size: var(--text-lg);
+    font-weight: 300;
+  }
+
+  .announce__progress {
+    position: absolute;
+    inset: auto 0 0;
+    height: 2px;
+    background: var(--line-soft);
+  }
+
+  .announce__progress span {
+    display: block;
+    height: 100%;
+    background: var(--gradient-brand);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  @media (max-width: 640px) {
+    .announce-wrap {
+      margin-top: calc(var(--space-7) * -1);
+    }
+
+    .announce__dots {
+      order: 3;
+      width: 100%;
+      margin: 0;
+    }
+
+    .announce__nav {
+      margin-left: auto;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((root) => {
+    const slides = [...root.querySelectorAll<HTMLElement>('[data-slide]')];
+    const dots = [...root.querySelectorAll<HTMLButtonElement>('[data-dot]')];
+    const progress = root.querySelector<HTMLElement>('[data-progress]')!;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const DURATION = 7000;
+    let index = 0;
+    let paused = false;
+    let elapsed = 0;
+    let last = performance.now();
+
+    const show = (i: number) => {
+      index = (i + slides.length) % slides.length;
+      slides.forEach((s, n) => {
+        s.classList.toggle('is-active', n === index);
+        s.inert = n !== index;
+      });
+      dots.forEach((d, n) => d.setAttribute('aria-selected', String(n === index)));
+      elapsed = 0;
+    };
+
+    root.querySelector('[data-prev]')?.addEventListener('click', () => show(index - 1));
+    root.querySelector('[data-next]')?.addEventListener('click', () => show(index + 1));
+    dots.forEach((d, n) => d.addEventListener('click', () => show(n)));
+
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(index - 1);
+      if (e.key === 'ArrowRight') show(index + 1);
+    });
+
+    // Swipe
+    let startX = 0;
+    root.addEventListener('pointerdown', (e) => (startX = e.clientX));
+    root.addEventListener('pointerup', (e) => {
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 50) show(index + (dx < 0 ? 1 : -1));
+    });
+
+    root.addEventListener('mouseenter', () => (paused = true));
+    root.addEventListener('mouseleave', () => (paused = false));
+    root.addEventListener('focusin', () => (paused = true));
+    root.addEventListener('focusout', () => (paused = false));
+
+    if (reduce || slides.length < 2) return;
+    const frame = (now: number) => {
+      if (!paused && !document.hidden) elapsed += now - last;
+      last = now;
+      if (elapsed >= DURATION) show(index + 1);
+      progress.style.transform = `scaleX(${Math.min(1, elapsed / DURATION)})`;
+      requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  });
+</script>

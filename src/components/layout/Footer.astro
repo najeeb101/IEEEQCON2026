@@ -1,0 +1,257 @@
+---
+/**
+ * Footer — Q-Con's logo / contact / "Follow us" block, extended with IECON-style
+ * link columns and the IEEE policy links expected on IEEE-branded sites.
+ */
+import Icon from '../ui/Icon.astro';
+import { footerNav } from '../../config/navigation';
+import { site, fullName } from '../../config/site';
+import { url } from '../../lib/url';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer__glow" aria-hidden="true"></div>
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <a href={url('/')} class="footer__logo" aria-label={`${fullName} home`}>
+        <img src={url('/brand/qcon-logo-white.png')} alt="" width="362" height="193" loading="lazy" />
+      </a>
+      <p class="footer__tagline">{site.tagline}</p>
+      <p class="footer__org">Organized by the {site.organizer}.</p>
+
+      <a class="footer__contact" href={`mailto:${site.contact.email}`}>
+        <Icon name="mail" size={18} />
+        {site.contact.email}
+      </a>
+
+      <div class="footer__social">
+        <span class="footer__label">Follow us</span>
+        <ul role="list">
+          {
+            site.socials.map((s) => (
+              <li>
+                <a href={s.url} target="_blank" rel="noopener noreferrer" aria-label={`${s.label} ${s.handle}`}>
+                  <Icon name={s.icon} size={20} />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    {
+      footerNav.map((col) => (
+        <nav class="footer__col" aria-label={col.title}>
+          <h2 class="footer__label">{col.title}</h2>
+          <ul role="list">
+            {col.links.map((link) => (
+              <li>
+                <a href={url(link.href)}>{link.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ))
+    }
+  </div>
+
+  <div class="container footer__bottom">
+    <p>© {year} {site.name}. All rights reserved.</p>
+    <ul role="list">
+      {
+        site.ieeeLinks.map((l) => (
+          <li>
+            <a href={l.url} target="_blank" rel="noopener noreferrer">
+              {l.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    overflow: hidden;
+    padding-top: var(--space-9);
+    border-top: 1px solid var(--line-soft);
+    background: var(--bg-deep);
+    font-size: var(--text-sm);
+  }
+
+  .footer__glow {
+    position: absolute;
+    inset: -40% -10% auto auto;
+    width: 60%;
+    height: 120%;
+    background: radial-gradient(closest-side, rgb(57 148 200 / 0.08), transparent);
+    pointer-events: none;
+  }
+
+  .footer__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.6fr repeat(3, 1fr);
+    gap: var(--space-7) var(--space-6);
+  }
+
+  .footer__logo img {
+    width: 170px;
+  }
+
+  .footer__tagline {
+    margin-top: var(--space-4);
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 300;
+  }
+
+  .footer__org {
+    margin-top: var(--space-2);
+    max-width: 34ch;
+    color: var(--text-subtle);
+  }
+
+  .footer__contact {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+    margin-top: var(--space-5);
+    color: var(--text-muted);
+    font-size: var(--text-base);
+    text-decoration: none;
+  }
+
+  .footer__contact:hover {
+    color: #fff;
+  }
+
+  .footer__social {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-top: var(--space-5);
+  }
+
+  .footer__social ul {
+    display: flex;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .footer__social a {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    color: var(--text-muted);
+    transition:
+      color var(--dur-fast),
+      border-color var(--dur-fast),
+      background-color var(--dur-fast);
+  }
+
+  .footer__social a:hover {
+    border-color: var(--accent);
+    background: rgb(57 148 200 / 0.12);
+    color: #fff;
+  }
+
+  .footer__label {
+    display: block;
+    margin: 0 0 var(--space-4);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+  }
+
+  .footer__social .footer__label {
+    margin: 0;
+    color: var(--text-subtle);
+  }
+
+  .footer__col ul {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .footer__col a {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  .footer__col a:hover {
+    color: var(--accent-soft);
+  }
+
+  .footer__bottom {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-6);
+    margin-top: var(--space-8);
+    padding-block: var(--space-5);
+    border-top: 1px solid var(--line-soft);
+    color: var(--text-subtle);
+    font-size: var(--text-xs);
+  }
+
+  .footer__bottom ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .footer__bottom a {
+    color: var(--text-subtle);
+    text-decoration: none;
+  }
+
+  .footer__bottom a:hover {
+    color: #fff;
+  }
+
+  @media (max-width: 960px) {
+    .footer__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .footer__brand {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .footer__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .footer__bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      /* keep the last links clear of the floating back-to-top button */
+      padding-bottom: 5.5rem;
+    }
+  }
+</style>

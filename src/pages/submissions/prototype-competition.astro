@@ -1,0 +1,34 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import SubmissionBlock from '../../components/ui/SubmissionBlock.astro';
+import RequirementList from '../../components/ui/RequirementList.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import DateTimeline from '../../components/ui/DateTimeline.astro';
+import { tracks, prototypeEligibility, prototypeRequirements, prototypeDates } from '../../data/submissions';
+
+const track = tracks.find((t) => t.id === 'prototype')!;
+---
+
+<PageLayout
+  title="Prototype & Innovation Competition"
+  lead="Teams and individuals present engineered prototypes, working or conceptual, that demonstrate technical depth, creativity, and real-world relevance. Judges evaluate each entry holistically and recognize standout designs."
+  crumbs={[{ label: 'Submissions', href: '/submissions/' }, { label: 'Prototype Competition' }]}
+>
+  <section class="section">
+    <div class="container">
+      <SubmissionBlock title="Who can enter?" status={track.status} formUrl={track.formUrl} deadline={track.deadline}>
+        <RequirementList items={prototypeEligibility} />
+      </SubmissionBlock>
+      <SubmissionBlock title="Prototype requirements" status={track.status}>
+        <RequirementList items={prototypeRequirements} />
+      </SubmissionBlock>
+    </div>
+  </section>
+
+  <section class="section section--deep">
+    <div class="container container--narrow">
+      <SectionHeading title="Important Dates" eyebrow="Prototype Competition" align="center" />
+      <DateTimeline dates={prototypeDates} showTrack={false} />
+    </div>
+  </section>
+</PageLayout>

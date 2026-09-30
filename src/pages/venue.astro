@@ -1,0 +1,44 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import WhenWhere from '../components/sections/WhenWhere.astro';
+import FactGrid from '../components/ui/FactGrid.astro';
+import MapEmbed from '../components/ui/MapEmbed.astro';
+import Button from '../components/ui/Button.astro';
+import { site, mapsDirectionsUrl } from '../config/site';
+---
+
+<PageLayout
+  title="Venue"
+  heading={site.venue.name}
+  eyebrow={`${site.venue.area} · ${site.venue.city}, ${site.venue.country}`}
+  lead={`${site.name} ${site.edition} takes place at ${site.venue.name} in ${site.venue.area}, ${site.venue.city}.`}
+  crumbs={[{ label: 'Venue' }]}
+>
+  <Fragment slot="actions">
+    <Button href={mapsDirectionsUrl} icon="external">Get directions</Button>
+  </Fragment>
+
+  <WhenWhere map={false} />
+
+  <section class="section section--tight">
+    <div class="container">
+      <div data-reveal><MapEmbed height="clamp(360px, 50vw, 560px)" /></div>
+      <div class="facts">
+        <FactGrid
+          facts={[
+            { icon: 'calendar', label: 'Date', value: site.event.dateLabel },
+            { icon: 'clock', label: 'Time', value: site.event.timeLabel },
+            { icon: 'pin', label: 'Venue', value: `${site.venue.name}, ${site.venue.area}` },
+            { icon: 'mail', label: 'Questions', value: site.contact.email, href: `mailto:${site.contact.email}` },
+          ]}
+        />
+      </div>
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .facts {
+    margin-top: var(--space-6);
+  }
+</style>

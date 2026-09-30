@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ParticleField from '../components/ui/ParticleField.astro';
+import Button from '../components/ui/Button.astro';
+import { url } from '../lib/url';
+---
+
+<BaseLayout title="Page not found">
+  <section class="nf">
+    <ParticleField variant="rings" tone="maroon" intensity={0.8} />
+    <div class="container nf__inner">
+      <img src={url('/brand/qcon-mark-white.png')} alt="" width="120" height="147" />
+      <p class="eyebrow">Error 404</p>
+      <h1>This page took a wrong turn</h1>
+      <p class="lead">The page you’re looking for doesn’t exist or has moved.</p>
+      <div class="nf__actions">
+        <Button href="/" icon="arrow-right">Back to home</Button>
+        <Button href="/program/schedule/" variant="outline">View the schedule</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 100svh;
+    padding-block: calc(var(--header-h) + var(--space-7)) var(--space-8);
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .nf__inner {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: var(--space-4);
+  }
+
+  h1 {
+    font-size: var(--text-4xl);
+  }
+
+  .nf__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+</style>

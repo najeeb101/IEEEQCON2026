@@ -1,0 +1,37 @@
+---
+/** Q-Con closing call to action: the particle globe with "Showcase your innovation" and Register. */
+import SplitPanel from '../ui/SplitPanel.astro';
+import Button from '../ui/Button.astro';
+import { fullName } from '../../config/site';
+---
+
+<section class="section" aria-labelledby="final-title">
+  <div class="container">
+    <SplitPanel variant="sphere" tone="cyan" columns="3fr 2fr" statement={`Showcase your innovation. Inspire the future. Join us at ${fullName}.`}>
+      <h2 id="final-title" class="final__title">Ready to take part?</h2>
+      <p class="lead">
+        Submit your research, showcase your prototype, or take part in the poster competition. Whether you’re presenting or
+        attending, {fullName} is your chance to connect with peers, explore breakthrough ideas, and step onto a national
+        platform built for future innovators.
+      </p>
+      <div class="final__actions">
+        <Button href="/registration/" size="lg" icon="arrow-right">Register Now</Button>
+        <Button href="/submissions/" size="lg" variant="outline">Submit Your Work</Button>
+      </div>
+    </SplitPanel>
+  </div>
+</section>
+
+<style>
+  .final__title {
+    margin-bottom: var(--space-4);
+    font-size: var(--text-3xl);
+  }
+
+  .final__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+</style>

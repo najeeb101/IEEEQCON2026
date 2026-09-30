@@ -1,0 +1,90 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import PersonCard from '../../components/ui/PersonCard.astro';
+import Button from '../../components/ui/Button.astro';
+import { committee } from '../../data/community';
+import { site, fullName } from '../../config/site';
+
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+---
+
+<PageLayout
+  title="Organizing Committee"
+  lead={`Meet the team behind ${fullName}, organized by the ${site.organizer}. Names are added as roles are confirmed.`}
+  crumbs={[{ label: 'About', href: '/about/' }, { label: 'Organizing Committee' }]}
+>
+  <section class="section">
+    <div class="container">
+      {
+        committee.map((group) => (
+          <section class="group" aria-labelledby={`g-${slug(group.title)}`}>
+            <h2 id={`g-${slug(group.title)}`} class="group__title" data-reveal>
+              {group.title}
+            </h2>
+            <div class="group__grid">
+              {group.members.map((m, i) => (
+                <PersonCard name={m.name} role={m.role} affiliation={m.affiliation} photo={m.photo} size="md" index={i} />
+              ))}
+            </div>
+          </section>
+        ))
+      }
+
+      <aside class="join" data-reveal>
+        <div>
+          <h2>Want to help run Q-Con?</h2>
+          <p class="muted">Students can volunteer on conference day; faculty and industry professionals can join as judges.</p>
+        </div>
+        <Button href={`mailto:${site.contact.email}?subject=${encodeURIComponent(`Volunteering at ${fullName}`)}`} icon="mail">
+          Get in touch
+        </Button>
+      </aside>
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .group + .group {
+    margin-top: var(--space-8);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .group__title {
+    margin-bottom: var(--space-7);
+    font-size: var(--text-2xl);
+    text-align: center;
+  }
+
+  .group__grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-7) var(--space-6);
+  }
+
+  .group__grid > :global(*) {
+    width: 240px;
+  }
+
+  .join {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    margin-top: var(--space-9);
+    padding: var(--space-6) clamp(1.25rem, 1rem + 2vw, 3rem);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+
+  .join h2 {
+    font-size: var(--text-xl);
+  }
+
+  .join p {
+    margin-top: var(--space-2);
+  }
+</style>

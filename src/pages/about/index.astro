@@ -1,0 +1,127 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import SplitPanel from '../../components/ui/SplitPanel.astro';
+import Button from '../../components/ui/Button.astro';
+import FactGrid from '../../components/ui/FactGrid.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Themes from '../../components/sections/Themes.astro';
+import { highlights } from '../../data/program';
+import { site, fullName, venueLine } from '../../config/site';
+---
+
+<PageLayout
+  title="About"
+  heading="Our Mission"
+  lead="To empower students to explore ideas, present research, build technologies, and engage with Qatar's growing engineering and innovation ecosystem."
+  crumbs={[{ label: 'About' }]}
+>
+  <Fragment slot="actions">
+    <Button href="/registration/" icon="arrow-right">Register</Button>
+    <Button href="/submissions/" variant="outline">Submit your work</Button>
+  </Fragment>
+
+  <section class="section" aria-labelledby="what-title">
+    <div class="container">
+      <SplitPanel variant="wave" tone="blue" statement="What is IEEE Q-Con?">
+        <h2 id="what-title" class="visually-hidden">What is IEEE Q-Con?</h2>
+        <p class="lead">
+          <span class="highlight">{fullName}</span> is a nationwide student engineering conference in Qatar, organized by the {site.organizer}. It is a platform where undergraduates and graduates from across the country come together to present
+          research, showcase prototypes, and connect with academic and industry leaders.
+        </p>
+        <p class="muted">
+          The event highlights innovation, creativity, and real-world impact across emerging engineering fields. IEEE Q-Con
+          serves as a bridge between academia and industry, supporting Qatar’s long-term vision for knowledge-driven
+          development and technological advancement.
+        </p>
+      </SplitPanel>
+    </div>
+  </section>
+
+  <section class="section section--tight" aria-labelledby="includes-title">
+    <div class="container">
+      <SplitPanel variant="wave" tone="maroon" reverse columns="3fr 2fr" statement="What the conference includes">
+        <h2 id="includes-title" class="visually-hidden">What the conference includes</h2>
+        <div class="includes">
+          {
+            highlights.map((h) => (
+              <div class="includes__item">
+                <h3 class="smallcaps">{h.title}</h3>
+                <p class="muted">{h.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </SplitPanel>
+    </div>
+  </section>
+
+  <Themes />
+
+  <section class="section" aria-labelledby="who-title">
+    <div class="container who">
+      <h2 id="who-title" data-reveal>Who can participate?</h2>
+      <div data-reveal>
+        <p class="lead">
+          The conference is open to students from all universities and institutions across Qatar. Participants may submit
+          research, join the prototype competition, or simply attend and engage in talks, demos, and networking.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--deep" aria-labelledby="when-title">
+    <div class="container">
+      <SectionHeading id="when-title" eyebrow="Save the date" title="When & Where" />
+      <FactGrid
+        facts={[
+          { icon: 'calendar', label: 'Date', value: site.event.dateLabel },
+          { icon: 'clock', label: 'Time', value: site.event.timeLabel },
+          { icon: 'pin', label: 'Location', value: venueLine, href: '/venue/' },
+        ]}
+      />
+      <div class="cta-row" data-reveal>
+        <Button href="/program/schedule/" icon="arrow-right">Conference Schedule</Button>
+        <Button href="/registration/" variant="outline">Register</Button>
+        <Button href="/submissions/" variant="outline">Submit Your Work</Button>
+      </div>
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .includes {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .includes__item h3 {
+    margin-bottom: var(--space-2);
+    font-size: var(--text-xl);
+  }
+
+  .who {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: var(--space-7);
+    align-items: center;
+  }
+
+  .who h2 {
+    font-size: var(--text-4xl);
+    font-weight: 500;
+  }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-7);
+  }
+
+  @media (max-width: 760px) {
+    .who {
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+    }
+  }
+</style>

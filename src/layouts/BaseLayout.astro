@@ -1,0 +1,122 @@
+---
+/**
+ * Base document: <head> (SEO, social cards, icons, fonts), header, main, footer.
+ * Every page uses this directly or through PageLayout.
+ */
+import '@fontsource/poppins/200.css';
+import '@fontsource/poppins/300.css';
+import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/500.css';
+import '@fontsource/poppins/600.css';
+import '@fontsource/barlow/300.css';
+import '@fontsource/barlow/400.css';
+import '@fontsource/barlow/500.css';
+import '@fontsource/barlow/600.css';
+import '../styles/global.css';
+
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import BackToTop from '../components/layout/BackToTop.astro';
+import { site, fullName } from '../config/site';
+import { url } from '../lib/url';
+
+interface Props {
+  /** Page title; omit on the home page. */
+  title?: string;
+  description?: string;
+  /** Extra JSON-LD object for the page. */
+  schema?: Record<string, unknown>;
+}
+
+const { title, description = site.description, schema } = Astro.props;
+const pageTitle = title ? `${title} | ${fullName}` : `${fullName} | ${site.kind} · ${site.venue.city}, ${site.venue.country}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(url('/brand/og-image.png'), Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#141416" />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="icon" type="image/png" sizes="32x32" href={url('/brand/favicon-32.png')} />
+    <link rel="icon" type="image/png" sizes="192x192" href={url('/brand/icon-192.png')} />
+    <link rel="apple-touch-icon" href={url('/brand/apple-touch-icon.png')} />
+    <link rel="sitemap" href={url('/sitemap-index.xml')} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={fullName} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <BackToTop />
+
+    <script>
+      // Scroll reveal: elements with [data-reveal] fade up once they enter the viewport.
+      const targets = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) =>
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add('is-visible');
+              io.unobserve(entry.target);
+            }),
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+        );
+        targets.forEach((el) => io.observe(el));
+      } else {
+        targets.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>
+
+<style>
+  .skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 100;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-xs);
+    background: var(--accent);
+    color: var(--on-accent);
+    font-weight: 600;
+    text-decoration: none;
+    transform: translateY(-160%);
+    transition: transform var(--dur) var(--ease-out);
+  }
+
+  .skip-link:focus {
+    transform: none;
+  }
+
+  main:focus {
+    outline: none;
+  }
+</style>
