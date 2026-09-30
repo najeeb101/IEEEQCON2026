@@ -77,8 +77,8 @@ Both fonts are self-hosted through `@fontsource`, with no requests to Google Fon
 
 ## Motion
 
-- `--ease-out` with `--dur-fast` 150ms for color changes, `--dur` 280ms for hovers, `--dur-slow` 700ms for reveals.
-- **Scroll reveal:** add `data-reveal` to an element and it fades up the first time it enters view. Add `style="--reveal-delay:N"` to stagger siblings.
+- `--ease-out` with `--dur-fast` 150ms for color changes and `--dur` 280ms for hovers. Reveals take 520ms.
+- **Scroll reveal:** add `data-reveal` to an element and it fades up the first time it enters view. Add `style="--reveal-delay:N"` to stagger a few sibling cards (60ms steps, capped at 5). Content already on screen at load is never hidden. **Put `data-reveal` on list and grid containers, not on every item** (see Performance in ARCHITECTURE.md).
 - **Hover lift** uses the `translate` property, not `transform`, so it never fights the reveal animation.
 - **Everything respects `prefers-reduced-motion`.** Animations collapse and particle fields render one still frame.
 
@@ -117,6 +117,7 @@ Both fonts are self-hosted through `@fontsource`, with no requests to Google Fon
 - ❌ No new accent colors. If something needs to stand out, use `--accent-2` (maroon).
 - ❌ No gradients behind body text. No white text on the blue button.
 - ❌ Don't add photo backgrounds from stock libraries without checking the license. Particle fields are the house visual.
+- ❌ No `backdrop-filter` blur on the header or on anything over a particle field. It's recomputed every frame. Use a ~95% opaque surface color.
 
 ## Responsive behavior
 

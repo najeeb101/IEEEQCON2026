@@ -46,6 +46,11 @@ img {
   height: auto;
 }
 
+/* Icons keep their size inside tight flex rows (buttons, meta lines). */
+.icon {
+  flex: none;
+}
+
 h1,
 h2,
 h3,
@@ -220,20 +225,24 @@ button {
 
 /* ---------- Scroll reveal (enabled by the script in BaseLayout) ---------- */
 
-/* An animation (not a transition) so components keep their own hover transitions. */
-.js [data-reveal] {
+/*
+ * Only elements that start below the fold are hidden (the script adds .reveal-pending),
+ * so nothing on screen ever waits for JavaScript. An animation, not a transition,
+ * so components keep their own hover transitions.
+ */
+.reveal-pending {
   opacity: 0;
 }
 
-.js [data-reveal].is-visible {
-  animation: reveal var(--dur-slow) var(--ease-out) both;
-  animation-delay: calc(var(--reveal-delay, 0) * 90ms);
+.reveal-pending.is-visible {
+  animation: reveal 520ms var(--ease-out) both;
+  animation-delay: calc(min(var(--reveal-delay, 0), 5) * 60ms);
 }
 
 @keyframes reveal {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
@@ -245,7 +254,7 @@ button {
     scroll-behavior: auto;
   }
 
-  .js [data-reveal] {
+  .reveal-pending {
     opacity: 1;
   }
 

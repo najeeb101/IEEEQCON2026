@@ -14,10 +14,10 @@ import { themes } from '../../data/program';
       lead="IEEE Q-Con focuses on engineering innovations that address real-world challenges. These themes guide the talks, posters, and prototype submissions."
       align="center"
     />
-    <ul class="themes__grid" role="list">
+    <ul class="themes__grid" role="list" data-reveal>
       {
-        themes.map((t, i) => (
-          <li class="theme" data-reveal style={`--reveal-delay:${i}`}>
+        themes.map((t) => (
+          <li class="theme">
             <span class="theme__icon">
               <Icon name={t.icon} size={30} />
             </span>

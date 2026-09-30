@@ -29,10 +29,10 @@ const kinds = [...new Set(items.map((i) => i.kind))] as SessionKind[];
   )
 }
 
-<ol class="schedule" role="list">
+<ol class="schedule" role="list" data-reveal>
   {
-    items.map((item, i) => (
-      <li class:list={['slot', `kind-${item.kind}`]} data-reveal style={`--reveal-delay:${Math.min(i, 6)}`}>
+    items.map((item) => (
+      <li class:list={['slot', `kind-${item.kind}`]}>
         <div class="slot__time">
           <Icon name="clock" size={20} />
           <span>

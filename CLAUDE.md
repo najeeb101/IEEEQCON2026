@@ -9,6 +9,7 @@ Static Astro 7 site for the IEEE Q-Con student conference (Doha, Qatar). It merg
 - **Internal links go through `url()`** from `src/lib/url.ts` (or `Button`, which calls it), so `BASE_PATH` deployments work.
 - **Don't invent facts** (fees, dates, names, partners). Use a clearly marked placeholder and list it in `docs/LAUNCH-CHECKLIST.md`.
 - Hover lifts use the CSS `translate` property. `data-reveal` owns `transform` via an animation.
+- **Performance:** put `data-reveal` on list containers, not items. No `backdrop-filter` over particle fields or on the fixed header. Load heavy embeds on demand (see `MapEmbed`). Keep particle work inside `scripts/particles.ts`, which self-throttles. See "Performance" in `docs/ARCHITECTURE.md`.
 - `slot` is reserved in Astro templates, so don't use it as a prop name (speakers use `session`).
 - Keep mobile working: check at 390px width as well as desktop.
 

@@ -18,10 +18,10 @@ interface Props {
 const { facts } = Astro.props;
 ---
 
-<dl class="facts">
+<dl class="facts" data-reveal>
   {
-    facts.map((f, i) => (
-      <div class="fact" data-reveal style={`--reveal-delay:${i}`}>
+    facts.map((f) => (
+      <div class="fact">
         <span class="fact__icon">
           <Icon name={f.icon} size={22} />
         </span>

@@ -13,6 +13,10 @@ import '@fontsource/barlow/400.css';
 import '@fontsource/barlow/500.css';
 import '@fontsource/barlow/600.css';
 import '../styles/global.css';
+// The three faces used above the fold, preloaded so headings don't swap fonts after first paint.
+import poppins400 from '@fontsource/poppins/files/poppins-latin-400-normal.woff2?url';
+import poppins500 from '@fontsource/poppins/files/poppins-latin-500-normal.woff2?url';
+import barlow400 from '@fontsource/barlow/files/barlow-latin-400-normal.woff2?url';
 
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
@@ -44,6 +48,11 @@ const ogImage = new URL(url('/brand/og-image.png'), Astro.site);
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content="#141416" />
     <meta name="generator" content={Astro.generator} />
+    {
+      [poppins400, poppins500, barlow400].map((href) => (
+        <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />
+      ))
+    }
 
     <link rel="icon" type="image/png" sizes="32x32" href={url('/brand/favicon-32.png')} />
     <link rel="icon" type="image/png" sizes="192x192" href={url('/brand/icon-192.png')} />
@@ -62,9 +71,6 @@ const ogImage = new URL(url('/brand/og-image.png'), Astro.site);
 
     {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
 
-    <script is:inline>
-      document.documentElement.classList.add('js');
-    </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -76,9 +82,9 @@ const ogImage = new URL(url('/brand/og-image.png'), Astro.site);
     <BackToTop />
 
     <script>
-      // Scroll reveal: elements with [data-reveal] fade up once they enter the viewport.
-      const targets = document.querySelectorAll<HTMLElement>('[data-reveal]');
-      if ('IntersectionObserver' in window) {
+      // Scroll reveal: [data-reveal] elements that start below the fold fade up as they arrive.
+      // Anything already on screen is left alone, so first paint never waits on this script.
+      if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         const io = new IntersectionObserver(
           (entries) =>
             entries.forEach((entry) => {
@@ -86,11 +92,16 @@ const ogImage = new URL(url('/brand/og-image.png'), Astro.site);
               entry.target.classList.add('is-visible');
               io.unobserve(entry.target);
             }),
-          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+          { rootMargin: '0px 0px -4% 0px' },
         );
-        targets.forEach((el) => io.observe(el));
-      } else {
-        targets.forEach((el) => el.classList.add('is-visible'));
+        const fold = window.innerHeight;
+        const below = [...document.querySelectorAll<HTMLElement>('[data-reveal]')].filter(
+          (el) => el.getBoundingClientRect().top > fold,
+        );
+        below.forEach((el) => {
+          el.classList.add('reveal-pending');
+          io.observe(el);
+        });
       }
     </script>
   </body>

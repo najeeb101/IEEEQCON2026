@@ -78,9 +78,7 @@ import { announcements } from '../../data/community';
     background:
       radial-gradient(60% 120% at 100% 0%, rgb(57 148 200 / 0.14), transparent 60%),
       radial-gradient(40% 90% at 0% 100%, rgb(190 74 74 / 0.12), transparent 60%),
-      rgb(27 28 30 / 0.92);
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
+      rgb(27 28 30 / 0.97);
     box-shadow: var(--shadow-pop);
   }
 
@@ -217,6 +215,21 @@ import { announcements } from '../../data/community';
     transform-origin: left;
   }
 
+  /* The timer is this CSS animation: its end advances the slide (see script). */
+  .announce.is-auto .announce__progress span {
+    animation: announce-progress 7s linear forwards;
+  }
+
+  .announce.is-paused .announce__progress span {
+    animation-play-state: paused;
+  }
+
+  @keyframes announce-progress {
+    to {
+      transform: scaleX(1);
+    }
+  }
+
   @media (max-width: 640px) {
     .announce-wrap {
       margin-top: calc(var(--space-7) * -1);
@@ -240,11 +253,16 @@ import { announcements } from '../../data/community';
     const dots = [...root.querySelectorAll<HTMLButtonElement>('[data-dot]')];
     const progress = root.querySelector<HTMLElement>('[data-progress]')!;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const DURATION = 7000;
+    const auto = !reduce && slides.length > 1;
     let index = 0;
-    let paused = false;
-    let elapsed = 0;
-    let last = performance.now();
+
+    const restartTimer = () => {
+      if (!auto) return;
+      // Re-trigger the CSS animation on the progress bar.
+      root.classList.remove('is-auto');
+      void progress.offsetWidth;
+      root.classList.add('is-auto');
+    };
 
     const show = (i: number) => {
       index = (i + slides.length) % slides.length;
@@ -253,7 +271,7 @@ import { announcements } from '../../data/community';
         s.inert = n !== index;
       });
       dots.forEach((d, n) => d.setAttribute('aria-selected', String(n === index)));
-      elapsed = 0;
+      restartTimer();
     };
 
     root.querySelector('[data-prev]')?.addEventListener('click', () => show(index - 1));
@@ -273,19 +291,20 @@ import { announcements } from '../../data/community';
       if (Math.abs(dx) > 50) show(index + (dx < 0 ? 1 : -1));
     });
 
-    root.addEventListener('mouseenter', () => (paused = true));
-    root.addEventListener('mouseleave', () => (paused = false));
-    root.addEventListener('focusin', () => (paused = true));
-    root.addEventListener('focusout', () => (paused = false));
+    if (!auto) return;
 
-    if (reduce || slides.length < 2) return;
-    const frame = (now: number) => {
-      if (!paused && !document.hidden) elapsed += now - last;
-      last = now;
-      if (elapsed >= DURATION) show(index + 1);
-      progress.style.transform = `scaleX(${Math.min(1, elapsed / DURATION)})`;
-      requestAnimationFrame(frame);
-    };
-    requestAnimationFrame(frame);
+    // Pause on hover, on keyboard focus, and while the carousel is off screen.
+    let hovered = false;
+    let focused = false;
+    let onScreen = true;
+    const sync = () => root.classList.toggle('is-paused', hovered || focused || !onScreen);
+    root.addEventListener('mouseenter', () => ((hovered = true), sync()));
+    root.addEventListener('mouseleave', () => ((hovered = false), sync()));
+    root.addEventListener('focusin', () => ((focused = true), sync()));
+    root.addEventListener('focusout', () => ((focused = false), sync()));
+    new IntersectionObserver(([e]) => ((onScreen = e.isIntersecting), sync())).observe(root);
+
+    progress.addEventListener('animationend', () => show(index + 1));
+    restartTimer();
   });
 </script>

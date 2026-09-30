@@ -4,10 +4,11 @@ The site is seeded with the **real content of IEEE Q-Con 2026** from the Wix sit
 
 ## Decisions needed
 
-- [ ] **Edition.** Is this site for Q-Con 2026 (April 1, 2026, already held) or the next edition? If it's the next one, follow "Starting a new edition" in the [content guide](CONTENT-GUIDE.md).
+- [x] **Edition.** The site is for the new edition starting in **mid-October**. The site still shows the 2026 content until the dates arrive.
+- [ ] **Edition dates.** Pending from the organizers. When they arrive, follow "Starting a new edition" in the [content guide](CONTENT-GUIDE.md).
 - [ ] **Domain.** Custom domain, or `github.io`? Sets `SITE_URL` (see [deployment](DEPLOYMENT.md)).
 - [ ] **Hosting.** GitHub Pages, Vercel/Netlify, or a university/IEEE server.
-- [ ] **Registration form.** Keep the existing Google Form or create a new one for the new edition. The 2026 form still accepts responses.
+- [ ] **Registration form.** Keeping the existing Google Form for now (decided). It still accepts responses, so revisit before launch.
 
 ## Placeholders to fill
 

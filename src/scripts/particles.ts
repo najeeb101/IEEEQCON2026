@@ -4,8 +4,10 @@
  *   sphere – the speckled globe from the closing call to action
  *   rings  – the concentric contour rings from the "Full day of innovation" panel
  *
- * Each <canvas data-particles> animates only while on screen and draws a single still frame
- * when the visitor prefers reduced motion.
+ * Performance: each <canvas data-particles> animates only while on screen, at 30fps (24 on
+ * phones), holds still while the page scrolls, and steps its particle count down on slower
+ * devices (falling back to a still frame if needed). Reduced motion and Data Saver get a
+ * single still frame.
  */
 
 type Variant = 'wave' | 'sphere' | 'rings';
@@ -19,6 +21,21 @@ const TONES: Record<string, RGB> = {
 };
 
 const BUCKETS = 14;
+// Frame rate comes from data-fps (default 30, capped at 24 on phones): background motion is
+// slow, so 30fps looks the same as 60 at half the cost.
+/** Max average draw time per frame before quality steps down. */
+const BUDGET_MS = 8;
+/** Density multipliers tried in order on slower devices. */
+const QUALITY = [1, 0.8, 0.62, 0.48, 0.36];
+
+// While the page is scrolling every field holds still, leaving the main thread to the scroll.
+let scrollIdleAt = 0;
+let scrollListening = false;
+function listenForScroll() {
+  if (scrollListening) return;
+  scrollListening = true;
+  window.addEventListener('scroll', () => (scrollIdleAt = performance.now() + 180), { passive: true });
+}
 
 function drawDots(ctx: CanvasRenderingContext2D, dots: Dot[], [r, g, b]: RGB) {
   const buckets: Dot[][] = Array.from({ length: BUCKETS }, () => []);
@@ -31,8 +48,13 @@ function drawDots(ctx: CanvasRenderingContext2D, dots: Dot[], [r, g, b]: RGB) {
     ctx.fillStyle = `rgba(${r},${g},${b},${((i + 0.5) / BUCKETS).toFixed(3)})`;
     ctx.beginPath();
     for (const [x, y, rad] of list) {
-      ctx.moveTo(x + rad, y);
-      ctx.arc(x, y, rad, 0, Math.PI * 2);
+      // Tiny dots are indistinguishable from squares and far cheaper to fill.
+      if (rad < 1.3) {
+        ctx.rect(x - rad, y - rad, rad * 2, rad * 2);
+      } else {
+        ctx.moveTo(x + rad, y);
+        ctx.arc(x, y, rad, 0, Math.PI * 2);
+      }
     }
     ctx.fill();
   });
@@ -145,53 +167,102 @@ function setup(canvas: HTMLCanvasElement) {
   const variant = (canvas.dataset.variant ?? 'wave') as Variant;
   const tone = TONES[canvas.dataset.tone ?? 'blue'] ?? TONES.blue;
   const intensity = Number(canvas.dataset.intensity ?? 1);
+  const fps = Number(canvas.dataset.fps ?? 30);
   const horizon = Number(canvas.dataset.horizon ?? 0.5);
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  const nav = navigator as Navigator & { connection?: { saveData?: boolean }; deviceMemory?: number };
+  const constrained = (nav.hardwareConcurrency ?? 8) <= 4 || (nav.deviceMemory ?? 8) <= 4;
+
   let w = 0;
   let h = 0;
-  let density = 1;
   let visible = false;
   let raf = 0;
-  const start = performance.now() - Math.random() * 20000;
+  let lastDraw = 0;
+  // Animation clock that only advances while drawing, so motion resumes without a jump after a pause.
+  let clock = Math.random() * 20;
+  // Adaptive quality: index into QUALITY, stepped down when frames are too expensive for the device.
+  let level = constrained ? 1 : 0;
+  let cost = 0;
+  let samples = 0;
+  let drawn = 0;
+  let still = reduce || !!nav.connection?.saveData;
 
-  const frame = (now: number) => {
-    const t = (now - start) / 1000;
+  const frame = () => {
+    const began = performance.now();
+    const density = (w < 640 ? 0.6 : w < 1024 ? 0.8 : 1) * QUALITY[level];
     ctx.clearRect(0, 0, w, h);
-    const dots = variant === 'sphere' ? sphere(w, h, t, density) : variant === 'rings' ? rings(w, h, t, density) : wave(w, h, t, density, horizon);
+    const dots =
+      variant === 'sphere' ? sphere(w, h, clock, density) : variant === 'rings' ? rings(w, h, clock, density) : wave(w, h, clock, density, horizon);
     if (intensity !== 1) for (const d of dots) d[3] = Math.min(1, d[3] * intensity);
     ctx.globalCompositeOperation = 'lighter';
     drawDots(ctx, dots, tone);
     ctx.globalCompositeOperation = 'source-over';
+    return performance.now() - began;
   };
 
   const loop = (now: number) => {
-    frame(now);
-    raf = visible && !reduce && !document.hidden ? requestAnimationFrame(loop) : 0;
+    raf = 0;
+    if (!visible || still || document.hidden) return;
+    raf = requestAnimationFrame(loop);
+    // Hold still while the page scrolls, and cap the frame rate otherwise (lower on phones).
+    if (now < scrollIdleAt || now - lastDraw < 1000 / (w < 640 ? Math.min(fps, 24) : fps)) return;
+    clock += Math.min(now - lastDraw, 50) / 1000;
+    lastDraw = now;
+    const c = frame();
+    // Skip warm-up frames (cold JIT, page still loading), calibrate on the third, then re-check every 10.
+    if (++drawn <= 2) return;
+    cost = drawn === 3 ? c : cost * 0.8 + c * 0.2;
+    if (drawn > 3 && ++samples < 10) return;
+    samples = 0;
+    while (cost > BUDGET_MS && level < QUALITY.length - 1) {
+      cost *= stepRatio(level);
+      level++;
+    }
+    if (cost > BUDGET_MS * 1.5) still = true; // lowest quality is still too slow: keep the last frame
+    canvas.dataset.quality = still ? 'still' : String(level);
   };
 
   const kick = () => {
-    if (!raf && visible) raf = requestAnimationFrame(loop);
+    if (!raf && visible && !still) {
+      lastDraw = performance.now();
+      raf = requestAnimationFrame(loop);
+    }
   };
 
   const resize = () => {
     const rect = canvas.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    // Soft dots don't need full retina resolution; 1.5x keeps phones from pushing 9x the pixels.
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     w = rect.width;
     h = rect.height;
     if (!w || !h) return;
     canvas.width = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    // Fewer particles on small screens keeps phones cool.
-    density = w < 640 ? 0.6 : w < 1024 ? 0.8 : 1;
-    frame(performance.now());
+    // Resizing clears the canvas. Repaint now only if it's on screen; otherwise when it arrives.
+    painted = false;
+    if (visible) paint();
   };
 
+  let painted = false;
+  const paint = () => {
+    frame();
+    painted = true;
+  };
+
+  // Estimated cost after stepping one quality level down (the wave's dot count scales with density²).
+  const stepRatio = (l: number) => (QUALITY[l + 1] / QUALITY[l]) ** (variant === 'wave' ? 2 : 1);
+
+  listenForScroll();
   new ResizeObserver(resize).observe(canvas);
   new IntersectionObserver(
     ([entry]) => {
       visible = entry.isIntersecting;
+      // Off-screen canvases are hidden so the browser can skip compositing them entirely.
+      canvas.style.visibility = visible ? '' : 'hidden';
+      // First paint happens on arrival, so a field scrolled into view mid-scroll is never blank.
+      if (visible && !painted && w) paint();
       kick();
     },
     { rootMargin: '120px' },
