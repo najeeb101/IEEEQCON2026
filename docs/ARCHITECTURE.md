@@ -109,7 +109,7 @@ pages  →  sections  →  ui  →  tokens.css
 | Countdown | `ui/Countdown.astro` | Reads `site.event.start`/`end`. Shows "Happening now" during the event and a thank-you after. Until a date is set, a "coming soon" line takes its place. |
 | Date timeline states | `ui/DateTimeline.astro` | Past/next are computed in the visitor's browser, so they stay right without a rebuild. |
 | Particle fields | `scripts/particles.ts` | See [Performance](#performance). |
-| Venue map | `ui/MapEmbed.astro` | Placeholder first. The Google Maps iframe loads only when the visitor taps "Show interactive map". |
+| Venue map | `ui/MapEmbed.astro` | On the home page, a placeholder first: the Google Maps iframe loads only when the visitor taps "Show interactive map". The Venue page loads it right away (`autoload`). |
 | Link prefetch | `astro.config.mjs` → `prefetch` | Pages are fetched on hover or focus, so navigation feels instant. |
 | Speaker bio dialog | `ui/PersonCard.astro` | Native `<dialog>`. Closes on Escape or backdrop click. |
 
@@ -128,7 +128,7 @@ What keeps it smooth, and should be kept:
 - **Particle fields** (`scripts/particles.ts`) animate only while on screen, at the field's `fps` (30 for heroes, 20 for panels, max 24 on phones). They **hold still while the page scrolls**, render at no more than 1.5× pixel density, draw tiny dots as rectangles, and **step their particle count down** when frames cost more than 8ms. On very slow devices they fall back to a still frame. Off-screen canvases are hidden. Reduced motion and Data Saver get one still frame.
 - **No `backdrop-filter` blur over animated areas or on the fixed header.** A blur has to be recomputed every frame. Use a solid color with ~95% opacity instead.
 - **Reveal lists as one block.** Put `data-reveal` on the list or grid container (timeline, schedule, stats, themes, facts), not on each item. Each revealed element becomes its own GPU layer while it animates.
-- **Heavy third-party embeds load on demand** (the map). Registration is the exception, because there the form is the whole point of the page.
+- **Heavy third-party embeds load on demand** (the home page map). Registration and the Venue map are the exceptions, because there the embed is the whole point of the page.
 - **Fonts:** the three faces used above the fold are preloaded in `BaseLayout`. Every face is self-hosted.
 
 ## SEO and sharing
