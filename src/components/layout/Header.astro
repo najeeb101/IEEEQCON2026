@@ -7,7 +7,7 @@
 import Icon from '../ui/Icon.astro';
 import Button from '../ui/Button.astro';
 import { mainNav, navCta } from '../../config/navigation';
-import { site, fullName } from '../../config/site';
+import { site, fullName, dateText } from '../../config/site';
 import { url, isActive } from '../../lib/url';
 
 const path = Astro.url.pathname;
@@ -19,7 +19,7 @@ const sectionActive = (item: (typeof mainNav)[number]) =>
 <header class="site-header" data-header>
   <div class="container site-header__inner">
     <a class="brand" href={url('/')} aria-label={`${fullName} home`}>
-      <img src={url('/brand/qcon-logo-white.png')} alt="" width="362" height="193" />
+      <img src={url('/brand/qcon-logo-white.png')} alt="" width="360" height="192" />
     </a>
 
     <nav class="nav" aria-label="Main">
@@ -82,7 +82,7 @@ const sectionActive = (item: (typeof mainNav)[number]) =>
 <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu" inert data-mobile-menu>
   <div class="mobile-menu__top container">
     <a class="brand" href={url('/')} aria-label={`${fullName} home`}>
-      <img src={url('/brand/qcon-logo-white.png')} alt="" width="362" height="193" />
+      <img src={url('/brand/qcon-logo-white.png')} alt="" width="360" height="192" />
     </a>
     <button class="menu-toggle" type="button" data-menu-close>
       <Icon name="close" size={26} />
@@ -132,7 +132,7 @@ const sectionActive = (item: (typeof mainNav)[number]) =>
     <Button href={navCta.href} size="lg" block icon="arrow-right">Register now</Button>
     <p class="mobile-menu__meta">
       <Icon name="calendar" size={16} />
-      {site.event.dateLabel} · {site.venue.name}
+      {dateText} · {site.venue.name}
     </p>
     <a class="mobile-menu__meta" href={`mailto:${site.contact.email}`}>
       <Icon name="mail" size={16} />

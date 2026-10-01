@@ -3,7 +3,7 @@ import PageLayout from '../layouts/PageLayout.astro';
 import FactGrid from '../components/ui/FactGrid.astro';
 import StatusBadge from '../components/ui/StatusBadge.astro';
 import Button from '../components/ui/Button.astro';
-import { site, fullName, venueLine } from '../config/site';
+import { site, fullName, venueLine, TBA } from '../config/site';
 
 const { status, formUrl } = site.registration;
 // embedded=true strips Google's chrome; hl=en keeps the form in English regardless of the visitor's region.
@@ -20,8 +20,8 @@ const embedUrl = formUrl ? `${formUrl}${formUrl.includes('?') ? '&' : '?'}embedd
     <div class="container">
       <FactGrid
         facts={[
-          { icon: 'calendar', label: 'Event date', value: site.event.dateLabel },
-          { icon: 'clock', label: 'Event time', value: site.event.timeLabel },
+          { icon: 'calendar', label: 'Event date', value: site.event.dateLabel || TBA },
+          { icon: 'clock', label: 'Event time', value: site.event.timeLabel || TBA },
           { icon: 'pin', label: 'Address', value: venueLine, href: '/venue/' },
           { icon: 'mail', label: 'Contact us', value: site.contact.email, href: `mailto:${site.contact.email}` },
         ]}

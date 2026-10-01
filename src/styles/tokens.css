@@ -9,7 +9,7 @@
 :root {
   /* ---- Brand ---- */
   --brand-blue: #006098;        /* logo "IEEE Q-CON" wordmark */
-  --brand-maroon: #500000;      /* logo "Q" and "2026" */
+  --brand-maroon: #500000;      /* logo "Q" and year */
 
   /* ---- Accent scales (tuned for dark backgrounds) ---- */
   --blue-100: #d6ebf7;

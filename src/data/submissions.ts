@@ -1,6 +1,6 @@
 /**
  * SUBMISSIONS & DATES — tracks, requirements and the important-dates timeline.
- * Dates are ISO strings (YYYY-MM-DD). Use `null` for "TBD".
+ * Dates are ISO strings (YYYY-MM-DD). Use `null` for "To be announced".
  */
 import type { Status } from '../config/site';
 
@@ -13,11 +13,11 @@ export interface ImportantDate {
 }
 
 export const importantDates: ImportantDate[] = [
-  { label: 'Abstract submission deadline', date: '2026-02-16', track: 'Research & Posters' },
-  { label: 'Notification of acceptance', date: '2026-02-28', track: 'Research & Posters' },
-  { label: 'Final poster deadline', date: '2026-03-14', track: 'Research & Posters' },
+  { label: 'Abstract submission deadline', date: null, track: 'Research & Posters' },
+  { label: 'Notification of acceptance', date: null, track: 'Research & Posters' },
+  { label: 'Final poster deadline', date: null, track: 'Research & Posters' },
   { label: 'Prototype submission deadline', date: null, track: 'Prototype Competition' },
-  { label: 'Conference day, evaluation & awards', date: '2026-04-01', milestone: true },
+  { label: 'Conference day, evaluation & awards', date: null, milestone: true },
 ];
 
 export interface Requirement {
@@ -45,9 +45,10 @@ export const tracks: Track[] = [
     href: '/submissions/research-and-posters/',
     summary:
       'Submit a one-page abstract for the Oral Presentation or Poster Session tracks. Completed and in-progress work are both welcome.',
-    status: 'open',
-    formUrl: 'https://forms.gle/UxDpqHF7y3auWSrY9',
-    deadline: '2026-02-16',
+    status: 'soon',
+    /** The 2026 form was https://forms.gle/UxDpqHF7y3auWSrY9. Add the new edition's form and set status to 'open'. */
+    formUrl: '',
+    deadline: null,
   },
   {
     id: 'prototype',
@@ -81,10 +82,10 @@ export const posterRequirements: Requirement[] = [
 export const posterTemplateUrl = '';
 
 export const researchDates: ImportantDate[] = [
-  { label: 'Abstract deadline', date: '2026-02-16' },
-  { label: 'Notification of acceptance', date: '2026-02-28' },
-  { label: 'Final poster deadline', date: '2026-03-14' },
-  { label: 'Evaluation and awards', date: '2026-04-01', milestone: true },
+  { label: 'Abstract deadline', date: null },
+  { label: 'Notification of acceptance', date: null },
+  { label: 'Final poster deadline', date: null },
+  { label: 'Evaluation and awards', date: null, milestone: true },
 ];
 
 export const prototypeEligibility: Requirement[] = [
@@ -106,5 +107,5 @@ export const prototypeDates: ImportantDate[] = [
   { label: 'Draft submission deadline', date: null },
   { label: 'Final submission deadline', date: null },
   { label: 'Notification of acceptance', date: null },
-  { label: 'Evaluation and awards', date: '2026-04-01', milestone: true },
+  { label: 'Evaluation and awards', date: null, milestone: true },
 ];

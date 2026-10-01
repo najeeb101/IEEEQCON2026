@@ -2,8 +2,8 @@
 /** Q-Con "A Full Day of Innovation. One Unifying Experience." split panel, with key moments from the schedule. */
 import SplitPanel from '../ui/SplitPanel.astro';
 import Button from '../ui/Button.astro';
-import { schedule } from '../../data/program';
-import { site, fullName } from '../../config/site';
+import { schedule, scheduleStatus } from '../../data/program';
+import { site, fullName, dateText } from '../../config/site';
 import { formatTime } from '../../lib/format';
 import { url } from '../../lib/url';
 
@@ -42,7 +42,9 @@ const moments = schedule.filter((s) => ['arrival', 'keynote', 'block', 'panel', 
       </p>
       <div class="flow__actions">
         <Button href="/program/schedule/" icon="arrow-right">Full schedule</Button>
-        <span class="flow__when">{site.event.dateLabel} · {site.event.timeLabel}</span>
+        <span class="flow__when">
+          {[dateText, site.event.timeLabel, scheduleStatus === 'tentative' && 'Tentative program'].filter(Boolean).join(' · ')}
+        </span>
       </div>
     </SplitPanel>
   </div>

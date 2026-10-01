@@ -14,28 +14,28 @@ export interface Announcement {
 /** Rotating announcements card on the home page. First item shows first. */
 export const announcements: Announcement[] = [
   {
+    tag: `Q-Con ${site.edition}`,
+    title: `${site.name} ${site.edition} is on its way`,
+    body: 'The next edition of Qatar’s student engineering conference is being planned. The date and deadlines will be announced here and on Instagram.',
+    cta: { label: `Follow ${site.socials[0].handle}`, href: site.socials[0].url },
+  },
+  {
     tag: 'Call for Submissions',
-    title: 'Research & poster abstracts are open',
-    body: 'Submit a one-page abstract (350 words max.) for the Oral Presentation or Poster Session tracks. Abstract deadline: February 16, 2026.',
+    title: 'Start preparing your abstract',
+    body: 'Research and poster abstracts are one page (350 words max.) and can cover completed or in-progress work. The submission form opens with the call.',
     cta: { label: 'Submission guidelines', href: '/submissions/research-and-posters/' },
   },
   {
-    tag: 'Registration',
-    title: `Registration for ${site.name} ${site.edition} is open`,
-    body: 'Join students, researchers, innovators and industry leaders from across Qatar for a full day of talks, posters, prototypes and networking.',
-    cta: { label: 'Register now', href: '/registration/' },
-  },
-  {
-    tag: 'Program',
-    title: 'Keynote #1: Sara El-Sallabi',
-    body: 'The morning keynote opens the day at 9:10 AM, followed by two blocks of student technical talks.',
-    cta: { label: 'See the schedule', href: '/program/schedule/' },
-  },
-  {
     tag: 'Prototype Competition',
-    title: 'Prototype submissions open soon',
+    title: 'Build something to show',
     body: 'Individuals or teams of up to four can enter working or conceptual prototypes with an electrical or electronic component.',
     cta: { label: 'Competition details', href: '/submissions/prototype-competition/' },
+  },
+  {
+    tag: 'Get Involved',
+    title: 'Volunteer, judge or sponsor',
+    body: 'Students can join the organizing team, faculty and industry experts can judge posters and prototypes, and organizations can sponsor the day.',
+    cta: { label: 'Sponsorship', href: '/sponsors/' },
   },
 ];
 

@@ -24,6 +24,7 @@ export const mainNav: NavItem[] = [
     children: [
       { label: 'About Q-Con', href: '/about/', description: 'Mission, themes and who can take part' },
       { label: 'Organizing Committee', href: '/about/organizing-committee/', description: 'The team behind the conference' },
+      { label: 'Media Kit', href: '/about/media-kit/', description: 'Logos, colors and brand guidelines' },
     ],
   },
   {
@@ -57,6 +58,7 @@ export const footerNav: { title: string; links: NavLink[] }[] = [
       { label: 'Organizing Committee', href: '/about/organizing-committee/' },
       { label: 'Sponsors', href: '/sponsors/' },
       { label: 'Venue', href: '/venue/' },
+      { label: 'Media Kit', href: '/about/media-kit/' },
     ],
   },
   {

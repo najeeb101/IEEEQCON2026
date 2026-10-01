@@ -5,9 +5,9 @@ function parseDay(iso: string): Date {
   return new Date(iso.length === 10 ? `${iso}T12:00:00+03:00` : iso);
 }
 
-/** "February 16, 2026" — or "TBD" for null. */
+/** "February 16, 2027", or "To be announced" for null. */
 export function formatDate(iso: string | null, style: 'long' | 'short' = 'long'): string {
-  if (!iso) return 'TBD';
+  if (!iso) return 'To be announced';
   return new Intl.DateTimeFormat('en-US', {
     month: style === 'long' ? 'long' : 'short',
     day: 'numeric',

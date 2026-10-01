@@ -10,7 +10,9 @@
     "check": "astro check",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "brand": "node scripts/brand-assets.mjs",
+    "og": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/og-image.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
@@ -23,6 +25,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "sharp": "^0.35.5",
     "typescript": "^6.0.3"
   },
   "private": true,

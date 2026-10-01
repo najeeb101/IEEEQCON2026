@@ -10,7 +10,7 @@ export type Status = 'open' | 'soon' | 'closed';
 
 export const site = {
   name: 'IEEE Q-Con',
-  edition: 2026,
+  edition: 2027,
   /** Shown in the hero under the title. */
   kind: 'Student Conference',
   tagline: 'Innovate. Inspire. Excel.',
@@ -19,11 +19,17 @@ export const site = {
   organizer: 'IEEE Chapter at Texas A&M University at Qatar',
 
   event: {
-    /** ISO 8601 with the Qatar offset (+03:00). Drives the countdown and structured data. */
-    start: '2026-04-01T08:00:00+03:00',
-    end: '2026-04-01T16:00:00+03:00',
-    dateLabel: 'April 1, 2026',
-    timeLabel: '8:00 AM – 4:00 PM',
+    /**
+     * ISO 8601 with the Qatar offset, e.g. '2027-04-01T08:00:00+03:00'. Drives the countdown and
+     * structured data. Leave null (and the labels empty) until the date is confirmed: the site then
+     * says "To be announced" and hides the countdown.
+     */
+    start: null as string | null,
+    end: null as string | null,
+    /** e.g. 'April 1, 2027' */
+    dateLabel: '' as string,
+    /** e.g. '8:00 AM – 4:00 PM' */
+    timeLabel: '' as string,
     format: 'In person',
   },
 
@@ -64,8 +70,19 @@ export const site = {
   ],
 } as const;
 
-/** "IEEE Q-Con 2026" */
+/** "IEEE Q-Con 2027" */
 export const fullName = `${site.name} ${site.edition}`;
+
+export const TBA = 'To be announced';
+
+/** True once the conference date is set. */
+export const hasDate = Boolean(site.event.start);
+
+/** "April 1, 2027", or "Date to be announced" */
+export const dateText = site.event.dateLabel || 'Date to be announced';
+
+/** "8:00 AM – 4:00 PM", or "Time to be announced" */
+export const timeText = site.event.timeLabel || 'Time to be announced';
 
 /** "Qatar National Library, Education City, Doha, Qatar" */
 export const venueLine = `${site.venue.name}, ${site.venue.area}, ${site.venue.city}, ${site.venue.country}`;
