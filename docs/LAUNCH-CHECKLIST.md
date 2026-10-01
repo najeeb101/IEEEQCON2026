@@ -6,8 +6,8 @@ The site is set up for **IEEE Q-Con 2027** with the designer's new logo. Content
 
 - [x] **Edition.** IEEE Q-Con 2027, the new edition starting in **mid-October**. Q-Con 2026 is listed under "Past editions" on the About page.
 - [ ] **Edition dates.** Pending from the organizers. When they arrive, follow "Before the date is confirmed" in the [content guide](CONTENT-GUIDE.md#before-the-date-is-confirmed).
-- [ ] **Domain.** Custom domain, or `github.io`? Sets `SITE_URL` (see [deployment](DEPLOYMENT.md)).
-- [ ] **Hosting.** GitHub Pages, Vercel/Netlify, or a university/IEEE server.
+- [ ] **Domain.** The site runs at `najeeb101.github.io/IEEEQCON2026` for now. Decide whether to use a custom domain (see [deployment](DEPLOYMENT.md#option-a-github-pages-current)).
+- [x] **Hosting.** GitHub Pages, deployed automatically from `main`.
 - [ ] **Registration form.** Keeping the existing Google Form for now (decided). It still accepts responses, so revisit before launch.
 
 ## Placeholders to fill

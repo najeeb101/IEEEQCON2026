@@ -1,6 +1,8 @@
 # Deployment
 
-The site builds to plain static files in `dist/`, so any static host works. **Nothing is deployed yet.** This guide is for when we're ready.
+The site builds to plain static files in `dist/`, so any static host works.
+
+**Live at https://najeeb101.github.io/IEEEQCON2026/** on GitHub Pages (option A below). Every merge to `main` rebuilds and republishes it within a couple of minutes; progress shows under the repository's **Actions** tab.
 
 ## Build
 
@@ -17,46 +19,14 @@ npm run preview                                    # check the production build 
 
 All internal links go through `url()`, so a `BASE_PATH` change needs no code changes.
 
-## Option A: GitHub Pages (free, repo already on GitHub)
+## Option A: GitHub Pages (current)
 
-1. In the repository: **Settings → Pages → Source: GitHub Actions**.
-2. Add `.github/workflows/deploy.yml`:
+Free, and the repository is already on GitHub.
 
-```yaml
-name: Deploy site
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-concurrency: { group: pages, cancel-in-progress: true }
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: npm }
-      - run: npm ci
-      - run: npm run build
-        env:
-          SITE_URL: https://<user>.github.io        # or your custom domain
-          BASE_PATH: /IEEEQCON2026                  # remove when using a custom domain
-      - uses: actions/upload-pages-artifact@v3
-        with: { path: dist }
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment: { name: github-pages, url: '${{ steps.d.outputs.page_url }}' }
-    steps:
-      - id: d
-        uses: actions/deploy-pages@v4
-```
-
-3. For a **custom domain**, add it under Settings → Pages, create `public/CNAME` containing the domain, set `SITE_URL` to it and remove `BASE_PATH`.
+- **Settings → Pages → Source** is set to **GitHub Actions**.
+- `.github/workflows/deploy.yml` runs `npm ci` and `npm run build` on every push to `main` (or by hand from the Actions tab), then publishes `dist/`. It sets `SITE_URL=https://najeeb101.github.io` and `BASE_PATH=/IEEEQCON2026`.
+- If a deploy fails, open the failed run in the Actions tab. The usual cause is a type error, which `npm run build` also shows locally.
+- **Custom domain:** add it under Settings → Pages, create `public/CNAME` containing the domain, then in the workflow set `SITE_URL` to `https://<domain>` and remove `BASE_PATH`.
 
 ## Option B: Vercel or Netlify
 
