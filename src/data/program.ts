@@ -85,12 +85,19 @@ export interface ScheduleItem {
   parts?: { title: string; time?: string; note?: string }[];
 }
 
-export const scheduleDate = '2026-04-01';
+/** The conference day, 'YYYY-MM-DD'. null until the date is confirmed. */
+export const scheduleDate: string | null = null;
+
+/**
+ * 'tentative' labels the schedule as a draft based on the previous edition's program.
+ * Switch to 'final' once the organizers confirm the times.
+ */
+export const scheduleStatus: 'tentative' | 'final' = 'tentative';
 
 export const schedule: ScheduleItem[] = [
   { start: '08:00', end: '09:00', title: 'Registration & Welcome Coffee', kind: 'arrival' },
   { start: '09:00', end: '09:10', title: 'Opening Ceremony', kind: 'ceremony' },
-  { start: '09:10', end: '09:40', title: 'Keynote #1', kind: 'keynote', speaker: 'Sara El-Sallabi' },
+  { start: '09:10', end: '09:40', title: 'Keynote #1', kind: 'keynote' },
   { start: '09:40', end: '10:20', title: 'Session 1: Technical Talks', kind: 'session' },
   { start: '10:20', end: '10:40', title: 'Coffee Break & Networking', kind: 'break' },
   { start: '10:40', end: '12:00', title: 'Session 2: Technical Talks', kind: 'session' },
@@ -105,7 +112,7 @@ export const schedule: ScheduleItem[] = [
       { title: 'Prototype Competition', note: 'Live demos and judging' },
     ],
   },
-  { start: '13:30', end: '14:00', title: 'Keynote #2', kind: 'keynote', speaker: 'IEEE alumni member or faculty member' },
+  { start: '13:30', end: '14:00', title: 'Keynote #2', kind: 'keynote' },
   { start: '14:00', end: '14:30', title: 'Panel Discussion', kind: 'panel' },
   { start: '14:30', end: '14:50', title: 'Coffee Break', kind: 'break' },
   { start: '14:50', end: '15:20', title: 'Awards & Closing Ceremony', kind: 'ceremony' },
@@ -137,13 +144,27 @@ export interface Speaker {
 }
 
 export const speakers: Speaker[] = [
-  { name: 'Sara El-Sallabi', role: 'Keynote Speaker', session: 'Keynote #1 · 9:10 AM' },
+  { name: 'To be announced', role: 'Keynote Speaker', session: 'Keynote #1', tba: true },
+  { name: 'To be announced', role: 'Keynote Speaker', session: 'Keynote #2', tba: true },
+  { name: 'To be announced', role: 'Panelists', session: 'Panel Discussion', tba: true },
+];
+
+export interface PastEdition {
+  year: number;
+  date: string;
+  venue: string;
+  keynotes: string[];
+  /** Path under /public to that year's white logo. */
+  logo: string;
+}
+
+/** Earlier editions, newest first (About page). Facts as published on that year's website. */
+export const pastEditions: PastEdition[] = [
   {
-    name: 'To be announced',
-    role: 'Keynote Speaker',
-    session: 'Keynote #2 · 1:30 PM',
-    affiliation: 'IEEE alumni member or faculty member',
-    tba: true,
+    year: 2026,
+    date: 'April 1, 2026',
+    venue: 'Qatar National Library, Doha',
+    keynotes: ['Sara El-Sallabi'],
+    logo: '/brand/past/qcon-2026-logo-white.png',
   },
-  { name: 'To be announced', role: 'Panelists', session: 'Panel Discussion · 2:00 PM', tba: true },
 ];

@@ -14,7 +14,7 @@ type Variant = 'wave' | 'sphere' | 'rings';
 type RGB = [number, number, number];
 type Dot = [x: number, y: number, r: number, a: number];
 
-const TONES: Record<string, RGB> = {
+export const TONES: Record<string, RGB> = {
   blue: [146, 168, 240], // periwinkle from the Q-Con hero
   cyan: [74, 160, 214], // Q-Con accent
   maroon: [232, 112, 112], // maroon glow
@@ -62,7 +62,7 @@ function drawDots(ctx: CanvasRenderingContext2D, dots: Dot[], [r, g, b]: RGB) {
 
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
 
-function wave(w: number, h: number, t: number, density: number, horizon: number): Dot[] {
+export function wave(w: number, h: number, t: number, density: number, horizon: number): Dot[] {
   const dots: Dot[] = [];
   const cols = Math.round(120 * density);
   const rows = Math.round(60 * density);

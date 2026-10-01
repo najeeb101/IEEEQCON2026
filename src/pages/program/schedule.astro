@@ -3,11 +3,12 @@ import PageLayout from '../../layouts/PageLayout.astro';
 import ScheduleList from '../../components/ui/ScheduleList.astro';
 import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
-import { schedule, scheduleDate } from '../../data/program';
-import { site } from '../../config/site';
+import { schedule, scheduleDate, scheduleStatus, pastEditions } from '../../data/program';
+import { site, dateText, timeText } from '../../config/site';
 import { dateParts } from '../../lib/format';
 
-const day = dateParts(scheduleDate);
+const weekday = scheduleDate ? dateParts(scheduleDate).weekday : 'One-day conference';
+const basedOn = pastEditions[0];
 ---
 
 <PageLayout
@@ -18,13 +19,25 @@ const day = dateParts(scheduleDate);
   <section class="section">
     <div class="container container--narrow">
       <header class="dayhead" data-reveal>
-        <p class="eyebrow">{day.weekday}</p>
-        <p class="dayhead__date smallcaps">{site.event.dateLabel}</p>
+        <p class="eyebrow">{weekday}</p>
+        <p class="dayhead__date smallcaps">{dateText}</p>
         <p class="dayhead__meta">
-          <span><Icon name="clock" size={18} /> {site.event.timeLabel}</span>
+          <span><Icon name="clock" size={18} /> {timeText}</span>
           <span><Icon name="pin" size={18} /> {site.venue.name}</span>
         </p>
       </header>
+
+      {
+        scheduleStatus === 'tentative' && (
+          <p class="tentative" data-reveal>
+            <Icon name="info" size={18} />
+            <span>
+              <strong>Tentative program.</strong> This follows the {basedOn ? `Q-Con ${basedOn.year}` : 'previous'} day
+              plan, so you know what to expect. Final times and sessions will be announced.
+            </span>
+          </p>
+        )
+      }
 
       <ScheduleList items={schedule} />
 
@@ -71,6 +84,28 @@ const day = dateParts(scheduleDate);
 
   .dayhead__meta :global(svg) {
     color: var(--accent-soft);
+  }
+
+  .tentative {
+    display: flex;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid var(--line-soft);
+    border-left: 3px solid var(--accent-2);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .tentative :global(svg) {
+    margin-top: 0.15em;
+    color: var(--accent-2);
+  }
+
+  .tentative strong {
+    color: var(--text);
   }
 
   .note {

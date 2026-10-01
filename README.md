@@ -26,6 +26,8 @@ npm run dev        # http://localhost:4321
 | `npm run check` | Type-checks every page, component and data file |
 | `npm run build` | Checks, then builds the static site into `dist/` |
 | `npm run preview` | Serves the built `dist/` locally |
+| `npm run brand` | Rebuilds every logo, icon and media kit file from `brand-source/` |
+| `npm run og` | Rebuilds the link preview image (needs Chrome or Edge installed) |
 
 ## Where things live
 
@@ -37,7 +39,8 @@ src/
   styles/tokens.css      ← the theme: every color, font, size, radius and shadow
   components/            ← layout, reusable UI, and page sections
   pages/                 ← one file per URL
-public/brand/            ← logos, favicons, social-share image
+brand-source/            ← the designer's logo files (edit these, then run npm run brand)
+public/brand/            ← generated logos, favicons, social-share image, media kit files
 docs/                    ← the documentation below
 ```
 

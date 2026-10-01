@@ -1,7 +1,7 @@
 ---
 /** Q-Con "When and Where?" — small-caps title, date and venue in light blue, full-width map below. */
 import MapEmbed from '../ui/MapEmbed.astro';
-import { site } from '../../config/site';
+import { site, dateText } from '../../config/site';
 
 interface Props {
   /** Hide the map (e.g. when the page shows it elsewhere). */
@@ -16,8 +16,10 @@ const { map = true } = Astro.props;
     <div class="when__head" data-reveal>
       <h2 id="when-title" class="smallcaps">When and Where?</h2>
       <span class="when__rule" aria-hidden="true"></span>
-      <p class="when__date smallcaps"><time datetime={site.event.start}>{site.event.dateLabel}</time></p>
-      <p class="when__time">{site.event.timeLabel} · {site.event.format}</p>
+      <p class="when__date smallcaps">
+        {site.event.start ? <time datetime={site.event.start}>{dateText}</time> : dateText}
+      </p>
+      <p class="when__time">{[site.event.timeLabel, site.event.format].filter(Boolean).join(' · ')}</p>
       <p class="when__venue smallcaps">
         {site.venue.name}, {site.venue.area}<br />{site.venue.city}, {site.venue.country}
       </p>

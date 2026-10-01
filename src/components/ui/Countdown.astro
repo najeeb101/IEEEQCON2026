@@ -1,9 +1,9 @@
 ---
 /**
  * Live countdown to the conference. Switches to "Happening now" during the event
- * and a thank-you line afterwards. Without JavaScript it shows the date.
+ * and a thank-you line afterwards. Until a date is set it shows a "coming soon" line instead.
  */
-import { site } from '../../config/site';
+import { site, hasDate } from '../../config/site';
 
 interface Props {
   class?: string;
@@ -16,23 +16,35 @@ const units = [
   ['minutes', 'Minutes'],
   ['seconds', 'Seconds'],
 ] as const;
+const social = site.socials[0];
 ---
 
-<div class:list={['countdown', className]} data-countdown data-start={site.event.start} data-end={site.event.end}>
-  <div class="countdown__clock" role="timer" aria-live="off" aria-label={`Time until ${site.event.dateLabel}`}>
-    {
-      units.map(([key, label]) => (
-        <div class="countdown__unit">
-          <span class="countdown__value" data-unit={key}>
-            --
-          </span>
-          <span class="countdown__label">{label}</span>
-        </div>
-      ))
-    }
-  </div>
-  <p class="countdown__message" data-message hidden></p>
-</div>
+{
+  hasDate ? (
+    <div class:list={['countdown', className]} data-countdown data-start={site.event.start} data-end={site.event.end}>
+      <div class="countdown__clock" role="timer" aria-live="off" aria-label={`Time until ${site.event.dateLabel}`}>
+        {units.map(([key, label]) => (
+          <div class="countdown__unit">
+            <span class="countdown__value" data-unit={key}>
+              --
+            </span>
+            <span class="countdown__label">{label}</span>
+          </div>
+        ))}
+      </div>
+      <p class="countdown__message" data-message hidden />
+    </div>
+  ) : (
+    <div class:list={['countdown', className]}>
+      <p class="countdown__message">
+        <span>
+          The {site.edition} date is coming soon.{' '}
+          <a href={social.url} target="_blank" rel="noopener">Follow {social.handle}</a>
+        </span>
+      </p>
+    </div>
+  )
+}
 
 <style>
   .countdown__clock {
@@ -83,10 +95,24 @@ const units = [
 
   .countdown__message::before {
     content: '';
+    flex: none;
     width: 8px;
     height: 8px;
     border-radius: 50%;
     background: var(--accent);
+  }
+
+  .countdown__message a {
+    color: var(--accent-soft);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.2em;
+    transition: text-decoration-color var(--dur-fast);
+  }
+
+  .countdown__message a:hover {
+    text-decoration-color: currentColor;
   }
 
   .countdown.is-done .countdown__clock {

@@ -11,16 +11,16 @@ How to update the site without touching design or layout. Everything here is an 
 
 ---
 
-## Starting a new edition (e.g. 2027)
+## Starting a new edition (e.g. 2028)
 
 Everything year-specific lives in **`src/config/site.ts`**:
 
 ```ts
-edition: 2027,
+edition: 2028,
 event: {
-  start: '2027-04-07T08:00:00+03:00',   // drives the countdown. Keep +03:00 (Doha time)
-  end:   '2027-04-07T16:00:00+03:00',
-  dateLabel: 'April 7, 2027',           // how the date is written on the page
+  start: '2028-04-05T08:00:00+03:00',   // drives the countdown. Keep +03:00 (Doha time)
+  end:   '2028-04-05T16:00:00+03:00',
+  dateLabel: 'April 5, 2028',           // how the date is written on the page
   timeLabel: '8:00 AM – 4:00 PM',
   format: 'In person',
 },
@@ -28,10 +28,23 @@ venue: { name: 'Qatar National Library', area: 'Education City', city: 'Doha', c
 ```
 
 Then work through:
+- `src/data/program.ts`: add the edition that just ended to the top of `pastEditions` (About page), and save its white logo in `public/brand/past/` *before* you replace the logos. Then update `scheduleDate`, the schedule and speakers.
 - `src/data/submissions.ts`: important dates, track deadlines, statuses, form links
-- `src/data/program.ts`: `scheduleDate`, schedule, speakers
 - `src/data/community.ts`: announcements, committee, sponsors
-- `public/brand/`: the logo files contain the year ("2026"), so replace them with the new artwork (same file names). See [Logos & images](#logos--images).
+- Logos and link preview: the logo contains the year, so put the designer's new files in `brand-source/` and run `npm run brand`, then `npm run og`. See [Logos & images](#logos--images).
+
+### Before the date is confirmed
+
+Leave the date fields empty and the site says "to be announced" everywhere instead of showing a wrong date:
+
+```ts
+start: null,
+end: null,
+dateLabel: '',
+timeLabel: '',
+```
+
+The hero shows "Date to be announced" and a "Follow @ieeeqcon" line instead of the countdown, and the search-engine event data is left out. Any important date set to `null` shows "To be announced" on the timeline. When the date arrives, fill in all four fields, set `scheduleDate` in `program.ts`, and run `npm run og` so the link preview shows the date too.
 
 ## Statuses: open, opening soon, closed
 
@@ -54,7 +67,7 @@ Registration and each submission track have a `status`:
 
 ```ts
 { label: 'Abstract submission deadline', date: '2027-02-15', track: 'Research & Posters' },
-{ label: 'Prototype submission deadline', date: null, track: 'Prototype Competition' },   // null shows "TBD"
+{ label: 'Prototype submission deadline', date: null, track: 'Prototype Competition' },   // null shows "To be announced"
 { label: 'Conference day, evaluation & awards', date: '2027-04-07', milestone: true },    // highlighted
 ```
 
@@ -82,6 +95,8 @@ Dates are `YYYY-MM-DD`. The next upcoming date gets a "Next" badge automatically
 ```
 
 `kind` controls the color and label: `arrival`, `ceremony`, `keynote`, `session`, `block`, `break`, `panel` or `networking`. Add `location` once rooms are known. A `block` can list `parts` (see the Innovation Block).
+
+`scheduleStatus: 'tentative'` puts a "Tentative program" note on the schedule page and the home page, explaining that the day follows the previous edition's plan. Switch it to `'final'` once the organizers confirm the times.
 
 ## Speakers
 
@@ -128,15 +143,28 @@ export const sponsorTiers = [
 
 - Put images in `public/` (for example `public/people/`, `public/logos/`) and reference them from the site root: `'/people/jane.jpg'`.
 - Portraits: square, at least 400×400, face centered. They're cropped to a circle.
-- Brand files in `public/brand/`:
+### Brand files
 
-| File | Used for |
+Don't edit the files in `public/brand/` by hand. They're generated from the designer's masters:
+
+1. Put the seven designer files in `brand-source/`, with the same names as now (`Logo (Transparent Background).png`, `White Logo.png`, `Black Logo.png`, `Logo (White Background).png`, `Icon.png`, `Icon White.png`, `Icon Black.png`).
+2. Run `npm run brand`. It crops each master, writes the site logos, browser and phone icons and the media kit downloads, and records their sizes in `src/data/brand-kit.json`.
+3. Run `npm run og`. It builds the link preview image from the new logo and the name, date and venue in `site.ts`. It uses the Chrome or Edge on your computer; set `CHROME_PATH` if it can't find one.
+4. Look at the result in `npm run dev`, then commit `brand-source/`, `public/brand/` and `src/data/brand-kit.json`.
+
+| File in `public/brand/` | Used for |
 | --- | --- |
 | `qcon-logo-white.png` | Header, footer, panels (dark backgrounds) |
 | `qcon-logo-color.png` | Available for light backgrounds and print |
 | `qcon-mark-white.png` | The "Q" in page heroes and on the 404 page |
 | `qcon-mark-color.png`, `favicon-32.png`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png` | Browser and phone icons |
 | `og-image.png` | Link preview on WhatsApp, LinkedIn, X (1200×630) |
+| `kit/` | Downloads and previews on the Media Kit page |
+| `past/` | Logos of earlier editions (About page). Not regenerated. |
+
+## Media kit
+
+`/about/media-kit/` offers the logo downloads, brand colors, fonts and usage rules to sponsors, press and volunteers. The downloads come from `npm run brand`. The wording, colors and do/don't rules are in `src/data/brand.ts`.
 
 ## Contact, socials, menus
 

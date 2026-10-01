@@ -33,13 +33,13 @@ const { dates, showTrack = true, class: className } = Astro.props;
                 <span class="timeline__day">{parts.day}</span>
               </>
             ) : (
-              <span class="timeline__tbd">TBD</span>
+              <span class="timeline__tbd">TBA</span>
             )}
           </span>
           <div class="timeline__text">
             <span class="timeline__label">{d.label}</span>
             <span class="timeline__meta">
-              <time datetime={d.date ?? undefined}>{formatDate(d.date)}</time>
+              {d.date ? <time datetime={d.date}>{formatDate(d.date)}</time> : <span>{formatDate(null)}</span>}
               {showTrack && d.track && <span class="timeline__track">{d.track}</span>}
             </span>
           </div>

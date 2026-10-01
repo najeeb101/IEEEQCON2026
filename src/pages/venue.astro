@@ -4,7 +4,7 @@ import WhenWhere from '../components/sections/WhenWhere.astro';
 import FactGrid from '../components/ui/FactGrid.astro';
 import MapEmbed from '../components/ui/MapEmbed.astro';
 import Button from '../components/ui/Button.astro';
-import { site, mapsDirectionsUrl } from '../config/site';
+import { site, mapsDirectionsUrl, TBA } from '../config/site';
 ---
 
 <PageLayout
@@ -26,8 +26,8 @@ import { site, mapsDirectionsUrl } from '../config/site';
       <div class="facts">
         <FactGrid
           facts={[
-            { icon: 'calendar', label: 'Date', value: site.event.dateLabel },
-            { icon: 'clock', label: 'Time', value: site.event.timeLabel },
+            { icon: 'calendar', label: 'Date', value: site.event.dateLabel || TBA },
+            { icon: 'clock', label: 'Time', value: site.event.timeLabel || TBA },
             { icon: 'pin', label: 'Venue', value: `${site.venue.name}, ${site.venue.area}` },
             { icon: 'mail', label: 'Questions', value: site.contact.email, href: `mailto:${site.contact.email}` },
           ]}

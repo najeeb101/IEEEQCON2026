@@ -21,7 +21,9 @@ src/
 ├─ data/
 │  ├─ program.ts            highlights, themes, stats, schedule, speakers
 │  ├─ submissions.ts        tracks, requirements, important dates
-│  └─ community.ts          announcements, committee, organizers, sponsors, get-involved cards
+│  ├─ community.ts          announcements, committee, organizers, sponsors, get-involved cards
+│  ├─ brand.ts              media kit: logo groups, colors, fonts, usage rules
+│  └─ brand-kit.json        logo file sizes, written by `npm run brand`
 ├─ styles/
 │  ├─ tokens.css            design tokens (the theme)
 │  └─ global.css            reset, base typography, utilities, reveal animation
@@ -37,7 +39,11 @@ src/
 │  ├─ url.ts                base-path-aware links, active-link detection
 │  └─ format.ts             date/time formatting in Doha time, initials
 └─ pages/                   file-based routes (one file = one URL)
-public/brand/               logos, favicons, og-image.png
+public/brand/               logos, favicons, og-image.png, media kit files (all generated)
+brand-source/               the designer's logo masters
+scripts/
+├─ brand-assets.mjs         npm run brand: logos, icons and media kit files from brand-source/
+└─ og-image.mjs             npm run og: the link preview image
 ```
 
 ### Layers and rules
@@ -61,7 +67,8 @@ pages  →  sections  →  ui  →  tokens.css
 | Page | Structure from | Look from |
 | --- | --- | --- |
 | Home | IECON (announcements, overview, stats, dates, speakers, partners, volunteer calls) | Q-Con (hero, staggered cards, "Full day" panel, "When and Where?", closing globe CTA) |
-| About | Q-Con About page | Q-Con |
+| About | Q-Con About page, plus past editions | Q-Con |
+| Media Kit | New: logo downloads, colors, fonts, usage rules | Q-Con |
 | Organizing Committee | IECON `/about/organizing-committee/` (grouped circular portraits) | Q-Con colors |
 | Call for Submissions | IECON Call for Papers (intro + tracks + sticky dates sidebar) | Q-Con |
 | Research & Posters, Prototype Competition | Q-Con Submissions page (status column + requirements) | Q-Con |
@@ -102,7 +109,7 @@ pages  →  sections  →  ui  →  tokens.css
 | Header scroll state, dropdowns, mobile menu | `layout/Header.astro` | Dropdowns open on hover (mouse) or click/Enter (touch, keyboard). Escape closes. The mobile menu is `inert` when closed. |
 | Scroll reveal | `layouts/BaseLayout.astro` + `global.css` | Only elements that start *below the fold* are hidden (`.reveal-pending`), so first paint never waits for JS and nothing is hidden without JS. |
 | Announcements carousel | `sections/Announcements.astro` | The 7s timer is a CSS animation on the progress bar, and its `animationend` advances the slide, so there is no per-frame JavaScript. Pauses on hover, focus and when off screen. Supports arrow keys and swipe. No autoplay with reduced motion. |
-| Countdown | `ui/Countdown.astro` | Reads `site.event.start`/`end`. Shows "Happening now" during the event and a thank-you after. |
+| Countdown | `ui/Countdown.astro` | Reads `site.event.start`/`end`. Shows "Happening now" during the event and a thank-you after. Until a date is set, a "coming soon" line takes its place. |
 | Date timeline states | `ui/DateTimeline.astro` | Past/next are computed in the visitor's browser, so they stay right without a rebuild. |
 | Particle fields | `scripts/particles.ts` | See [Performance](#performance). |
 | Venue map | `ui/MapEmbed.astro` | Placeholder first. The Google Maps iframe loads only when the visitor taps "Show interactive map". |
@@ -129,10 +136,10 @@ What keeps it smooth, and should be kept:
 
 ## SEO and sharing
 
-- `BaseLayout` sets the title pattern `Page | IEEE Q-Con 2026`, meta description, canonical URL, Open Graph and Twitter card tags, and theme color.
-- The home page adds schema.org `Event` JSON-LD (dates, venue, organizer).
+- `BaseLayout` sets the title pattern `Page | IEEE Q-Con 2027`, meta description, canonical URL, Open Graph and Twitter card tags, and theme color.
+- The home page adds schema.org `Event` JSON-LD (dates, venue, organizer) once `site.event.start` is set.
 - `@astrojs/sitemap` generates `sitemap-index.xml`. **It needs `SITE_URL` set at build time** (see [DEPLOYMENT.md](DEPLOYMENT.md)).
-- The social preview image is `public/brand/og-image.png` (1200×630). Regenerate it when the edition year changes.
+- The social preview image is `public/brand/og-image.png` (1200×630). `npm run og` rebuilds it from the logo and `site.ts` with the site's fonts, tokens and particle wave. Rerun it when the logo, year, date or venue changes.
 
 ## Adding things
 

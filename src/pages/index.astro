@@ -12,30 +12,32 @@ import WhenWhere from '../components/sections/WhenWhere.astro';
 import Partners from '../components/sections/Partners.astro';
 import GetInvolved from '../components/sections/GetInvolved.astro';
 import FinalCta from '../components/sections/FinalCta.astro';
-import { site, fullName } from '../config/site';
+import { site, fullName, hasDate } from '../config/site';
 
-// schema.org Event — lets search engines show the date and venue in results.
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'Event',
-  name: fullName,
-  description: site.description,
-  startDate: site.event.start,
-  endDate: site.event.end,
-  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-  eventStatus: 'https://schema.org/EventScheduled',
-  location: {
-    '@type': 'Place',
-    name: site.venue.name,
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: site.venue.area,
-      addressLocality: site.venue.city,
-      addressCountry: 'QA',
-    },
-  },
-  organizer: { '@type': 'Organization', name: site.organizer, email: site.contact.email },
-};
+// schema.org Event — lets search engines show the date and venue in results. Needs a date.
+const schema = hasDate
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'Event',
+      name: fullName,
+      description: site.description,
+      startDate: site.event.start,
+      endDate: site.event.end,
+      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+      eventStatus: 'https://schema.org/EventScheduled',
+      location: {
+        '@type': 'Place',
+        name: site.venue.name,
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: site.venue.area,
+          addressLocality: site.venue.city,
+          addressCountry: 'QA',
+        },
+      },
+      organizer: { '@type': 'Organization', name: site.organizer, email: site.contact.email },
+    }
+  : undefined;
 ---
 
 <BaseLayout schema={schema}>
