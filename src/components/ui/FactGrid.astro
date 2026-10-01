@@ -22,13 +22,13 @@ const { facts } = Astro.props;
   {
     facts.map((f) => (
       <div class="fact">
-        <span class="fact__icon">
-          <Icon name={f.icon} size={22} />
-        </span>
-        <div>
-          <dt>{f.label}</dt>
-          <dd>{f.href ? <a href={url(f.href)}>{f.value}</a> : f.value}</dd>
-        </div>
+        <dt>
+          <span class="fact__icon">
+            <Icon name={f.icon} size={22} />
+          </span>
+          {f.label}
+        </dt>
+        <dd>{f.href ? <a href={url(f.href)}>{f.value}</a> : f.value}</dd>
       </div>
     ))
   }
@@ -42,22 +42,26 @@ const { facts } = Astro.props;
     margin: 0;
   }
 
+  /* A <dl> group may hold only <dt> and <dd>, so the icon lives in the <dt> and is placed in the left gutter. */
   .fact {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--space-4);
+    --icon: 46px;
+    position: relative;
+    min-height: calc(var(--icon) + 2 * var(--space-5));
     padding: var(--space-5);
+    padding-left: calc(var(--space-5) + var(--icon) + var(--space-4));
     border: 1px solid var(--line-soft);
     border-radius: var(--radius-md);
     background: var(--surface);
   }
 
   .fact__icon {
+    position: absolute;
+    top: var(--space-5);
+    left: var(--space-5);
     display: grid;
-    flex: none;
     place-items: center;
-    width: 46px;
-    height: 46px;
+    width: var(--icon);
+    height: var(--icon);
     border-radius: var(--radius-sm);
     background: rgb(57 148 200 / 0.1);
     color: var(--accent);
@@ -77,6 +81,8 @@ const { facts } = Astro.props;
     font-family: var(--font-display);
     font-size: var(--text-lg);
     line-height: 1.35;
+    /* Long unbroken values (the email address) wrap instead of spilling out of the box. */
+    overflow-wrap: anywhere;
   }
 
   dd a {
