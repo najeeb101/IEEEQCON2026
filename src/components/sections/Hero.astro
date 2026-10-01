@@ -48,7 +48,8 @@ import { site, dateText } from '../../config/site';
     display: flex;
     align-items: center;
     min-height: max(640px, 100svh);
-    padding-block: calc(var(--header-h) + var(--space-7)) var(--space-9);
+    /* Bottom: the announcements card overlaps the last --space-9 (see Announcements), plus a gap. */
+    padding-block: calc(var(--header-h) + var(--space-7)) calc(var(--space-9) + var(--space-7));
     overflow: hidden;
     background:
       radial-gradient(60% 50% at 80% 75%, rgb(57 148 200 / 0.12), transparent 70%),
@@ -139,6 +140,8 @@ import { site, dateText } from '../../config/site';
   @media (max-width: 640px) {
     .hero {
       min-height: 0;
+      /* The card overlaps less on phones (--space-7). */
+      padding-bottom: calc(var(--space-7) * 2);
     }
 
     .hero__actions > :global(*) {
