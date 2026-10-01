@@ -8,7 +8,7 @@ The site is set up for **IEEE Q-Con 2027** with the designer's new logo. Content
 - [ ] **Edition dates.** Pending from the organizers. When they arrive, follow "Before the date is confirmed" in the [content guide](CONTENT-GUIDE.md#before-the-date-is-confirmed).
 - [ ] **Domain.** The site runs at `najeeb101.github.io/IEEEQCON2026` for now. Decide whether to use a custom domain (see [deployment](DEPLOYMENT.md#option-a-github-pages-current)).
 - [x] **Hosting.** GitHub Pages, deployed automatically from `main`.
-- [ ] **Registration form.** Keeping the existing Google Form for now (decided). It still accepts responses, so revisit before launch.
+- [x] **Registration form.** The page shows "Opening soon" until a 2027 form exists (decided). The 2026 form still accepts responses, so close it in Google Forms.
 
 ## Placeholders to fill
 
@@ -16,6 +16,7 @@ The site is set up for **IEEE Q-Con 2027** with the designer's new logo. Content
 | --- | --- | --- |
 | Conference date and time | `config/site.ts` → `event`, `data/program.ts` → `scheduleDate` | "Date to be announced"; countdown hidden |
 | Submission deadlines | `data/submissions.ts` → `importantDates`, `researchDates`, `prototypeDates`, `tracks[].deadline` | "To be announced" |
+| Registration form | `config/site.ts` → `registration` (`formUrl`, `status`) | "Opening soon". The 2026 form link is kept in a comment. |
 | Research & poster submission form | `data/submissions.ts` → `tracks` (research `formUrl`, `status`) | "Opening soon". The 2026 form link is kept in a comment. |
 | Prototype competition form | `data/submissions.ts` → `tracks` | "Opening soon" |
 | Schedule | `data/program.ts` → `schedule`, `scheduleStatus` | Tentative, following the 2026 day plan |

@@ -51,10 +51,13 @@ export const site = {
   ] as const,
 
   registration: {
-    status: 'open' as Status,
-    /** Public Google Form link. The page embeds it when status is 'open'. */
-    formUrl:
-      'https://docs.google.com/forms/d/e/1FAIpQLSdtKSSySb5cfqBjG1FW0sMLw2HstF86sHVpDRL1nEAP1kBWig/viewform',
+    status: 'soon' as Status,
+    /**
+     * Public Google Form link. The page embeds it when status is 'open'.
+     * The 2026 form was https://docs.google.com/forms/d/e/1FAIpQLSdtKSSySb5cfqBjG1FW0sMLw2HstF86sHVpDRL1nEAP1kBWig/viewform.
+     * Add the new edition's form and set status to 'open'.
+     */
+    formUrl: '' as string,
   },
 
   sponsorship: {
