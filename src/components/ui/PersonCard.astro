@@ -16,9 +16,12 @@ interface Props {
   tba?: boolean;
   size?: 'md' | 'lg';
   index?: number;
+  /** Heading level of the name: 2 when the cards sit directly under the page title. */
+  level?: 2 | 3;
 }
 
-const { name, role, affiliation, session, bio, photo, tba = false, size = 'lg', index = 0 } = Astro.props;
+const { name, role, affiliation, session, bio, photo, tba = false, size = 'lg', index = 0, level = 3 } = Astro.props;
+const Name = level === 2 ? 'h2' : 'h3';
 const displayName = tba || !name ? 'To be announced' : name;
 const dialogId = bio ? `bio-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}` : undefined;
 const avatarSize = size === 'lg' ? 168 : 128;
@@ -28,7 +31,7 @@ const avatarSize = size === 'lg' ? 168 : 128;
   <Avatar name={displayName} photo={photo} size={avatarSize} placeholder={tba || !name} />
   <div class="person__text">
     {session && <span class="person__slot">{session}</span>}
-    <h3 class="person__name">{displayName}</h3>
+    <Name class="person__name">{displayName}</Name>
     {role && <p class="person__role">{role}</p>}
     {affiliation && <p class="person__affiliation">{affiliation}</p>}
   </div>
@@ -74,7 +77,8 @@ const avatarSize = size === 'lg' ? 168 : 128;
   .person__slot {
     display: block;
     margin-bottom: 0.35em;
-    color: var(--accent-2);
+    /* Lighter maroon: --accent-2 is under 4.5:1 for this small text. */
+    color: var(--maroon-300);
     font-size: var(--text-xs);
     font-weight: 600;
     letter-spacing: 0.14em;

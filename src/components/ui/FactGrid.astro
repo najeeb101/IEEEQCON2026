@@ -20,17 +20,21 @@ const { facts } = Astro.props;
 
 <dl class="facts" data-reveal>
   {
-    facts.map((f) => (
-      <div class="fact">
-        <dt>
-          <span class="fact__icon">
-            <Icon name={f.icon} size={22} />
-          </span>
-          {f.label}
-        </dt>
-        <dd>{f.href ? <a href={url(f.href)}>{f.value}</a> : f.value}</dd>
-      </div>
-    ))
+    facts.map((f) => {
+      // An email address may wrap after the "@" rather than mid-word.
+      const value = f.value.split('@').map((part, i) => (i ? <>@<wbr />{part}</> : part));
+      return (
+        <div class="fact">
+          <dt>
+            <span class="fact__icon">
+              <Icon name={f.icon} size={22} />
+            </span>
+            {f.label}
+          </dt>
+          <dd>{f.href ? <a href={url(f.href)}>{value}</a> : value}</dd>
+        </div>
+      );
+    })
   }
 </dl>
 
