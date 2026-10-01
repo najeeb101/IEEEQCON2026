@@ -109,7 +109,7 @@ pages  →  sections  →  ui  →  tokens.css
 | Countdown | `ui/Countdown.astro` | Reads `site.event.start`/`end`. Shows "Happening now" during the event and a thank-you after. Until a date is set, a "coming soon" line takes its place. |
 | Date timeline states | `ui/DateTimeline.astro` | Past/next are computed in the visitor's browser, so they stay right without a rebuild. |
 | Particle fields | `scripts/particles.ts` | See [Performance](#performance). |
-| Venue map | `ui/MapEmbed.astro` | On the home page, a placeholder first: the Google Maps iframe loads only when the visitor taps "Show interactive map". The Venue page loads it right away (`autoload`). |
+| Venue map | `ui/MapEmbed.astro` | On the home page, a placeholder first: the Google Maps iframe loads only when the visitor taps "Show interactive map". The Venue page loads it on its own once the page has finished loading (`autoload`), so it doesn't delay the first paint. |
 | Link prefetch | `astro.config.mjs` → `prefetch` | Pages are fetched on hover or focus, so navigation feels instant. |
 | Speaker bio dialog | `ui/PersonCard.astro` | Native `<dialog>`. Closes on Escape or backdrop click. |
 
@@ -130,6 +130,8 @@ What keeps it smooth, and should be kept:
 - **Reveal lists as one block.** Put `data-reveal` on the list or grid container (timeline, schedule, stats, themes, facts), not on each item. Each revealed element becomes its own GPU layer while it animates.
 - **Heavy third-party embeds load on demand** (the home page map). Registration and the Venue map are the exceptions, because there the embed is the whole point of the page.
 - **Fonts:** the three faces used above the fold are preloaded in `BaseLayout`. Every face is self-hosted.
+- **CSS is inlined** into each page (`build.inlineStylesheets: 'always'` in `astro.config.mjs`). All of it is ~9 KB gzipped, so this removes the render-blocking stylesheet request for little extra page weight.
+- **Lighthouse (Oct 2026):** accessibility, best practices and SEO 100 on every page except Registration (best practices 79, from the embedded Google Form's third-party cookies). Performance 92–99 on a simulated phone, 98–100 on desktop.
 
 ## SEO and sharing
 

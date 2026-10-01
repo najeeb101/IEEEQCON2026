@@ -20,7 +20,7 @@ const basedOn = pastEditions[0];
     <div class="container container--narrow">
       <header class="dayhead" data-reveal>
         <p class="eyebrow">{weekday}</p>
-        <p class="dayhead__date smallcaps">{dateText}</p>
+        <h2 class="dayhead__date smallcaps">{dateText}</h2>
         <p class="dayhead__meta">
           <span><Icon name="clock" size={18} /> {timeText}</span>
           <span><Icon name="pin" size={18} /> {site.venue.name}</span>
@@ -32,7 +32,7 @@ const basedOn = pastEditions[0];
           <p class="tentative" data-reveal>
             <Icon name="info" size={18} />
             <span>
-              <strong>Tentative program.</strong> This follows the {basedOn ? `Q-Con ${basedOn.year}` : 'previous'} day
+              <strong>Tentative program.</strong> This follows the {basedOn ? <span class="nowrap">Q-Con {basedOn.year}</span> : 'previous'} day
               plan, so you know what to expect. Final times and sessions will be announced.
             </span>
           </p>
@@ -106,6 +106,11 @@ const basedOn = pastEditions[0];
 
   .tentative strong {
     color: var(--text);
+  }
+
+  /* Keep "Q-Con 2026" together; browsers may break after the hyphen. */
+  .nowrap {
+    white-space: nowrap;
   }
 
   .note {

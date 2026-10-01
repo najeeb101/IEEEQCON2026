@@ -14,7 +14,7 @@ import { speakers } from '../../data/program';
   <section class="section">
     <div class="container">
       <div class="grid-speakers">
-        {speakers.map((s, i) => <PersonCard {...s} index={i} />)}
+        {speakers.map((s, i) => <PersonCard {...s} index={i} level={2} />)}
       </div>
       <div class="more" data-reveal>
         <p class="muted">More speakers and panelists will be announced soon.</p>

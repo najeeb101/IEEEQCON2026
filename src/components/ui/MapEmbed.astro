@@ -2,8 +2,9 @@
 /**
  * Venue map. By default it shows a lightweight placeholder and loads the Google Maps embed only
  * when the visitor asks for it: the embed runs seconds of script on phones, and Google sees no
- * visit until the map is opened. `autoload` loads it right away, for pages where the map is the
- * point (Venue). "Directions" works immediately either way.
+ * visit until the map is opened. `autoload` loads it on its own once the page has finished
+ * loading, for pages where the map is the point (Venue): the embed is ~450 KB, so it waits
+ * rather than delaying the first paint. "Directions" works immediately either way.
  */
 import Icon from './Icon.astro';
 import Button from './Button.astro';
@@ -11,7 +12,7 @@ import { site, mapsEmbedUrl, mapsDirectionsUrl } from '../../config/site';
 
 interface Props {
   height?: string;
-  /** Load the Google Maps embed with the page instead of on request. */
+  /** Load the Google Maps embed by itself after the page loads, instead of on request. */
   autoload?: boolean;
 }
 
@@ -20,18 +21,14 @@ const title = `Map showing ${site.venue.name}`;
 ---
 
 <div class="map" style={`--map-h:${height}`}>
-  {
-    autoload ? (
-      <div class="map__frame">
-        <iframe src={mapsEmbedUrl} title={title} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen />
-      </div>
-    ) : (
-      <div class="map__frame" data-map data-src={mapsEmbedUrl} data-title={title}>
-        <div class="map__placeholder" aria-hidden="true">
-          <span class="map__ping">
-            <Icon name="pin" size={30} />
-          </span>
-        </div>
+  <div class="map__frame" data-map data-src={mapsEmbedUrl} data-title={title} data-autoload={autoload || undefined}>
+    <div class="map__placeholder" aria-hidden="true">
+      <span class="map__ping">
+        <Icon name="pin" size={30} />
+      </span>
+    </div>
+    {
+      !autoload && (
         <div class="map__load">
           <button type="button" data-map-load>
             <Icon name="globe" size={18} />
@@ -39,9 +36,9 @@ const title = `Map showing ${site.venue.name}`;
           </button>
           <span>Loads Google Maps</span>
         </div>
-      </div>
-    )
-  }
+      )
+    }
+  </div>
   <div class="map__card">
     <span class="map__pin"><Icon name="pin" size={22} /></span>
     <div>
@@ -203,15 +200,21 @@ const title = `Map showing ${site.venue.name}`;
 </style>
 
 <script>
+  const load = (root: HTMLElement) => {
+    const frame = document.createElement('iframe');
+    frame.src = root.dataset.src!;
+    frame.title = root.dataset.title!;
+    frame.referrerPolicy = 'no-referrer-when-downgrade';
+    frame.allowFullscreen = true;
+    root.replaceChildren(frame);
+    return frame;
+  };
+
   document.querySelectorAll<HTMLElement>('[data-map]').forEach((root) => {
-    root.querySelector('[data-map-load]')?.addEventListener('click', () => {
-      const frame = document.createElement('iframe');
-      frame.src = root.dataset.src!;
-      frame.title = root.dataset.title!;
-      frame.referrerPolicy = 'no-referrer-when-downgrade';
-      frame.allowFullscreen = true;
-      root.replaceChildren(frame);
-      frame.focus();
-    });
+    root.querySelector('[data-map-load]')?.addEventListener('click', () => load(root).focus());
+    if (root.dataset.autoload === undefined) return;
+    // Wait for the page's own load, so the map doesn't hold up the first paint.
+    if (document.readyState === 'complete') load(root);
+    else window.addEventListener('load', () => load(root), { once: true });
   });
 </script>
