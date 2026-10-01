@@ -135,9 +135,10 @@ import { site, dateText } from '../../config/site';
   }
 
 
+  /* Phones size the hero to its content: full height would leave half the screen empty above the title. */
   @media (max-width: 640px) {
     .hero {
-      align-items: flex-end;
+      min-height: 0;
     }
 
     .hero__actions > :global(*) {
