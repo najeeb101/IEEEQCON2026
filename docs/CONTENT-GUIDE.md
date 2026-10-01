@@ -143,14 +143,15 @@ export const sponsorTiers = [
 
 - Put images in `public/` (for example `public/people/`, `public/logos/`) and reference them from the site root: `'/people/jane.jpg'`.
 - Portraits: square, at least 400×400, face centered. They're cropped to a circle.
+
 ### Brand files
 
 Don't edit the files in `public/brand/` by hand. They're generated from the designer's masters:
 
-1. Put the seven designer files in `brand-source/`, with the same names as now (`Logo (Transparent Background).png`, `White Logo.png`, `Black Logo.png`, `Logo (White Background).png`, `Icon.png`, `Icon White.png`, `Icon Black.png`).
-2. Run `npm run brand`. It crops each master, writes the site logos, browser and phone icons and the media kit downloads, and records their sizes in `src/data/brand-kit.json`.
+1. Put the designer's files in `brand-source/` with the same names as now. The site uses `Logo (Transparent Background).png`, `White Logo.png`, `Icon.png` and `Icon White.png`.
+2. Run `npm run brand`. It crops each master and writes the site logos and the browser and phone icons.
 3. Run `npm run og`. It builds the link preview image from the new logo and the name, date and venue in `site.ts`. It uses the Chrome or Edge on your computer; set `CHROME_PATH` if it can't find one.
-4. Look at the result in `npm run dev`, then commit `brand-source/`, `public/brand/` and `src/data/brand-kit.json`.
+4. Look at the result in `npm run dev`, then commit `brand-source/` and `public/brand/`.
 
 | File in `public/brand/` | Used for |
 | --- | --- |
@@ -159,12 +160,7 @@ Don't edit the files in `public/brand/` by hand. They're generated from the desi
 | `qcon-mark-white.png` | The "Q" in page heroes and on the 404 page |
 | `qcon-mark-color.png`, `favicon-32.png`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png` | Browser and phone icons |
 | `og-image.png` | Link preview on WhatsApp, LinkedIn, X (1200×630) |
-| `kit/` | Downloads and previews on the Media Kit page |
 | `past/` | Logos of earlier editions (About page). Not regenerated. |
-
-## Media kit
-
-`/about/media-kit/` offers the logo downloads, brand colors, fonts and usage rules to sponsors, press and volunteers. The downloads come from `npm run brand`. The wording, colors and do/don't rules are in `src/data/brand.ts`.
 
 ## Contact, socials, menus
 

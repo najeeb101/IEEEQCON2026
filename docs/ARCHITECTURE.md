@@ -21,9 +21,7 @@ src/
 ├─ data/
 │  ├─ program.ts            highlights, themes, stats, schedule, speakers
 │  ├─ submissions.ts        tracks, requirements, important dates
-│  ├─ community.ts          announcements, committee, organizers, sponsors, get-involved cards
-│  ├─ brand.ts              media kit: logo groups, colors, fonts, usage rules
-│  └─ brand-kit.json        logo file sizes, written by `npm run brand`
+│  └─ community.ts          announcements, committee, organizers, sponsors, get-involved cards
 ├─ styles/
 │  ├─ tokens.css            design tokens (the theme)
 │  └─ global.css            reset, base typography, utilities, reveal animation
@@ -39,10 +37,10 @@ src/
 │  ├─ url.ts                base-path-aware links, active-link detection
 │  └─ format.ts             date/time formatting in Doha time, initials
 └─ pages/                   file-based routes (one file = one URL)
-public/brand/               logos, favicons, og-image.png, media kit files (all generated)
+public/brand/               logos, favicons, og-image.png (generated)
 brand-source/               the designer's logo masters
 scripts/
-├─ brand-assets.mjs         npm run brand: logos, icons and media kit files from brand-source/
+├─ brand-assets.mjs         npm run brand: logos and icons from brand-source/
 └─ og-image.mjs             npm run og: the link preview image
 ```
 
@@ -68,7 +66,6 @@ pages  →  sections  →  ui  →  tokens.css
 | --- | --- | --- |
 | Home | IECON (announcements, overview, stats, dates, speakers, partners, volunteer calls) | Q-Con (hero, staggered cards, "Full day" panel, "When and Where?", closing globe CTA) |
 | About | Q-Con About page, plus past editions | Q-Con |
-| Media Kit | New: logo downloads, colors, fonts, usage rules | Q-Con |
 | Organizing Committee | IECON `/about/organizing-committee/` (grouped circular portraits) | Q-Con colors |
 | Call for Submissions | IECON Call for Papers (intro + tracks + sticky dates sidebar) | Q-Con |
 | Research & Posters, Prototype Competition | Q-Con Submissions page (status column + requirements) | Q-Con |
