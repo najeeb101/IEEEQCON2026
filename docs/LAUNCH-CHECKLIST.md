@@ -28,7 +28,6 @@ The site is set up for **IEEE Q-Con 2027** with the designer's new logo. Content
 | Sponsorship prospectus PDF | `config/site.ts` → `sponsorship.prospectusUrl` | Hidden |
 | A1 poster template link | `data/submissions.ts` → `posterTemplateUrl` | "Will be posted here" |
 | Session rooms | `data/program.ts` → `schedule[].location` | Not shown |
-| Vector / print logo files | Media Kit page | PNG only; the page asks people to email for other formats |
 
 ## Facts to confirm
 
@@ -40,7 +39,6 @@ These appear on the site. They come from the old sites, but should be re-checked
 - [ ] "In person" format and the venue (Qatar National Library)
 - [ ] Conference themes (three) and the "at a glance" numbers in `data/program.ts`
 - [ ] Past editions entry for 2026 (date, venue, keynote) in `data/program.ts` → `pastEditions`
-- [ ] Media kit logo rules in `data/brand.ts` (clear space, minimum size, do's and don'ts). They're sensible defaults written for the site, not the designer's own guidelines, so check them with the designer.
 - [ ] IEEE brand usage. If you add the IEEE master logo, follow the IEEE brand guidelines. The footer links to IEEE's privacy and nondiscrimination policies.
 
 ## Technical
