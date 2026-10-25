@@ -46,7 +46,7 @@ const mail = `mailto:${site.contact.email}?subject=${encodeURIComponent(`Sponsor
 
   <section class="section">
     <div class="container">
-      <SectionHeading title="Organized by" align="center" />
+      <SectionHeading title="Organized by" lead="The IEEE student branches at four universities in Qatar." align="center" />
       <div class="organizers" data-reveal>
         {organizers.map((o) => <LogoTile name={o.name} logo={o.logo} href={o.url} size="lg" />)}
       </div>
@@ -91,8 +91,8 @@ const mail = `mailto:${site.contact.email}?subject=${encodeURIComponent(`Sponsor
 <style>
   .organizers {
     display: grid;
-    grid-template-columns: minmax(0, 520px);
-    justify-content: center;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-4);
   }
 
   .tier {
@@ -153,6 +153,12 @@ const mail = `mailto:${site.contact.email}?subject=${encodeURIComponent(`Sponsor
   @media (max-width: 900px) {
     .reasons {
       grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .organizers {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 </style>

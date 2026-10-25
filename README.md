@@ -59,15 +59,16 @@ docs/                    ← the documentation below
 ## Site map
 
 ```
-/                                   Home
-/about/                             About Q-Con
-/about/organizing-committee/        Organizing Committee
-/submissions/                       Call for Submissions
-/submissions/research-and-posters/  Research & Poster Submissions
-/submissions/prototype-competition/ Prototype & Innovation Competition
-/program/schedule/                  Conference Schedule   (/program redirects here)
-/program/speakers/                  Keynotes & Panel
-/sponsors/                          Sponsors & Partners
-/venue/                             Venue
-/registration/                      Registration
+/                                      Home
+/about/                                About Q-Con
+/about/organizing-committee/           Organizing Committee
+/submissions/                          Call for Submissions   (/submissions/research-and-posters redirects here)
+/submissions/poster-competition/       Poster Competition
+/submissions/prototype-competition/    Prototype Competition
+/submissions/technical-presentations/  Technical Presentations
+/program/schedule/                     Conference Schedule    (/program redirects here)
+/program/speakers/                     Keynotes & Panel
+/sponsors/                             Sponsors & Partners
+/venue/                                Venue
+/registration/                         Registration
 ```

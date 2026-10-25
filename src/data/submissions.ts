@@ -1,8 +1,14 @@
 /**
- * SUBMISSIONS & DATES — tracks, requirements and the important-dates timeline.
+ * SUBMISSIONS & DATES — competition formats, requirements and the important-dates timeline.
  * Dates are ISO strings (YYYY-MM-DD). Use `null` for "To be announced".
+ *
+ * The requirements below are the Q-Con 2026 rules, shown as last year's until each committee
+ * confirms the 2027 criteria. Set `rulesYear` to the new edition once they do.
  */
 import type { Status } from '../config/site';
+
+/** The edition the requirements on the format pages come from. */
+export const rulesYear: number = 2026;
 
 export interface ImportantDate {
   label: string;
@@ -12,12 +18,20 @@ export interface ImportantDate {
   milestone?: boolean;
 }
 
+/** Home page and Call for Submissions. */
 export const importantDates: ImportantDate[] = [
-  { label: 'Abstract submission deadline', date: null, track: 'Research & Posters' },
-  { label: 'Notification of acceptance', date: null, track: 'Research & Posters' },
-  { label: 'Final poster deadline', date: null, track: 'Research & Posters' },
-  { label: 'Prototype submission deadline', date: null, track: 'Prototype Competition' },
-  { label: 'Conference day, evaluation & awards', date: null, milestone: true },
+  { label: 'Call for submissions opens', date: null, track: 'All formats' },
+  { label: 'Submission deadline', date: null, track: 'All formats' },
+  { label: 'Acceptances announced', date: null, track: 'All formats' },
+  { label: 'Attendee registration closes', date: null, track: 'Registration' },
+  { label: 'Conference, judging & awards', date: null, milestone: true },
+];
+
+/** The timeline on each format page. */
+export const formatDates: ImportantDate[] = [
+  { label: 'Submission deadline', date: null },
+  { label: 'Acceptances announced', date: null },
+  { label: 'Judging and awards', date: null, milestone: true },
 ];
 
 export interface Requirement {
@@ -27,6 +41,10 @@ export interface Requirement {
   emphasis?: boolean;
 }
 
+/**
+ * The three student competition formats (Call for Submissions cards). Not to be confused with the
+ * three conference tracks, which are `themes` in program.ts.
+ */
 export interface Track {
   id: string;
   title: string;
@@ -40,27 +58,35 @@ export interface Track {
 
 export const tracks: Track[] = [
   {
-    id: 'research',
-    title: 'Research & Poster Submissions',
-    href: '/submissions/research-and-posters/',
-    summary:
-      'Submit a one-page abstract for the Oral Presentation or Poster Session tracks. Completed and in-progress work are both welcome.',
+    id: 'poster',
+    title: 'Poster Competition',
+    href: '/submissions/poster-competition/',
+    summary: 'Submit a one-page abstract and present your research as a poster, judged on conference day.',
     status: 'soon',
-    /** The 2026 form was https://forms.gle/UxDpqHF7y3auWSrY9. Add the new edition's form and set status to 'open'. */
+    /** The 2026 abstract form (posters and talks) was https://forms.gle/UxDpqHF7y3auWSrY9. */
     formUrl: '',
     deadline: null,
   },
   {
     id: 'prototype',
-    title: 'Prototype & Innovation Competition',
+    title: 'Prototype Competition',
     href: '/submissions/prototype-competition/',
-    summary:
-      'Individuals or teams of up to four present an engineered prototype, working or conceptual, during the Innovation Block.',
+    summary: 'Show an engineered prototype, working or conceptual, and demo it to the judges on conference day.',
     status: 'soon',
+    deadline: null,
+  },
+  {
+    id: 'presentation',
+    title: 'Technical Presentations',
+    href: '/submissions/technical-presentations/',
+    summary: 'Submit a one-page abstract and present your research as a technical talk to judges and attendees.',
+    status: 'soon',
+    formUrl: '',
     deadline: null,
   },
 ];
 
+/** Poster Competition and Technical Presentations. */
 export const abstractRequirements: Requirement[] = [
   { text: '1 page (350 words max.)' },
   { text: 'Must relate to the conference themes' },
@@ -81,12 +107,11 @@ export const posterRequirements: Requirement[] = [
 /** Link to the A1 poster template. Leave empty to show "Template coming soon". */
 export const posterTemplateUrl = '';
 
-export const researchDates: ImportantDate[] = [
-  { label: 'Abstract deadline', date: null },
-  { label: 'Notification of acceptance', date: null },
-  { label: 'Final poster deadline', date: null },
-  { label: 'Evaluation and awards', date: null, milestone: true },
-];
+/**
+ * Technical Presentations: talk length, format and judging. Empty until the Panel & Speakers
+ * committee confirms them; the page then says they will be announced.
+ */
+export const presentationRequirements: Requirement[] = [];
 
 export const prototypeEligibility: Requirement[] = [
   { text: 'Open to all university students, individually or in teams of up to 4' },
@@ -101,11 +126,4 @@ export const prototypeRequirements: Requirement[] = [
     items: ['Problem being solved', 'Idea and design', 'Electrical/electronic components', 'Implementation', 'Potential impact or use'],
   },
   { text: 'Must include an image of the current prototype, with completion plans if it is unfinished at the time of submission' },
-];
-
-export const prototypeDates: ImportantDate[] = [
-  { label: 'Draft submission deadline', date: null },
-  { label: 'Final submission deadline', date: null },
-  { label: 'Notification of acceptance', date: null },
-  { label: 'Evaluation and awards', date: null, milestone: true },
 ];

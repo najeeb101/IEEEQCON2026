@@ -7,7 +7,7 @@
 import Icon from '../ui/Icon.astro';
 import Button from '../ui/Button.astro';
 import { mainNav, navCta } from '../../config/navigation';
-import { site, fullName, dateText } from '../../config/site';
+import { site, fullName, dateText, venueShort } from '../../config/site';
 import { url, isActive } from '../../lib/url';
 
 const path = Astro.url.pathname;
@@ -132,7 +132,7 @@ const sectionActive = (item: (typeof mainNav)[number]) =>
     <Button href={navCta.href} size="lg" block icon="arrow-right">Register now</Button>
     <p class="mobile-menu__meta">
       <Icon name="calendar" size={16} />
-      {dateText} · {site.venue.name}
+      {dateText} · {venueShort}
     </p>
     <a class="mobile-menu__meta" href={`mailto:${site.contact.email}`}>
       <Icon name="mail" size={16} />

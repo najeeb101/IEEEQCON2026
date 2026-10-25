@@ -46,6 +46,16 @@ timeLabel: '',
 
 The hero shows "Date to be announced" and a "Follow @ieeeqcon" line instead of the countdown, and the search-engine event data is left out. Any important date set to `null` shows "To be announced" on the timeline. When the date arrives, fill in all four fields, set `scheduleDate` in `program.ts`, and run `npm run og` so the link preview shows the date too.
 
+### Before the venue is announced
+
+Leave `venue.name`, `venue.area` and `venue.mapQuery` empty (keep `city` and `country`). The site then says "Venue to be announced", shows "Doha, Qatar" in the hero and header, hides the map and the "Get directions" button, and leaves out the search-engine event data. On reveal day, fill in all three, for example:
+
+```ts
+venue: { name: 'Qatar National Library', area: 'Education City', city: 'Doha', country: 'Qatar', mapQuery: 'Qatar National Library, Education City, Doha, Qatar' },
+```
+
+Then run `npm run og` so the link preview names the venue.
+
 ## Statuses: open, opening soon, closed
 
 Registration and each submission track have a `status`:
@@ -57,18 +67,18 @@ Registration and each submission track have a `status`:
 | `'closed'` | A "Closed" badge |
 
 - Registration: `site.registration.status` and `formUrl` in `src/config/site.ts`. When open, the Google Form is embedded on `/registration/`. Paste the normal `…/viewform` link; the page adds the embed settings itself.
-- Tracks: `tracks[].status`, `formUrl` and `deadline` in `src/data/submissions.ts`.
+- Competition formats (Poster, Prototype, Technical Presentations): `tracks[].status`, `formUrl` and `deadline` in `src/data/submissions.ts`.
 
 > Statuses change only when you edit them. The site doesn't flip them automatically at a deadline. Past dates on the timeline *do* dim automatically.
 
 ## Important dates
 
-`src/data/submissions.ts` → `importantDates` (home and Call for Submissions), plus `researchDates` and `prototypeDates` for the track pages.
+`src/data/submissions.ts` → `importantDates` (home and Call for Submissions), plus `formatDates` for the three format pages.
 
 ```ts
-{ label: 'Abstract submission deadline', date: '2027-02-15', track: 'Research & Posters' },
-{ label: 'Prototype submission deadline', date: null, track: 'Prototype Competition' },   // null shows "To be announced"
-{ label: 'Conference day, evaluation & awards', date: '2027-04-07', milestone: true },    // highlighted
+{ label: 'Submission deadline', date: '2027-02-15', track: 'All formats' },
+{ label: 'Attendee registration closes', date: null, track: 'Registration' },   // null shows "To be announced"
+{ label: 'Conference, judging & awards', date: '2027-04-07', milestone: true },  // highlighted
 ```
 
 Dates are `YYYY-MM-DD`. The next upcoming date gets a "Next" badge automatically.
@@ -117,18 +127,33 @@ Use `tba: true` with `name: 'To be announced'` for placeholders.
 
 ## Organizing committee
 
-`src/data/community.ts` → `committee`. Groups contain members. Leave `name: ''` to show "To be announced".
+`src/data/community.ts`:
+
+- `leadership`: the Faculty Advisor and General Chairs, shown first with larger portraits.
+- `committees`: the eight committees (Poster, Prototype, Panel & Speakers, Logistics, Sponsorship, Student Engagement, Ceremonies, Publicity), each with a Lead and a Co-lead, shown as a grid of panels.
+
+Leave `name: ''` to show "To be announced".
 
 ```ts
-{ title: 'General Chairs', members: [{ name: 'Name Surname', role: 'General Chair', affiliation: 'TAMUQ', photo: '/people/name.jpg' }] },
+{ title: 'Poster', members: [{ name: 'Name Surname', role: 'Lead', affiliation: 'TAMUQ', photo: '/people/name.jpg' }, { name: '', role: 'Co-lead' }] },
 ```
+
+Headshots should be professional, on a plain or suitable background.
+
+## Competition rules
+
+The format pages show the requirements in `src/data/submissions.ts` (`abstractRequirements`, `posterRequirements`, `prototypeEligibility`, `prototypeRequirements`, `presentationRequirements`). Until the committees confirm the new criteria, these are the previous edition's rules, and `rulesYear` says which edition they come from. While `rulesYear` differs from `site.edition`, each format page shows a "Last year's rules" note. Once the new criteria are in, set `rulesYear` to the new edition and the note disappears.
+
+`presentationRequirements` (talk length, format, judging) is empty for now, so the Technical Presentations page says these will be announced.
 
 ## Sponsors & organizers
 
 `src/data/community.ts`:
 
+The organizer tiles are built from `site.universities` in `src/config/site.ts` (TAMUQ, QU, HBKU and UDST), and `site.organizer` is the "organized by the…" wording used in sentences and the footer. To add logos, map them in `organizers`:
+
 ```ts
-export const organizers = [{ name: 'IEEE Chapter at Texas A&M University at Qatar', logo: '/logos/ieee-tamuq.png', url: 'https://…' }];
+export const organizers = site.universities.map((u) => ({ name: u.name, logo: `/logos/${u.short.toLowerCase()}.png` }));
 
 export const sponsorTiers = [
   { tier: 'Gold', sponsors: [{ name: 'Company', logo: '/logos/company.svg', url: 'https://company.com' }], placeholders: 2 },

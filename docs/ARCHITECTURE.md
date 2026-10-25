@@ -19,9 +19,9 @@ src/
 │  ├─ site.ts               edition-wide facts + statuses (single source of truth)
 │  └─ navigation.ts         header/mobile/footer menus
 ├─ data/
-│  ├─ program.ts            highlights, themes, stats, schedule, speakers
-│  ├─ submissions.ts        tracks, requirements, important dates
-│  └─ community.ts          announcements, committee, organizers, sponsors, get-involved cards
+│  ├─ program.ts            highlights, themes (the conference tracks), stats, schedule, speakers
+│  ├─ submissions.ts        competition formats (`tracks`), requirements, important dates
+│  └─ community.ts          announcements, leadership, committees, organizers, sponsors, get-involved cards
 ├─ styles/
 │  ├─ tokens.css            design tokens (the theme)
 │  └─ global.css            reset, base typography, utilities, reveal animation
@@ -66,9 +66,9 @@ pages  →  sections  →  ui  →  tokens.css
 | --- | --- | --- |
 | Home | IECON (announcements, overview, stats, dates, speakers, partners, volunteer calls) | Q-Con (hero, staggered cards, "Full day" panel, "When and Where?", closing globe CTA) |
 | About | Q-Con About page, plus past editions | Q-Con |
-| Organizing Committee | IECON `/about/organizing-committee/` (grouped circular portraits) | Q-Con colors |
+| Organizing Committee | IECON `/about/organizing-committee/` (grouped circular portraits), with the eight committees as a grid of panels | Q-Con colors |
 | Call for Submissions | IECON Call for Papers (intro + tracks + sticky dates sidebar) | Q-Con |
-| Research & Posters, Prototype Competition | Q-Con Submissions page (status column + requirements) | Q-Con |
+| Poster Competition, Prototype Competition, Technical Presentations | Q-Con Submissions page (status column + requirements) | Q-Con |
 | Schedule | Q-Con Schedule rows + IECON program color-coding legend | Q-Con |
 | Speakers | IECON Keynote Speakers (portrait grid + "Read more") | Q-Con colors |
 | Sponsors | IECON exhibitors/partners grid + sponsorship CTA | Q-Con |
@@ -83,11 +83,11 @@ pages  →  sections  →  ui  →  tokens.css
 | 2 | Announcements carousel (overlaps the hero) | `sections/Announcements` |
 | 3 | Overview panel + four staggered feature cards | `sections/Overview` |
 | 4 | "At a glance" numbers | `sections/Stats` |
-| 5 | Conference themes (light band) | `sections/Themes` |
+| 5 | Conference tracks (light band) | `sections/Themes` |
 | 6 | "A full day of innovation" + key moments | `sections/DayFlow` |
 | 7 | Important dates + globe | `sections/KeyDates` |
 | 8 | Keynotes & panel | `sections/SpeakersPreview` |
-| 9 | When and Where? + map | `sections/WhenWhere` |
+| 9 | When and Where? + map (once the venue is announced) | `sections/WhenWhere` |
 | 10 | Organized by / sponsors or "Partner with us" | `sections/Partners` |
 | 11 | Get involved (follow, judge, volunteer) | `sections/GetInvolved` |
 | 12 | Closing CTA with particle globe | `sections/FinalCta` |

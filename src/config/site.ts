@@ -16,7 +16,16 @@ export const site = {
   tagline: 'Innovate. Inspire. Excel.',
   description:
     'IEEE Q-Con is a nationwide student engineering conference in Qatar where undergraduates and graduates present research, showcase prototypes, and connect with academic and industry leaders.',
-  organizer: 'IEEE Chapter at Texas A&M University at Qatar',
+  /** Reads after "organized by the". The universities themselves are listed in `universities` below. */
+  organizer: 'IEEE student branches at TAMUQ, QU, HBKU and UDST',
+
+  /** The universities behind Q-Con (organizer tiles, "at a glance" band). */
+  universities: [
+    { short: 'TAMUQ', name: 'Texas A&M University at Qatar' },
+    { short: 'QU', name: 'Qatar University' },
+    { short: 'HBKU', name: 'Hamad Bin Khalifa University' },
+    { short: 'UDST', name: 'University of Doha for Science and Technology' },
+  ],
 
   event: {
     /**
@@ -34,12 +43,17 @@ export const site = {
   },
 
   venue: {
-    name: 'Qatar National Library',
-    area: 'Education City',
+    /**
+     * Leave `name` empty until the venue is announced: the site then says "Venue to be announced"
+     * and hides the map. The 2026 venue was Qatar National Library, Education City, with
+     * mapQuery 'Qatar National Library, Education City, Doha, Qatar'.
+     */
+    name: '' as string,
+    area: '' as string,
     city: 'Doha',
     country: 'Qatar',
     /** Used for the embedded map and the "Get directions" button. */
-    mapQuery: 'Qatar National Library, Education City, Doha, Qatar',
+    mapQuery: '' as string,
   },
 
   contact: {
@@ -87,8 +101,19 @@ export const dateText = site.event.dateLabel || 'Date to be announced';
 /** "8:00 AM – 4:00 PM", or "Time to be announced" */
 export const timeText = site.event.timeLabel || 'Time to be announced';
 
-/** "Qatar National Library, Education City, Doha, Qatar" */
-export const venueLine = `${site.venue.name}, ${site.venue.area}, ${site.venue.city}, ${site.venue.country}`;
+/** True once the venue is set. */
+export const hasVenue = Boolean(site.venue.name);
+
+/** "Qatar National Library", or "Venue to be announced" */
+export const venueText = site.venue.name || 'Venue to be announced';
+
+/** "Qatar National Library, Doha", or "Doha, Qatar" while the venue is unannounced */
+export const venueShort = hasVenue ? `${site.venue.name}, ${site.venue.city}` : `${site.venue.city}, ${site.venue.country}`;
+
+/** "Qatar National Library, Education City, Doha, Qatar", or "Venue to be announced" */
+export const venueLine = hasVenue
+  ? [site.venue.name, site.venue.area, site.venue.city, site.venue.country].filter(Boolean).join(', ')
+  : venueText;
 
 export const mapsDirectionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(site.venue.mapQuery)}`;
 export const mapsEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(site.venue.mapQuery)}&output=embed`;

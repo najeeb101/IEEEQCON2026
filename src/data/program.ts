@@ -13,9 +13,9 @@ export interface Highlight {
 /** The four core components of the day (home page cards + about page). */
 export const highlights: Highlight[] = [
   {
-    title: 'Research Presentations',
+    title: 'Technical Presentations',
     icon: 'presentation',
-    body: 'Students present their research through oral talks and posters across multiple disciplines, reviewed by faculty and industry experts.',
+    body: 'Students present their research in technical talks across multiple disciplines, judged by faculty and industry experts.',
   },
   {
     title: 'Keynotes & Industry Panels',
@@ -47,14 +47,14 @@ export const themes: Theme[] = [
     body: 'Renewables, storage, efficient power conversion and the grid of the future.',
   },
   {
-    title: 'Healthcare & Biomedical Technologies',
+    title: 'Healthcare & Biomedical Applications',
     icon: 'pulse',
     body: 'Devices, sensing and computing that improve diagnosis, treatment and wellbeing.',
   },
   {
-    title: 'Smart Infrastructure & Intelligent Systems',
+    title: 'Smart Infrastructure & Communication Systems',
     icon: 'city',
-    body: 'Connected cities, automation, AI and the systems that tie them together.',
+    body: 'Connected cities, networks, and the communication systems that tie them together.',
   },
 ];
 
@@ -66,9 +66,9 @@ export interface Stat {
 
 /** "Q-Con at a glance" band — every number is a fact about the format, not a guess. */
 export const stats: Stat[] = [
-  { value: '1', label: 'Full day', note: 'Talks, keynotes, posters and prototypes under one roof' },
-  { value: '3', label: 'Conference themes', note: 'Energy, healthcare and smart infrastructure' },
-  { value: '4', label: 'Ways to take part', note: 'Present, exhibit a poster, compete, or attend' },
+  { value: '4', label: 'Universities', note: 'TAMUQ, QU, HBKU and UDST' },
+  { value: '3', label: 'Conference tracks', note: 'Energy, healthcare and smart infrastructure' },
+  { value: '3', label: 'Competition formats', note: 'Posters, prototypes and technical presentations' },
   { value: '2', label: 'Award categories', note: 'Undergraduate and graduate' },
 ];
 

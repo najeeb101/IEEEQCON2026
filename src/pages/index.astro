@@ -12,10 +12,10 @@ import WhenWhere from '../components/sections/WhenWhere.astro';
 import Partners from '../components/sections/Partners.astro';
 import GetInvolved from '../components/sections/GetInvolved.astro';
 import FinalCta from '../components/sections/FinalCta.astro';
-import { site, fullName, hasDate } from '../config/site';
+import { site, fullName, hasDate, hasVenue } from '../config/site';
 
-// schema.org Event — lets search engines show the date and venue in results. Needs a date.
-const schema = hasDate
+// schema.org Event — lets search engines show the date and venue in results. Needs both.
+const schema = hasDate && hasVenue
   ? {
       '@context': 'https://schema.org',
       '@type': 'Event',

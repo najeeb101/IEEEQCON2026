@@ -94,6 +94,7 @@ Both fonts are self-hosted through `@fontsource`, with no requests to Google Fon
 | Circular portrait with gradient ring | `ui/Avatar.astro`, `ui/PersonCard.astro` | IECON committee and keynotes |
 | Logo tile (light tile so any sponsor logo reads on dark) | `ui/LogoTile.astro` | IECON partners |
 | Submission row: action/status left, requirements right | `ui/SubmissionBlock.astro` | Q-Con submissions page |
+| Inline note with an info icon and a maroon edge ("Tentative program", "Last year's rules") | `ui/Notice.astro` | New |
 
 ## Components at a glance
 

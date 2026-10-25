@@ -14,20 +14,26 @@ interface Props {
   bio?: string;
   photo?: string;
   tba?: boolean;
-  size?: 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg';
   index?: number;
   /** Heading level of the name: 2 when the cards sit directly under the page title. */
-  level?: 2 | 3;
+  level?: 2 | 3 | 4;
+  /** Set false when the surrounding grid carries `data-reveal`. */
+  reveal?: boolean;
 }
 
-const { name, role, affiliation, session, bio, photo, tba = false, size = 'lg', index = 0, level = 3 } = Astro.props;
-const Name = level === 2 ? 'h2' : 'h3';
+const { name, role, affiliation, session, bio, photo, tba = false, size = 'lg', index = 0, level = 3, reveal = true } = Astro.props;
+const Name = `h${level}` as 'h2' | 'h3' | 'h4';
 const displayName = tba || !name ? 'To be announced' : name;
 const dialogId = bio ? `bio-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}` : undefined;
-const avatarSize = size === 'lg' ? 168 : 128;
+const avatarSize = { sm: 96, md: 128, lg: 168 }[size];
 ---
 
-<article class:list={['person', `person--${size}`, { 'person--tba': tba || !name }]} data-reveal style={`--reveal-delay:${index}`}>
+<article
+  class:list={['person', `person--${size}`, { 'person--tba': tba || !name }]}
+  data-reveal={reveal || undefined}
+  style={reveal ? `--reveal-delay:${index}` : undefined}
+>
   <Avatar name={displayName} photo={photo} size={avatarSize} placeholder={tba || !name} />
   <div class="person__text">
     {session && <span class="person__slot">{session}</span>}
@@ -93,6 +99,14 @@ const avatarSize = size === 'lg' ? 168 : 128;
 
   .person--md .person__name {
     font-size: var(--text-lg);
+  }
+
+  .person--sm {
+    gap: var(--space-3);
+  }
+
+  .person--sm .person__name {
+    font-size: var(--text-base);
   }
 
   .person--tba .person__name {

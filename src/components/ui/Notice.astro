@@ -1,0 +1,40 @@
+---
+/** Inline note with an info icon and a maroon edge: "tentative", "last year's rules" and similar caveats. */
+import Icon from './Icon.astro';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<p class:list={['notice', className]} data-reveal>
+  <Icon name="info" size={18} />
+  <span><slot /></span>
+</p>
+
+<style>
+  .notice {
+    display: flex;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid var(--line-soft);
+    border-left: 3px solid var(--accent-2);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .notice :global(svg) {
+    flex: none;
+    margin-top: 0.15em;
+    color: var(--accent-2);
+  }
+
+  .notice :global(strong) {
+    color: var(--text);
+  }
+</style>

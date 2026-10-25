@@ -17,7 +17,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { promisify } from 'node:util';
-import { site, fullName } from '../src/config/site.ts';
+import { site, fullName, venueShort } from '../src/config/site.ts';
 import { wave, TONES } from '../src/scripts/particles.ts';
 
 const W = 1200;
@@ -57,8 +57,7 @@ const logo = await dataUri('public/brand/qcon-logo-white.png', 'image/png');
 
 // A fixed moment of the home page wave, a little brighter, so the image only changes when the content does.
 const dots = wave(W, H, 6, 1, 0.62).map(([x, y, r, a]) => [x, y, r, Math.min(1, a * 1.7)].map((n) => Math.round(n * 100) / 100));
-const place = `${site.venue.name}, ${site.venue.city}`;
-const meta = site.event.dateLabel ? `${site.event.dateLabel} · ${place}` : place;
+const meta = site.event.dateLabel ? `${site.event.dateLabel} · ${venueShort}` : venueShort;
 
 const html = `<!doctype html>
 <html lang="en">

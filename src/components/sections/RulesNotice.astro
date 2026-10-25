@@ -1,0 +1,23 @@
+---
+/** Format pages: flags the requirements as last edition's until the new criteria are confirmed. */
+import Notice from '../ui/Notice.astro';
+import { rulesYear } from '../../data/submissions';
+import { site } from '../../config/site';
+---
+
+{
+  rulesYear !== site.edition && (
+    <Notice>
+      <strong>Last year’s rules.</strong> These are the <span class="nowrap">Q-Con {rulesYear}</span> requirements, so you
+      can start preparing. The <span class="nowrap">Q-Con {site.edition}</span> criteria will be posted when the call for
+      submissions opens.
+    </Notice>
+  )
+}
+
+<style>
+  /* Keep "Q-Con 2026" together; browsers may break after the hyphen. */
+  .nowrap {
+    white-space: nowrap;
+  }
+</style>
