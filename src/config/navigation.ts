@@ -30,9 +30,10 @@ export const mainNav: NavItem[] = [
     label: 'Submissions',
     href: '/submissions/',
     children: [
-      { label: 'Call for Submissions', href: '/submissions/', description: 'Tracks, themes and key dates' },
-      { label: 'Research & Posters', href: '/submissions/research-and-posters/', description: 'Abstracts, oral talks and posters' },
+      { label: 'Call for Submissions', href: '/submissions/', description: 'Formats, tracks and key dates' },
+      { label: 'Poster Competition', href: '/submissions/poster-competition/', description: 'Abstracts and research posters' },
       { label: 'Prototype Competition', href: '/submissions/prototype-competition/', description: 'Show what you have built' },
+      { label: 'Technical Presentations', href: '/submissions/technical-presentations/', description: 'Present your research as a talk' },
     ],
   },
   {
@@ -63,8 +64,9 @@ export const footerNav: { title: string; links: NavLink[] }[] = [
     title: 'Participate',
     links: [
       { label: 'Call for Submissions', href: '/submissions/' },
-      { label: 'Research & Posters', href: '/submissions/research-and-posters/' },
+      { label: 'Poster Competition', href: '/submissions/poster-competition/' },
       { label: 'Prototype Competition', href: '/submissions/prototype-competition/' },
+      { label: 'Technical Presentations', href: '/submissions/technical-presentations/' },
       { label: 'Registration', href: '/registration/' },
     ],
   },

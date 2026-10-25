@@ -1,8 +1,9 @@
 ---
 import PageLayout from '../../layouts/PageLayout.astro';
 import PersonCard from '../../components/ui/PersonCard.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Button from '../../components/ui/Button.astro';
-import { committee } from '../../data/community';
+import { leadership, committees } from '../../data/community';
 import { site, fullName } from '../../config/site';
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
@@ -16,7 +17,7 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   <section class="section">
     <div class="container">
       {
-        committee.map((group) => (
+        leadership.map((group) => (
           <section class="group" aria-labelledby={`g-${slug(group.title)}`}>
             <h2 id={`g-${slug(group.title)}`} class="group__title" data-reveal>
               {group.title}
@@ -29,6 +30,37 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
           </section>
         ))
       }
+
+      <section class="committees" aria-labelledby="committees-title">
+        <SectionHeading
+          id="committees-title"
+          title="Committees"
+          lead="Eight student committees run the conference, each with a lead and a co-lead."
+          align="center"
+        />
+        <ul class="committees__grid" role="list" data-reveal>
+          {
+            committees.map((group) => (
+              <li class="committee">
+                <h3 class="committee__title smallcaps">{group.title}</h3>
+                <div class="committee__people">
+                  {group.members.map((m) => (
+                    <PersonCard
+                      name={m.name}
+                      role={m.role}
+                      affiliation={m.affiliation}
+                      photo={m.photo}
+                      size="sm"
+                      level={4}
+                      reveal={false}
+                    />
+                  ))}
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
 
       <aside class="join" data-reveal>
         <div>
@@ -44,7 +76,8 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 </PageLayout>
 
 <style>
-  .group + .group {
+  .group + .group,
+  .committees {
     margin-top: var(--space-8);
     padding-top: var(--space-8);
     border-top: 1px solid var(--line-soft);
@@ -67,6 +100,42 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     width: 240px;
   }
 
+  .committees :global(.heading) {
+    margin-inline: auto;
+  }
+
+  .committees__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .committee {
+    display: grid;
+    align-content: start;
+    gap: var(--space-5);
+    padding: var(--space-5) var(--space-4) var(--space-6);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+
+  .committee__title {
+    color: var(--accent-soft);
+    font-size: var(--text-lg);
+    font-weight: 500;
+    text-align: center;
+  }
+
+  .committee__people {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
   .join {
     display: flex;
     flex-wrap: wrap;
@@ -86,5 +155,17 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
   .join p {
     margin-top: var(--space-2);
+  }
+
+  @media (max-width: 1100px) {
+    .committees__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 600px) {
+    .committees__grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

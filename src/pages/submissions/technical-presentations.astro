@@ -1,0 +1,50 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import SubmissionBlock from '../../components/ui/SubmissionBlock.astro';
+import RequirementList from '../../components/ui/RequirementList.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import DateTimeline from '../../components/ui/DateTimeline.astro';
+import RulesNotice from '../../components/sections/RulesNotice.astro';
+import { tracks, abstractRequirements, presentationRequirements, formatDates } from '../../data/submissions';
+
+const track = tracks.find((t) => t.id === 'presentation')!;
+---
+
+<PageLayout
+  title="Technical Presentations"
+  lead="Submit a one-page abstract and present your research as a technical talk, judged by faculty and industry experts."
+  crumbs={[{ label: 'Submissions', href: '/submissions/' }, { label: 'Technical Presentations' }]}
+>
+  <section class="section">
+    <div class="container">
+      <RulesNotice />
+      <SubmissionBlock
+        title="Abstract Submission"
+        status={track.status}
+        formUrl={track.formUrl}
+        deadline={track.deadline}
+        deadlineLabel="Submission deadline"
+      >
+        <h3>Abstract requirements</h3>
+        <RequirementList items={abstractRequirements} />
+      </SubmissionBlock>
+
+      <SubmissionBlock title="Talk Format" status={track.status === 'open' ? 'soon' : track.status}>
+        {
+          presentationRequirements.length > 0 ? (
+            <RequirementList items={presentationRequirements} />
+          ) : (
+            <p class="muted">Talk length, format and judging criteria will be announced with the call for submissions.</p>
+          )
+        }
+      </SubmissionBlock>
+    </div>
+  </section>
+
+  <section class="section section--deep">
+    <div class="container container--narrow">
+      <SectionHeading title="Important Dates" eyebrow="Technical Presentations" align="center" />
+      <DateTimeline dates={formatDates} showTrack={false} />
+    </div>
+  </section>
+</PageLayout>

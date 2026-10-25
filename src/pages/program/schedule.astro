@@ -3,17 +3,18 @@ import PageLayout from '../../layouts/PageLayout.astro';
 import ScheduleList from '../../components/ui/ScheduleList.astro';
 import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
+import Notice from '../../components/ui/Notice.astro';
 import { schedule, scheduleDate, scheduleStatus, pastEditions } from '../../data/program';
-import { site, dateText, timeText } from '../../config/site';
+import { site, dateText, timeText, hasVenue, venueShort } from '../../config/site';
 import { dateParts } from '../../lib/format';
 
-const weekday = scheduleDate ? dateParts(scheduleDate).weekday : 'One-day conference';
+const weekday = scheduleDate ? dateParts(scheduleDate).weekday : 'Conference program';
 const basedOn = pastEditions[0];
 ---
 
 <PageLayout
   title="Conference Schedule"
-  lead={`A full day of keynotes, technical talks, posters, prototypes and networking at ${site.venue.name}.`}
+  lead={`Keynotes, technical talks, posters, prototypes and networking${hasVenue ? ` at ${site.venue.name}` : ''}.`}
   crumbs={[{ label: 'Program' }, { label: 'Schedule' }]}
 >
   <section class="section">
@@ -23,19 +24,16 @@ const basedOn = pastEditions[0];
         <h2 class="dayhead__date smallcaps">{dateText}</h2>
         <p class="dayhead__meta">
           <span><Icon name="clock" size={18} /> {timeText}</span>
-          <span><Icon name="pin" size={18} /> {site.venue.name}</span>
+          <span><Icon name="pin" size={18} /> {venueShort}</span>
         </p>
       </header>
 
       {
         scheduleStatus === 'tentative' && (
-          <p class="tentative" data-reveal>
-            <Icon name="info" size={18} />
-            <span>
-              <strong>Tentative program.</strong> This follows the {basedOn ? <span class="nowrap">Q-Con {basedOn.year}</span> : 'previous'} day
-              plan, so you know what to expect. Final times and sessions will be announced.
-            </span>
-          </p>
+          <Notice>
+            <strong>Tentative program.</strong> This follows the {basedOn ? <span class="nowrap">Q-Con {basedOn.year}</span> : 'previous'} day
+            plan, so you know what to expect. Final times and sessions will be announced.
+          </Notice>
         )
       }
 
@@ -84,28 +82,6 @@ const basedOn = pastEditions[0];
 
   .dayhead__meta :global(svg) {
     color: var(--accent-soft);
-  }
-
-  .tentative {
-    display: flex;
-    gap: var(--space-3);
-    margin-bottom: var(--space-6);
-    padding: var(--space-4) var(--space-5);
-    border: 1px solid var(--line-soft);
-    border-left: 3px solid var(--accent-2);
-    border-radius: var(--radius-sm);
-    background: var(--surface);
-    color: var(--text-muted);
-    font-size: var(--text-sm);
-  }
-
-  .tentative :global(svg) {
-    margin-top: 0.15em;
-    color: var(--accent-2);
-  }
-
-  .tentative strong {
-    color: var(--text);
   }
 
   /* Keep "Q-Con 2026" together; browsers may break after the hyphen. */

@@ -4,40 +4,48 @@ import WhenWhere from '../components/sections/WhenWhere.astro';
 import FactGrid from '../components/ui/FactGrid.astro';
 import MapEmbed from '../components/ui/MapEmbed.astro';
 import Button from '../components/ui/Button.astro';
-import { site, mapsDirectionsUrl, TBA } from '../config/site';
+import { site, fullName, mapsDirectionsUrl, hasVenue, venueLine, TBA } from '../config/site';
+
+const social = site.socials[0];
 ---
 
 <PageLayout
   title="Venue"
-  heading={site.venue.name}
-  lead={`${site.name} ${site.edition} takes place at ${site.venue.name} in ${site.venue.area}, ${site.venue.city}.`}
+  heading={hasVenue ? site.venue.name : 'Venue'}
+  lead={hasVenue
+    ? `${fullName} takes place at ${site.venue.name} in ${[site.venue.area, site.venue.city].filter(Boolean).join(', ')}.`
+    : `The venue for ${fullName} will be announced soon, here and on Instagram.`}
   crumbs={[{ label: 'Venue' }]}
 >
   <Fragment slot="actions">
-    <Button href={mapsDirectionsUrl} icon="external">Get directions</Button>
+    {
+      hasVenue ? (
+        <Button href={mapsDirectionsUrl} icon="external">Get directions</Button>
+      ) : (
+        <Button href={social.url} iconStart={social.icon}>Follow {social.handle}</Button>
+      )
+    }
   </Fragment>
 
   <WhenWhere map={false} />
 
   <section class="section section--tight">
     <div class="container">
-      <div data-reveal><MapEmbed height="clamp(360px, 50vw, 560px)" autoload /></div>
-      <div class="facts">
-        <FactGrid
-          facts={[
-            { icon: 'calendar', label: 'Date', value: site.event.dateLabel || TBA },
-            { icon: 'clock', label: 'Time', value: site.event.timeLabel || TBA },
-            { icon: 'pin', label: 'Venue', value: `${site.venue.name}, ${site.venue.area}` },
-            { icon: 'mail', label: 'Questions', value: site.contact.email, href: `mailto:${site.contact.email}` },
-          ]}
-        />
-      </div>
+      {hasVenue && <div class="map" data-reveal><MapEmbed height="clamp(360px, 50vw, 560px)" autoload /></div>}
+      <FactGrid
+        facts={[
+          { icon: 'calendar', label: 'Date', value: site.event.dateLabel || TBA },
+          { icon: 'clock', label: 'Time', value: site.event.timeLabel || TBA },
+          { icon: 'pin', label: 'Venue', value: venueLine },
+          { icon: 'mail', label: 'Questions', value: site.contact.email, href: `mailto:${site.contact.email}` },
+        ]}
+      />
     </div>
   </section>
 </PageLayout>
 
 <style>
-  .facts {
-    margin-top: var(--space-6);
+  .map {
+    margin-bottom: var(--space-6);
   }
 </style>

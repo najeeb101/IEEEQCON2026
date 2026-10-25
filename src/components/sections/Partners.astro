@@ -14,7 +14,13 @@ const sponsors = sponsorTiers.flatMap((t) => t.sponsors);
 
 <section class="section partners" aria-labelledby="partners-title">
   <div class="container">
-    <SectionHeading id="partners-title" eyebrow="Partners" title={`${fullName} is organized by`} align="center" />
+    <SectionHeading
+      id="partners-title"
+      eyebrow="Partners"
+      title={`${fullName} is organized by`}
+      lead="The IEEE student branches at four universities in Qatar."
+      align="center"
+    />
     <div class="partners__organizers" data-reveal>
       {organizers.map((o) => <LogoTile name={o.name} logo={o.logo} href={o.url} size="lg" />)}
     </div>
@@ -45,8 +51,8 @@ const sponsors = sponsorTiers.flatMap((t) => t.sponsors);
 <style>
   .partners__organizers {
     display: grid;
-    grid-template-columns: minmax(0, 520px);
-    justify-content: center;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-4);
   }
 
   .partners__subtitle {
@@ -82,5 +88,11 @@ const sponsors = sponsorTiers.flatMap((t) => t.sponsors);
     max-width: 60ch;
     margin-top: var(--space-2);
     color: var(--text-muted);
+  }
+
+  @media (max-width: 860px) {
+    .partners__organizers {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 </style>

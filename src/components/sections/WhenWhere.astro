@@ -1,7 +1,10 @@
 ---
-/** Q-Con "When and Where?" — small-caps title, date and venue in light blue, full-width map below. */
+/**
+ * Q-Con "When and Where?" — small-caps title, date and venue in light blue, full-width map below.
+ * The map waits until the venue is announced.
+ */
 import MapEmbed from '../ui/MapEmbed.astro';
-import { site, dateText } from '../../config/site';
+import { site, dateText, hasVenue, venueText } from '../../config/site';
 
 interface Props {
   /** Hide the map (e.g. when the page shows it elsewhere). */
@@ -21,11 +24,11 @@ const { map = true } = Astro.props;
       </p>
       <p class="when__time">{[site.event.timeLabel, site.event.format].filter(Boolean).join(' · ')}</p>
       <p class="when__venue smallcaps">
-        {site.venue.name}, {site.venue.area}<br />{site.venue.city}, {site.venue.country}
+        {[venueText, site.venue.area].filter(Boolean).join(', ')}<br />{site.venue.city}, {site.venue.country}
       </p>
     </div>
     {
-      map && (
+      map && hasVenue && (
         <div data-reveal>
           <MapEmbed />
         </div>
@@ -38,8 +41,11 @@ const { map = true } = Astro.props;
   .when__head {
     display: grid;
     justify-items: center;
-    margin-bottom: var(--space-7);
     text-align: center;
+  }
+
+  .when__head:not(:last-child) {
+    margin-bottom: var(--space-7);
   }
 
   h2 {

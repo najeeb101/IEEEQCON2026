@@ -5,32 +5,27 @@ import RequirementList from '../../components/ui/RequirementList.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import DateTimeline from '../../components/ui/DateTimeline.astro';
 import Button from '../../components/ui/Button.astro';
-import {
-  tracks,
-  abstractRequirements,
-  posterRequirements,
-  posterTemplateUrl,
-  researchDates,
-} from '../../data/submissions';
+import RulesNotice from '../../components/sections/RulesNotice.astro';
+import { tracks, abstractRequirements, posterRequirements, posterTemplateUrl, formatDates } from '../../data/submissions';
 
-const track = tracks.find((t) => t.id === 'research')!;
+const track = tracks.find((t) => t.id === 'poster')!;
 ---
 
 <PageLayout
-  title="Research & Poster Submissions"
-  lead="Submit a one-page abstract for the Poster Session or Oral Presentation tracks. Accepted posters are judged on conference day, with awards for undergraduate and graduate categories."
-  crumbs={[{ label: 'Submissions', href: '/submissions/' }, { label: 'Research & Posters' }]}
+  title="Poster Competition"
+  lead="Submit a one-page abstract and present your research as a poster. Posters are judged on conference day, with awards for undergraduate and graduate categories."
+  crumbs={[{ label: 'Submissions', href: '/submissions/' }, { label: 'Poster Competition' }]}
 >
   <section class="section">
     <div class="container">
+      <RulesNotice />
       <SubmissionBlock
-        title="Abstract Submission for Poster / Presentation"
+        title="Abstract Submission"
         status={track.status}
         formUrl={track.formUrl}
         deadline={track.deadline}
         deadlineLabel="Submission deadline"
       >
-        <p class="muted intro">Students may submit research for consideration in either the Poster Session or Oral Presentation tracks.</p>
         <h3>Abstract requirements</h3>
         <RequirementList items={abstractRequirements} />
       </SubmissionBlock>
@@ -55,17 +50,13 @@ const track = tracks.find((t) => t.id === 'research')!;
 
   <section class="section section--deep">
     <div class="container container--narrow">
-      <SectionHeading title="Important Dates" eyebrow="Research & Posters" align="center" />
-      <DateTimeline dates={researchDates} showTrack={false} />
+      <SectionHeading title="Important Dates" eyebrow="Poster Competition" align="center" />
+      <DateTimeline dates={formatDates} showTrack={false} />
     </div>
   </section>
 </PageLayout>
 
 <style>
-  .intro {
-    margin-bottom: var(--space-5);
-  }
-
   .template {
     margin-top: var(--space-5);
   }

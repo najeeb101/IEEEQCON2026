@@ -22,5 +22,7 @@ export default defineConfig({
   // Redirect targets are not base-prefixed by Astro, so add it here.
   redirects: {
     '/program': `${base.replace(/\/$/, '')}/program/schedule/`,
+    // Split into the poster and technical presentation pages for 2027.
+    '/submissions/research-and-posters': `${base.replace(/\/$/, '')}/submissions/`,
   },
 });

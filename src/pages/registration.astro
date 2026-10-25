@@ -13,7 +13,7 @@ const embedUrl = formUrl ? `${formUrl}${formUrl.includes('?') ? '&' : '?'}embedd
 <PageLayout
   title="Registration"
   heading={`Register for ${fullName}`}
-  lead="Join students, researchers, innovators, and industry leaders from across Qatar for a full day of engineering talks, posters, prototypes, and interactive sessions."
+  lead="Join students, researchers, innovators, and industry leaders from across Qatar for engineering talks, posters, prototypes, and interactive sessions."
   crumbs={[{ label: 'Registration' }]}
 >
   <section class="section section--tight">
@@ -22,7 +22,7 @@ const embedUrl = formUrl ? `${formUrl}${formUrl.includes('?') ? '&' : '?'}embedd
         facts={[
           { icon: 'calendar', label: 'Event date', value: site.event.dateLabel || TBA },
           { icon: 'clock', label: 'Event time', value: site.event.timeLabel || TBA },
-          { icon: 'pin', label: 'Address', value: venueLine, href: '/venue/' },
+          { icon: 'pin', label: 'Venue', value: venueLine, href: '/venue/' },
           { icon: 'mail', label: 'Contact us', value: site.contact.email, href: `mailto:${site.contact.email}` },
         ]}
       />

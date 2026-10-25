@@ -14,18 +14,18 @@ const openTrack = tracks.find((t) => t.status === 'open' && t.formUrl);
 <PageLayout
   title="Call for Submissions"
   heading={`Submit your work to ${fullName}`}
-  lead="Students across Qatar are invited to submit research abstracts, posters, or engineering prototypes. All submissions are reviewed by faculty and industry judges, with awards presented during the conference."
+  lead="Students across Qatar are invited to compete in three formats: posters, prototypes and technical presentations. Every entry fits one of the three conference tracks and is judged by faculty and industry experts, with awards presented during the conference."
   crumbs={[{ label: 'Submissions' }]}
 >
   <Fragment slot="actions">
-    {openTrack && <Button href={openTrack.formUrl} icon="arrow-right">Submit an abstract</Button>}
-    <Button href="/submissions/research-and-posters/" variant="outline">Read the guidelines</Button>
+    {openTrack && <Button href={openTrack.formUrl} icon="arrow-right">Submit now</Button>}
+    <Button href="#themes-title" variant="outline">See the tracks</Button>
   </Fragment>
 
   <section class="section">
     <div class="container cfp">
       <div>
-        <SectionHeading eyebrow="Two ways to take part" title="Submission Tracks" />
+        <SectionHeading eyebrow="Three ways to compete" title="Competition Formats" />
         <div class="cfp__tracks">
           {tracks.map((t, i) => <TrackCard track={t} index={i} />)}
         </div>
@@ -33,9 +33,8 @@ const openTrack = tracks.find((t) => t.status === 'open' && t.formUrl);
         <div class="cfp__who" data-reveal>
           <h2>Who can submit?</h2>
           <p class="muted">
-            The conference is open to students from all universities and institutions across Qatar. Abstracts are open to
-            students and researchers, but only students compete for awards. Prototype entries are open to all university
-            students, individually or in teams of up to four.
+            The conference is open to students from all universities and institutions across Qatar. Eligibility and
+            requirements for each format are on its guidelines page.
           </p>
         </div>
       </div>

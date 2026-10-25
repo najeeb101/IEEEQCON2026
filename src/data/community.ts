@@ -16,20 +16,20 @@ export const announcements: Announcement[] = [
   {
     tag: `Q-Con ${site.edition}`,
     title: `${site.name} ${site.edition} is on its way`,
-    body: 'The next edition of Qatar’s student engineering conference is being planned. The date and deadlines will be announced here and on Instagram.',
+    body: 'Qatar’s student engineering conference is back, organized by the IEEE student branches at TAMUQ, QU, HBKU and UDST. The date and venue will be announced here and on Instagram.',
     cta: { label: `Follow ${site.socials[0].handle}`, href: site.socials[0].url },
   },
   {
-    tag: 'Call for Submissions',
-    title: 'Start preparing your abstract',
-    body: 'Research and poster abstracts are one page (350 words max.) and can cover completed or in-progress work. The submission form opens with the call.',
-    cta: { label: 'Submission guidelines', href: '/submissions/research-and-posters/' },
+    tag: 'Organizing Committee',
+    title: 'Meet the team soon',
+    body: 'Eight student committees are planning this year’s conference. Their leads will be introduced on Instagram and on the committee page.',
+    cta: { label: 'Organizing Committee', href: '/about/organizing-committee/' },
   },
   {
-    tag: 'Prototype Competition',
-    title: 'Build something to show',
-    body: 'Individuals or teams of up to four can enter working or conceptual prototypes with an electrical or electronic component.',
-    cta: { label: 'Competition details', href: '/submissions/prototype-competition/' },
+    tag: 'Competitions',
+    title: 'Three ways to compete',
+    body: 'Enter the Poster Competition, the Prototype Competition or Technical Presentations, in energy, healthcare or smart infrastructure. The criteria are posted when the call opens.',
+    cta: { label: 'Competition formats', href: '/submissions/' },
   },
   {
     tag: 'Get Involved',
@@ -52,7 +52,7 @@ export interface CommitteeGroup {
 }
 
 /** Leave `name` empty to show "To be announced". */
-export const committee: CommitteeGroup[] = [
+export const leadership: CommitteeGroup[] = [
   { title: 'Faculty Advisor', members: [{ name: '', role: 'Faculty Advisor' }] },
   {
     title: 'General Chairs',
@@ -61,22 +61,18 @@ export const committee: CommitteeGroup[] = [
       { name: '', role: 'General Co-Chair' },
     ],
   },
-  {
-    title: 'Program & Competitions',
-    members: [
-      { name: '', role: 'Technical Program Chair' },
-      { name: '', role: 'Poster Session Chair' },
-      { name: '', role: 'Prototype Competition Chair' },
-    ],
-  },
-  {
-    title: 'Operations & Outreach',
-    members: [
-      { name: '', role: 'Logistics Chair' },
-      { name: '', role: 'Sponsorship Chair' },
-      { name: '', role: 'Publicity & Media Chair' },
-    ],
-  },
+];
+
+/** The eight committees, in the order they are introduced on Instagram. Each has a lead and a co-lead. */
+export const committees: CommitteeGroup[] = [
+  { title: 'Poster', members: [{ name: '', role: 'Lead' }, { name: '', role: 'Co-lead' }] },
+  { title: 'Prototype', members: [{ name: '', role: 'Lead' }, { name: '', role: 'Co-lead' }] },
+  { title: 'Panel & Speakers', members: [{ name: '', role: 'Lead' }, { name: '', role: 'Co-lead' }] },
+  { title: 'Logistics', members: [{ name: '', role: 'Lead' }, { name: '', role: 'Co-lead' }] },
+  { title: 'Sponsorship', members: [{ name: '', role: 'Lead' }, { name: '', role: 'Co-lead' }] },
+  { title: 'Student Engagement', members: [{ name: '', role: 'Lead' }, { name: '', role: 'Co-lead' }] },
+  { title: 'Ceremonies', members: [{ name: '', role: 'Lead' }, { name: '', role: 'Co-lead' }] },
+  { title: 'Publicity', members: [{ name: '', role: 'Lead' }, { name: '', role: 'Co-lead' }] },
 ];
 
 export interface Organization {
@@ -86,7 +82,8 @@ export interface Organization {
   url?: string;
 }
 
-export const organizers: Organization[] = [{ name: site.organizer }];
+/** Organizer tiles, one per university; the heading above them names the IEEE student branches. */
+export const organizers: Organization[] = site.universities.map((u) => ({ name: u.name }));
 
 export interface SponsorTier {
   tier: string;
