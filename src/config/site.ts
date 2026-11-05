@@ -17,14 +17,13 @@ export const site = {
   description:
     'IEEE Q-Con is a nationwide student engineering conference in Qatar where undergraduates and graduates present research, showcase prototypes, and connect with academic and industry leaders.',
   /** Reads after "organized by the". The universities themselves are listed in `universities` below. */
-  organizer: 'IEEE student branches at TAMUQ, QU, HBKU and UDST',
+  organizer: 'IEEE student branches at TAMUQ, QU and HBKU',
 
-  /** The universities behind Q-Con (organizer tiles, "at a glance" band). */
+  /** The universities behind Q-Con (organizer logos, "at a glance" band). Logos: white SVG/PNG on a transparent background, in public/logos/. */
   universities: [
-    { short: 'TAMUQ', name: 'Texas A&M University at Qatar' },
-    { short: 'QU', name: 'Qatar University' },
-    { short: 'HBKU', name: 'Hamad Bin Khalifa University' },
-    { short: 'UDST', name: 'University of Doha for Science and Technology' },
+    { short: 'TAMUQ', name: 'Texas A&M University at Qatar', logo: '/logos/tamuq-white.svg' },
+    { short: 'QU', name: 'Qatar University', logo: '/logos/qu-white.svg' },
+    { short: 'HBKU', name: 'Hamad Bin Khalifa University', logo: '/logos/hbku-white.svg' },
   ],
 
   event: {

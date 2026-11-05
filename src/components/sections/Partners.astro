@@ -5,6 +5,7 @@
  */
 import SectionHeading from '../ui/SectionHeading.astro';
 import LogoTile from '../ui/LogoTile.astro';
+import OrganizerLogo from '../ui/OrganizerLogo.astro';
 import Button from '../ui/Button.astro';
 import { organizers, sponsorTiers } from '../../data/community';
 import { fullName } from '../../config/site';
@@ -18,11 +19,11 @@ const sponsors = sponsorTiers.flatMap((t) => t.sponsors);
       id="partners-title"
       eyebrow="Partners"
       title={`${fullName} is organized by`}
-      lead="The IEEE student branches at four universities in Qatar."
+      lead="The IEEE student branches at three universities in Qatar."
       align="center"
     />
     <div class="partners__organizers" data-reveal>
-      {organizers.map((o) => <LogoTile name={o.name} logo={o.logo} href={o.url} size="lg" />)}
+      {organizers.map((o) => <OrganizerLogo name={o.name} logo={o.logo} />)}
     </div>
 
     {
@@ -51,8 +52,10 @@ const sponsors = sponsorTiers.flatMap((t) => t.sponsors);
 <style>
   .partners__organizers {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: var(--space-4);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+    max-width: 960px;
+    margin-inline: auto;
   }
 
   .partners__subtitle {
@@ -90,9 +93,10 @@ const sponsors = sponsorTiers.flatMap((t) => t.sponsors);
     color: var(--text-muted);
   }
 
-  @media (max-width: 860px) {
+  @media (max-width: 560px) {
     .partners__organizers {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: 1fr;
+      gap: 0;
     }
   }
 </style>

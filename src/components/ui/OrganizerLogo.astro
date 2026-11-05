@@ -1,0 +1,55 @@
+---
+/**
+ * Organizing university: logo straight on the page (no tile) with the name underneath.
+ * Logos should be transparent PNG or SVG; a white version reads best on the dark theme.
+ * Without a logo, only the name is shown.
+ */
+import { url } from '../../lib/url';
+
+interface Props {
+  name: string;
+  logo?: string;
+}
+
+const { name, logo } = Astro.props;
+---
+
+<figure class="org">
+  {logo && <img class="org__logo" src={url(logo)} alt="" loading="lazy" decoding="async" />}
+  <figcaption class="org__name">{name}</figcaption>
+</figure>
+
+<style>
+  .org {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    margin: 0;
+    padding: var(--space-5) var(--space-3);
+    text-align: center;
+  }
+
+  .org__logo {
+    width: auto;
+    max-width: 100%;
+    height: 88px;
+    object-fit: contain;
+  }
+
+  .org__name {
+    max-width: 22ch;
+    color: var(--text-body);
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: 500;
+    line-height: var(--leading-snug);
+    text-wrap: balance;
+  }
+
+  @media (max-width: 640px) {
+    .org__logo {
+      height: 64px;
+    }
+  }
+</style>
