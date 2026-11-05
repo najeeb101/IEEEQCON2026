@@ -150,18 +150,18 @@ The format pages show the requirements in `src/data/submissions.ts` (`abstractRe
 
 `src/data/community.ts`:
 
-The organizer tiles are built from `site.universities` in `src/config/site.ts` (TAMUQ, QU, HBKU and UDST), and `site.organizer` is the "organized by the…" wording used in sentences and the footer. To add logos, map them in `organizers`:
+The "Organized by" logos come from `site.universities` in `src/config/site.ts` (TAMUQ, QU and HBKU), and `site.organizer` is the "organized by the…" wording used in sentences and the footer. Each university's logo sits straight on the dark page with its name underneath, so use a **white** logo on a transparent background (SVG best). The files are in `public/logos/` (`tamuq-white.svg`, `qu-white.svg`, `hbku-white.svg`); `tamuq-color.svg`, `qu-color.svg` and `hbku-color.svg` are kept for print or light backgrounds. To change one, replace the file or edit its `logo` path in `site.universities`.
+
+Sponsors are set in `sponsorTiers`:
 
 ```ts
-export const organizers = site.universities.map((u) => ({ name: u.name, logo: `/logos/${u.short.toLowerCase()}.png` }));
-
 export const sponsorTiers = [
   { tier: 'Gold', sponsors: [{ name: 'Company', logo: '/logos/company.svg', url: 'https://company.com' }], placeholders: 2 },
 ];
 ```
 
 - While a tier has no sponsors, the Sponsors page shows `placeholders` dashed "Your logo here" slots. The home page shows a "Partner with us" invitation until at least one sponsor exists.
-- Logos sit on a light tile, so full-color logos work. SVG or PNG with a transparent background is best.
+- Sponsor logos sit on a light tile, so full-color logos work. SVG or PNG with a transparent background is best.
 - To offer a PDF prospectus, put it in `public/` and set `site.sponsorship.prospectusUrl: '/sponsorship-prospectus.pdf'`.
 
 ## Logos & images

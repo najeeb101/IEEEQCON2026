@@ -16,7 +16,7 @@ export const announcements: Announcement[] = [
   {
     tag: `Q-Con ${site.edition}`,
     title: `${site.name} ${site.edition} is on its way`,
-    body: 'Qatar’s student engineering conference is back, organized by the IEEE student branches at TAMUQ, QU, HBKU and UDST. The date and venue will be announced here and on Instagram.',
+    body: 'Qatar’s student engineering conference is back, organized by the IEEE student branches at TAMUQ, QU and HBKU. The date and venue will be announced here and on Instagram.',
     cta: { label: `Follow ${site.socials[0].handle}`, href: site.socials[0].url },
   },
   {
@@ -83,7 +83,7 @@ export interface Organization {
 }
 
 /** Organizer tiles, one per university; the heading above them names the IEEE student branches. */
-export const organizers: Organization[] = site.universities.map((u) => ({ name: u.name }));
+export const organizers: Organization[] = site.universities.map((u) => ({ name: u.name, logo: u.logo }));
 
 export interface SponsorTier {
   tier: string;

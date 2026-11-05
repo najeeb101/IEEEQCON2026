@@ -10,7 +10,8 @@ The site is set up for **IEEE Q-Con 2027** with the designer's new logo. Content
 - [ ] **Domain.** The site runs at `najeeb101.github.io/IEEEQCON2026` for now. Decide whether to use a custom domain (see [deployment](DEPLOYMENT.md#option-a-github-pages-current)).
 - [x] **Hosting.** GitHub Pages, deployed automatically from `main`.
 - [x] **Registration form.** The page shows "Opening soon" until a 2027 form exists (decided). The 2026 form still accepts responses, so close it in Google Forms.
-- [x] **Organizer wording.** "Organized by the IEEE student branches at TAMUQ, QU, HBKU and UDST" (decided 2026-10-25).
+- [x] **Organizer wording.** "Organized by the IEEE student branches at TAMUQ, QU and HBKU" (UDST removed 2026-11-05; it is not on the committee).
+- [ ] **TAMUQ logo.** The white ATM "QATAR" mark in `public/logos/tamuq-white.svg` comes from an archived 2017 copy of qatar.tamu.edu (the live site blocks downloads). Ask the TAMUQ branch for their current official white logo and replace the file. The QU and HBKU logos come from their official media kit and website.
 - [ ] **Attendee registration.** Does it open with the call for submissions, and is there a fee? Registration stays "Opening soon" until this is answered.
 - [ ] **"Partner with us".** Whether to publish the expected audience and the sponsor tiers. The Sponsors page stays as it is until then.
 

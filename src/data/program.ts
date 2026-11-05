@@ -66,7 +66,7 @@ export interface Stat {
 
 /** "Q-Con at a glance" band — every number is a fact about the format, not a guess. */
 export const stats: Stat[] = [
-  { value: '4', label: 'Universities', note: 'TAMUQ, QU, HBKU and UDST' },
+  { value: '3', label: 'Universities', note: 'TAMUQ, QU and HBKU' },
   { value: '3', label: 'Conference tracks', note: 'Energy, healthcare and smart infrastructure' },
   { value: '3', label: 'Competition formats', note: 'Posters, prototypes and technical presentations' },
   { value: '2', label: 'Award categories', note: 'Undergraduate and graduate' },
